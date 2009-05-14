@@ -13,4 +13,9 @@
  * $Id$
  */
 
+class Opc_Exception extends Opl_Exception{}
 
+class Opc_InvalidArgumentType_Exception extends Opc_Exception
+{
+	protected $_message = 'The method got %s data type, %s expected.';
+} // end Opc_InvalidArgumentType_Exception;
