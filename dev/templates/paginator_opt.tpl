@@ -8,7 +8,7 @@
 <body>
 <p>
 {$pager::decorator is 'all'}
-<opt:selector name="pager">
+<opt:selector name="pager" test="type">
 	<opt:number> <a parse:href="'?page='~$pager.number">{$pager.number}</a> </opt:number>
 	<opt:current> <strong>[{$pager.number}]</strong> </opt:current> 
 </opt:selector>
