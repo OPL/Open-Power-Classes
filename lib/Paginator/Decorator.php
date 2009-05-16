@@ -13,98 +13,98 @@
  * $Id$
  */
 
+/**
+ *
+ */	
+abstract class Opc_Paginator_Decorator
+{
 	/**
-	 *
+	 * Paginator instance		
+	 * @var Opc_Paginator_Range
 	 */	
-	abstract class Opc_Paginator_Decorator
+	protected $_paginator = null;
+	
+	/**
+	 * Setup is executed when the pager is in the dirty state.
+	 * Use for init calculations.		 		
+	 * @return void
+	 */	
+	public function setup()
+	{ 
+	} // end setup();
+	
+	/**
+	 * Magic function so that $obj->key = "value" will work
+	 * 		 		
+	 * @param string $key
+	 * @param mixed $value
+	 * @return true
+	 */	
+	final public function __set($key, $value)
+	{ 
+		return $this->set($key, $value);
+	} // end __set();
+	
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return true
+	 */	
+	public function set($key, $value)
+	{ 
+		$key = trim($key, '_');
+		
+		if(isset($this->$key))
+		{
+			$this->_paginator->state(Opc_Paginator_Range::STATE_DIRTY);
+			$this->$key = $value;
+			return true;
+		}
+		
+		throw new Opc_OptionNotExists_Exception($key, get_class($this));
+	} // end set();
+		
+	/**
+	 * Magic function so that $obj->key will work
+	 *
+	 * @param string $key
+	 * @return mixed
+	 */	
+	final public function __get($key)
 	{
-		/**
-		 * Paginator instance		
-		 * @var Opc_Paginator_Range
-		 */	
-		protected $_paginator = null;
+		return $this->get($key);
+	} // end __get();
+	
+	/**
+	 * @param string $key		
+	 * @return mixed
+	 */	
+	public function get($key)
+	{ 
+		$key = trim($key, '_');
 		
-		/**
-		 * Setup is executed when the pager is in the dirty state.
-		 * Use for init calculations.		 		
-		 * @return void
-		 */	
-		public function setup()
-		{ 
-		} // end setup();
-		
-		/**
-		 * Magic function so that $obj->key = "value" will work
-		 * 		 		
-		 * @param string $key
-		 * @param mixed $value
-		 * @return true
-		 */	
-		final public function __set($key, $value)
-		{ 
-			return $this->set($key, $value);
-		} // end __set();
-		
-		/**
-		 * @param string $key
-		 * @param mixed $value
-		 * @return true
-		 */	
-		public function set($key, $value)
-		{ 
-			$key = trim($key, '_');
-			
-			if(isset($this->$key))
-			{
-				$this->_paginator->state(Opc_Paginator_Range::STATE_DIRTY);
-				$this->$key = $value;
-				return true;
-			}
-			
-			throw new Opc_OptionNotExists_Exception($key, get_class($this));
-		} // end set();
-			
-		/**
-		 * Magic function so that $obj->key will work
-		 *
-		 * @param string $key
-		 * @return mixed
-		 */	
-		final public function __get($key)
+		if(isset($this->$key))
 		{
-			return $this->get($key);
-		} // end __get();
+			return $this->$key;
+		}
 		
-		/**
-		 * @param string $key		
-		 * @return mixed
-		 */	
-		public function get($key)
-		{ 
-			$key = trim($key, '_');
-			
-			if(isset($this->$key))
-			{
-				return $this->$key;
-			}
-			
-			throw new Opc_OptionNotExists_Exception($key, get_class($this));
-		} // end get();
-		
-		/**
-		 * @param Opc_Paginator_Range $paginator Current paginator instance
-		 * @return void
-		 */	
-		final public function setPaginator(Opc_Paginator_Range $paginator)
-		{
-			$this->_paginator = $paginator; 
-		} // end setPaginator();
-		
-		/**
-		 * This method should return an array. Used in Iterator interface
-		 * of the paginator.
-		 * 		 		  		
-		 * @return array
-		 */	
-		abstract public function current();
-	} // end Opc_Paginator_Decorator;
+		throw new Opc_OptionNotExists_Exception($key, get_class($this));
+	} // end get();
+	
+	/**
+	 * @param Opc_Paginator_Range $paginator Current paginator instance
+	 * @return void
+	 */	
+	final public function setPaginator(Opc_Paginator_Range $paginator)
+	{
+		$this->_paginator = $paginator; 
+	} // end setPaginator();
+	
+	/**
+	 * This method should return an array. Used in Iterator interface
+	 * of the paginator.
+	 * 		 		  		
+	 * @return array
+	 */	
+	abstract public function current();
+} // end Opc_Paginator_Decorator;

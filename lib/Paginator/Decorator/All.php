@@ -13,30 +13,30 @@
  * $Id$
  */
 
+/**
+ *
+ */	
+class Opc_Paginator_Decorator_All extends Opc_Paginator_Decorator
+{
 	/**
-	 *
+	 * Returns all page numbers
+	 * 		 		
+	 * @return array
 	 */	
-	class Opc_Paginator_Decorator_All extends Opc_Paginator_Decorator
+	public function current()
 	{
-		/**
-		 * Returns all page numbers
-		 * 		 		
-		 * @return array
-		 */	
-		public function current()
+		$i = $this->_paginator->key();
+		
+		$current = array(
+			'item' => 'number',
+			'number' => $i,
+		);
+		
+		if($i == $this->_paginator->page_float)
 		{
-			$i = $this->_paginator->key();
-			
-			$current = array(
-				'type' => 'number',
-				'number' => $i,
-			);
-			
-			if($i == $this->_paginator->page_float)
-			{
-				$current['type'] = 'current';
-			}
-			
-			return $current;
-		} // end current();
-	} // end Opc_Paginator_Decorator_All;
+			$current['item'] = 'current';
+		}
+		
+		return $current;
+	} // end current();
+} // end Opc_Paginator_Decorator_All;

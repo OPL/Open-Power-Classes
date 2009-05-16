@@ -13,32 +13,32 @@
  * $Id$
  */
 
+/**
+ * 1 2 3 .................. 22 23 [24] 25 26 ...................................... 65 66 67
+ */	
+class Opc_Paginator_Decorator_DottingSlider extends Opc_Paginator_Decorator_Slider
+{
 	/**
-	 * 1 2 3 .................. 22 23 [24] 25 26 ...................................... 65 66 67
+	 * Replaces static separator of "Slider" with a dot representing all pages,
+	 * which are not "current", "chunk" and "around".		 
+	 * 		 		
+	 * @access private		
+	 * @return array
 	 */	
-	class Opc_Paginator_Decorator_DottingSlider extends Opc_Paginator_Decorator_Slider
+	protected function _separator()
 	{
-		/**
-		 * Replaces static separator of "Slider" with a dot representing all pages,
-		 * which are not "current", "chunk" and "around".		 
-		 * 		 		
-		 * @access private		
-		 * @return array
-		 */	
-		protected function _separator()
+		$i = $this->_paginator->key();
+		
+		$current = array(
+			'item' => 'dot',
+			'number' => $i,
+		);
+		
+		if($i == $this->_paginator->page_float)
 		{
-			$i = $this->_paginator->key();
-			
-			$current = array(
-				'type' => 'dot',
-				'number' => $i,
-			);
-			
-			if($i == $this->_paginator->page_float)
-			{
-				$current['type'] = 'current';
-			}
-			
-			return $current;
-		} // end _separator();
-	} // end Opc_Paginator_Decorator_DottingSlider;
+			$current['item'] = 'current';
+		}
+		
+		return $current;
+	} // end _separator();
+} // end Opc_Paginator_Decorator_DottingSlider;

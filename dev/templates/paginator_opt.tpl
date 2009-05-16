@@ -6,12 +6,42 @@
 	<title>Paginator Test 1</title>
 </head>
 <body>
+<p>Page {$pager.page} of {$pager.pageCount}</p>
+
 <p>
 {$pager::decorator is 'all'}
-<opt:selector name="pager" test="type">
+<opt:selector name="pager">
 	<opt:number> <a parse:href="'?page='~$pager.number">{$pager.number}</a> </opt:number>
 	<opt:current> <strong>[{$pager.number}]</strong> </opt:current> 
 </opt:selector>
+</p>
+
+<p>
+{$pager::decorator is 'slider'}
+{$pager::decorator::chunk is 5}
+<opt:selector name="pager">
+	<opt:number> <a parse:href="'?page='~$pager.number">{$pager.number}</a> </opt:number>
+	<opt:current> <strong>[{$pager.number}]</strong> </opt:current>
+	<opt:gap> ... </opt:gap>
+</opt:selector>
+</p>
+
+<p>
+{$pager::decorator is 'stepping_slider'}
+{$pager::decorator::chunk is 1}
+{$pager::decorator::around is 1}
+<opt:selector name="pager">
+	<opt:number> <a parse:href="'?page='~$pager.number">{$pager.number}</a> </opt:number>
+	<opt:current> <strong>[{$pager.number}]</strong> </opt:current>
+	<opt:step> <a parse:href="'?page='~$pager.number"><small>{$pager.number}</small></a> </opt:step>
+</opt:selector>
+</p>
+
+<p>
+	<a parse:href="'?page='~$pager.first.number" opt:if="$pager.first.number">&lArr; first</a>
+	<a parse:href="'?page='~$pager.previous.number" opt:if="$pager.previous.number">&larr; previous</a>
+	<a parse:href="'?page='~$pager.next.number" opt:if="$pager.next.number">next &rarr;</a>
+	<a parse:href="'?page='~$pager.last.number" opt:if="$pager.last.number">last &rArr;</a>
 </p>
 </body>
 </html>

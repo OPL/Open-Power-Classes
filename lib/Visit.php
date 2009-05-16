@@ -21,7 +21,7 @@ class Opc_Visit
 {
 	/**
 	 * The internal data store.
-	 * @var Array
+	 * @var array
 	 */
 	private $_data = array();
 

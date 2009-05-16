@@ -13,132 +13,132 @@
  * $Id$
  */
 
+/**
+ * 1 2 3 ... 22 23 [24] 25 26 ... 65 66 67
+ */	
+class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
+{
 	/**
-	 * 1 2 3 ... 22 23 [24] 25 26 ... 65 66 67
+	 * Number of pages around current 
+	 * For value 2: "5 6 [7] 8 9" 		 
+	 * @access public		 		
+	 * @var integer	
 	 */	
-	class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
+	protected $around = 2;
+	/**
+	 * Number of pages at the begin and the end 
+	 * @access public		 	 		 		
+	 * @var integer	
+	 */	
+	protected $chunk = 3;
+	
+	/**
+	 * @access private
+	 * @var integer			 
+	 */	
+	protected $_allchunk;
+	/**
+	 * Start number before current 		
+	 * @access private
+	 * @var integer			 
+	 */	
+	protected $_back;
+	/**
+	 * End number after current	 		
+	 * @access private
+	 * @var integer		 
+	 */	
+	protected $_forward;
+	
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return true
+	 */	
+	public function set($key, $value)
 	{
-		/**
-		 * Number of pages around current 
-		 * For value 2: "5 6 [7] 8 9" 		 
-		 * @access public		 		
-		 * @var integer	
-		 */	
-		protected $around = 2;
-		/**
-		 * Number of pages at the begin and the end 
-		 * @access public		 	 		 		
-		 * @var integer	
-		 */	
-		protected $chunk = 3;
+		$key = trim($key, '_');
 		
-		/**
-		 * @access private
-		 * @var integer			 
-		 */	
-		protected $_allchunk;
-		/**
-		 * Start number before current 		
-		 * @access private
-		 * @var integer			 
-		 */	
-		protected $_back;
-		/**
-		 * End number after current	 		
-		 * @access private
-		 * @var integer		 
-		 */	
-		protected $_forward;
-		
-		/**
-		 * @param string $key
-		 * @param mixed $value
-		 * @return true
-		 */	
-		public function set($key, $value)
+		switch($key)
 		{
-			$key = trim($key, '_');
-			
-			switch($key)
-			{
-				case 'chunk':	
-				case 'around':	
-						$value = (int)$value;
-					break;
-			}
-			
-			return parent::set($key, $value);
-		} // end set();
+			case 'chunk':	
+			case 'around':	
+					$value = (int)$value;
+				break;
+		}
 		
-		/**
-		 * Setup
-		 * 		 
-		 * @return void
-		 */	
-		public function setup()
-		{
-			$this->_allchunk = $this->_paginator->pageCount - $this->chunk;
-			$this->_back     = $this->_paginator->page_float - $this->around;
-			$this->_forward  = $this->_paginator->page_float + $this->around;
-		} // end setup();
+		return parent::set($key, $value);
+	} // end set();
+	
+	/**
+	 * Setup
+	 * 		 
+	 * @return void
+	 */	
+	public function setup()
+	{
+		$this->_allchunk = $this->_paginator->pageCount - $this->chunk;
+		$this->_back     = $this->_paginator->page_float - $this->around;
+		$this->_forward  = $this->_paginator->page_float + $this->around;
+	} // end setup();
+	
+	/**
+	 * Return current, "around", and "chunk" numbers
+	 *		 		
+	 * @return array
+	 */	
+	public function current()
+	{
+		$current = false;
+		$i = $this->_paginator->key();
 		
-		/**
-		 * Return current, "around", and "chunk" numbers
-		 *		 		
-		 * @return array
-		 */	
-		public function current()
-		{
-			$current = false;
-			$i = $this->_paginator->key();
+		if($i > $this->_allchunk || $i <= $this->chunk
+			|| $i == $this->_paginator->page_float
+			|| ($i >= $this->_back && $i <= $this->_forward)
+		){
+			$current = array(
+				'item' => 'number',
+				'number' => $i,
+			);
 			
-			if($i > $this->_allchunk || $i <= $this->chunk
-				|| $i == $this->_paginator->page_float
-				|| ($i >= $this->_back && $i <= $this->_forward)
-			){
-				$current = array(
-					'type' => 'number',
-					'number' => $i,
-				);
-				
-				if($i == $this->_paginator->page_float)
-				{
-					$current['type'] = 'current';
-				}
-			}
-			else
+			if($i == $this->_paginator->page_float)
 			{
-				$current = $this->_separator();
+				$current['item'] = 'current';
 			}
-			
-			return $current;
-		} // end current();
+		}
+		else
+		{
+			$current = $this->_separator();
+		}
 		
-		/**
-		 * Returns a separator-type item, which is not a number 
-		 * 		 		
-		 * @access protected	
-		 * @return array
-		 */	
-		protected function _separator()
+		return $current;
+	} // end current();
+	
+	/**
+	 * Returns a separator-type item, which is not a number 
+	 * 		 		
+	 * @access protected	
+	 * @return array
+	 */	
+	protected function _separator()
+	{
+		if($this->chunk == 0)
 		{
-			if($this->chunk == 0)
-			{
-				return false;
-			}
-			
-			$i = $this->_paginator->key();
-			$current = array('type' => 'separator');
-			
-			if($i < $this->_back)
-			{
-				$this->_paginator->seek(ceil($this->_back - 1));
-			}
-			elseif($i > $this->_forward)
-			{
-				$this->_paginator->seek($this->_allchunk);
-			}
-			
-			return $current;
-		} // end _separator();
-	} // end Opc_Paginator_Decorator_Slider;
+			return false;
+		}
+		
+		$i = $this->_paginator->key();
+		$current = array('item' => 'gap');
+		
+		if($i < $this->_back)
+		{
+			$this->_paginator->seek(ceil($this->_back - 1));
+		}
+		elseif($i > $this->_forward)
+		{
+			$this->_paginator->seek($this->_allchunk);
+		}
+		
+		return $current;
+	} // end _separator();
+} // end Opc_Paginator_Decorator_Slider;

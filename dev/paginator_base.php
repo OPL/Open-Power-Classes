@@ -32,7 +32,7 @@ try
 	echo '<p>';
 	foreach($pager as $page)
 	{
-		switch($page['type'])
+		switch($page['item'])
 		{
 			case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
 			case 'number': echo ' <a href="?page='.$page['number'].'&amp;offset='.$page['offset'].'">'.$page['number'].'</a> '; break;
@@ -45,11 +45,11 @@ try
 	echo '<p>';
 	foreach($pager as $page)
 	{
-		switch($page['type'])
+		switch($page['item'])
 		{
 			case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
 			case 'number': echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
-			case 'separator': echo " ... "; break;
+			case 'gap': echo " ... "; break;
 		}	
 	}
 	echo '</p>';   
@@ -61,7 +61,7 @@ try
 	echo '<p>';
 	foreach($pager as $page)
 	{
-		switch($page['type'])
+		switch($page['item'])
 		{
 			case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
 			case 'number': echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
@@ -74,7 +74,7 @@ try
 	echo '<p>';
 	foreach($pager as $page)
 	{
-		switch($page['type'])
+		switch($page['item'])
 		{
 			case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
 			case 'number': echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
@@ -90,7 +90,7 @@ try
 	echo '<p>';
 	foreach($pager as $page)
 	{
-		switch($page['type'])
+		switch($page['item'])
 		{
 			case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
 			case 'number': echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
@@ -106,7 +106,7 @@ try
 	echo '<p>';
 	foreach($pager as $page)
 	{
-		switch($page['type'])
+		switch($page['item'])
 		{
 			case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
 			case 'number': echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
