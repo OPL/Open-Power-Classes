@@ -21,7 +21,7 @@ try
 	echo "<ul>";
 	foreach(new LimitIterator(new ArrayIterator(range(1, $pager->all)), $pager->offset, $pager->limit) as $i)
 	{
-	    echo '<li>'.$i.'</li>';
+		echo '<li>'.$i.'</li>';
 	}
 	echo "</ul>";
 	

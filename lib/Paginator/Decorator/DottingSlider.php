@@ -1,7 +1,7 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ===========================================
+ *  ==========================================
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -14,7 +14,10 @@
  */
 
 /**
- * 1 2 3 .................. 22 23 [24] 25 26 ...................................... 65 66 67
+ * Dotting slider decorator class. Extends slider decorator but instead
+ * of gaps it returns a clickable "dot"-type pages. 
+ * 
+ * 1 2 3 ........ 12 13 [14] 15 16 ..... 22 23 24
  */	
 class Opc_Paginator_Decorator_DottingSlider extends Opc_Paginator_Decorator_Slider
 {

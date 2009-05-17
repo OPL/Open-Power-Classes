@@ -1,7 +1,7 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ===========================================
+ *  ==========================================
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -14,6 +14,9 @@
  */
 
 /**
+ * Stepping slider decorator class. Extends slider decorator, but instead
+ * of gaps it returns steps. 
+ *   
  * 1 2 3 <10> <20> 22 23 [24] 25 26 <30> <40> <50> <60> 65 66 67
  */	
 class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Slider
@@ -43,7 +46,7 @@ class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Sli
 		switch($key)
 		{
 			case 'stepping':	
-					$value = (int)$value;
+				$value = (int)$value;
 				break;
 		}
 		

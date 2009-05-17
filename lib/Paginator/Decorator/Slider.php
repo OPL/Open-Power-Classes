@@ -1,7 +1,7 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ===========================================
+ *  ==========================================
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -14,6 +14,9 @@
  */
 
 /**
+ * Slider decorator class. Displays pages around current, pages at the
+ * beggining and at the end and a gap between them.  
+ *  
  * 1 2 3 ... 22 23 [24] 25 26 ... 65 66 67
  */	
 class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
@@ -63,7 +66,7 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 		{
 			case 'chunk':	
 			case 'around':	
-					$value = (int)$value;
+				$value = (int)$value;
 				break;
 		}
 		

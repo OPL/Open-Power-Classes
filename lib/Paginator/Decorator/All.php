@@ -1,7 +1,7 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ===========================================
+ *  ==========================================
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -14,7 +14,7 @@
  */
 
 /**
- *
+ * Decorator class, which returns all pages.
  */	
 class Opc_Paginator_Decorator_All extends Opc_Paginator_Decorator
 {

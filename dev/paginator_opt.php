@@ -10,7 +10,7 @@ Opl_Registry::setState('opl_extended_errors', true);
 
 try
 {
-    $tpl = new Opt_Class;
+	$tpl = new Opt_Class;
    	$tpl->sourceDir = './templates/';
    	$tpl->compileDir = './templates_c/';
    	$tpl->charset = 'utf-8';
@@ -24,10 +24,10 @@ try
 	
 	
 	$view = new Opt_View('paginator_opt.tpl');
-    $view->pager = $pager;
+	$view->pager = $pager;
 	$view->setFormat('pager', 'Objective/Array'); 
 
-    	
+		
 	$out = new Opt_Output_Http;
 	$out->setContentType(Opt_Output_Http::HTML);
 	$out->render($view); 

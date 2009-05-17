@@ -1,7 +1,7 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ===========================================
+ *  ==========================================
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -14,6 +14,8 @@
  */
 
 /**
+ * Jumper decorator class. Page ranges jump between steps.
+ *  
  * <1> <11> 21 22 23 [24] 25 26 27 28 29 30 <31> <41> <51> <61>
  */	
 class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
@@ -59,10 +61,10 @@ class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 		switch($key)
 		{
 			case 'stepping':	
-					$value = (int)$value;
+				$value = (int)$value;
 				break;
 			case 'steps':	
-					$value = (boolean)$value;
+				$value = (boolean)$value;
 				break;
 		}
 		
