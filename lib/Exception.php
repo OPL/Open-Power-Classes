@@ -39,3 +39,8 @@ class Opc_PaginatorNoData_Exception extends Opc_Exception
 {
 
 } // end Opc_PaginatorNoData_Exception;
+
+class Opc_DoctrineModelsInvalidDirectoryName_Exception extends Opc_Exception
+{
+	protected $_message = 'Given Doctrine generated models folder name is invalid.';
+} // end Opc_DoctrineModelsGeneratedNameInvalid_Exception;
