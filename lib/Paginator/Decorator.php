@@ -36,11 +36,11 @@ abstract class Opc_Paginator_Decorator
 	/**
 	 * Imports the decorator options from an array.
 	 *
-	 * @param array $optList The option list
+	 * @param array $config The option list
 	 */
-	final public function loadConfig($optList)
+	final public function loadConfig(array $config)
 	{
-		foreach($optList as $name => $value)
+		foreach($config as $name => $value)
 		{
 			$this->set($name, $value);
 		}

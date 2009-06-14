@@ -12,8 +12,8 @@ try
 {
 	$opc = new Opc_Class;
 	$opc->itemsPerPage = 13;
-	$opc->paginationDecorator = 'jumper';
-//	$opc->paginationDecoratorOptions;
+	$opc->paginatorDecorator = 'jumper';
+//	$opc->paginatorDecoratorOptions;
 
 	$pager = Opc_Paginator::create(1000); // returns Opc_Paginator_Pager;
 	$pager->all = 1000;

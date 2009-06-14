@@ -40,6 +40,16 @@ class Opc_PaginatorNoData_Exception extends Opc_Exception
 
 } // end Opc_PaginatorNoData_Exception;
 
+class Opc_PaginatorUndefinedDecorator_Exception extends Opc_Exception
+{
+	protected $_message = 'Undefined decorator "%s".';
+} // end Opc_PaginatorUndefinedDecorator_Exception;
+
+class Opc_PaginatorWrongSubclassDecorator_Exception extends Opc_Exception
+{
+	protected $_message = 'Given decorator "%s" is not a subclass of "Opc_Paginator_Decorator".';
+} // end Opc_PaginatorWrongSubclassDecorator_Exception;
+
 class Opc_DoctrineModelsInvalidDirectoryName_Exception extends Opc_Exception
 {
 	protected $_message = 'Given Doctrine generated models folder name is invalid.';

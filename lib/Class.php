@@ -24,14 +24,22 @@ class Opc_Class extends Opl_Class
 	public $expiryTime = 3600;
 	public $quantum = 1.0;
 
-	// Opc_Pagination configuration
+	// Opc_Paginator configuration
 	/**
 	 * Default value for Opc_Paginator_Range->limit	
 	 * @var integer
 	 */	 	
 	public $itemsPerPage = 10;
-	public $paginationDecorator = null;
-	public $paginationDecoratorOptions = null;
+	/**
+	 * Default decorator	
+	 * @var string|Opc_Paginator_Decorator
+	 */	 
+	public $paginatorDecorator = null;
+	/**
+	 * Default decorator's options	
+	 * @var array
+	 */	 
+	public $paginatorDecoratorOptions = null;
 
 	// Opc_Visit configuration
 

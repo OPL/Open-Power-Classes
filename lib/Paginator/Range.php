@@ -12,10 +12,7 @@
  *
  * $Id$
  */
-
-//TODO: Exceptions!!!
-//TODO: Opc Exception returns an error with __UNKNOWN__ 
-
+ 
 /**
  *
  */	
@@ -117,17 +114,20 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	public function __construct($all = null, $limit = null)
 	{
 		$opc = Opl_Registry::get('opc');
+		
 		if(is_null($limit))
 		{
 			$limit = $opc->itemsPerPage;
 		}
-		if(!is_null($opc->paginationDecorator))
+		
+		if(!is_null($opc->paginatorDecorator))
 		{
-			$this->decorator = $opc->paginationDecorator;
+			$this->set('decorator', $opc->paginatorDecorator);
 		}
-		if(is_array($opc->paginationDecoratorOptions))
+		
+		if(is_array($opc->paginatorDecoratorOptions))
 		{
-			$this->decorator->loadConfig($opc->paginationDecoratorOptions);
+			$this->decorator->loadConfig($opc->paginatorDecoratorOptions);
 		}
 		
 		$this->set('all', $all);
@@ -290,14 +290,14 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 					
 					if(!$decoratorClass)
 					{
-						throw new Opc_Exception('Undefined decorator ['.$value.']');
+						throw new Opc_PaginatorUndefinedDecorator_Exception($value);
 					}
 					
 					$this->_decorator = new $decoratorClass;
 					
 					if(!is_subclass_of($this->_decorator, 'Opc_Paginator_Decorator'))
 					{
-						throw new Opc_Exception('Given decorator ['.get_class($value).'] is not a subclass of "Opc_Paginator_Decorator".');
+						throw new Opc_PaginatorWrongSubclassDecorator_Exception(get_class($value));
 					}
 					
 					$this->_decorator->setPaginator($this);
@@ -306,7 +306,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 				{
 					if(!is_subclass_of($value, 'Opc_Paginator_Decorator'))
 					{
-						throw new Opc_Exception('Given decorator ['.get_class($value).'] is not a subclass of "Opc_Paginator_Decorator".');
+						throw new Opc_PaginatorWrongSubclassDecorator_Exception(get_class($value));
 					}
 					
 					$this->_decorator = clone $value;
@@ -314,7 +314,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 				}
 				else
 				{
-					throw new Opc_Exception('Undefined decorator ['.$value.']');
+					throw new Opc_PaginatorUndefinedDecorator_Exception((string) $value);
 				}
 				
 				$this->state(self::STATE_DIRTY);
