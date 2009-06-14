@@ -32,6 +32,19 @@ abstract class Opc_Paginator_Decorator
 	public function setup()
 	{ 
 	} // end setup();
+
+	/**
+	 * Imports the decorator options from an array.
+	 *
+	 * @param array $optList The option list
+	 */
+	final public function loadConfig($optList)
+	{
+		foreach($optList as $name => $value)
+		{
+			$this->set($name, $value);
+		}
+	} // end loadConfig();
 	
 	/**
 	 * Magic function so that $obj->key = "value" will work

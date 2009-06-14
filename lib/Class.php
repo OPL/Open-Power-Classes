@@ -30,6 +30,8 @@ class Opc_Class extends Opl_Class
 	 * @var integer
 	 */	 	
 	public $itemsPerPage = 10;
+	public $paginationDecorator = null;
+	public $paginationDecoratorOptions = null;
 
 	// Opc_Visit configuration
 

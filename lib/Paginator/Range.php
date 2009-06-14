@@ -116,9 +116,18 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	 */	
 	public function __construct($all = null, $limit = null)
 	{
+		$opc = Opl_Registry::get('opc');
 		if(is_null($limit))
 		{
-			$limit = Opl_Registry::get('opc')->itemsPerPage;
+			$limit = $opc->itemsPerPage;
+		}
+		if(!is_null($opc->paginationDecorator))
+		{
+			$this->decorator = $opc->paginationDecorator;
+		}
+		if(is_array($opc->paginationDecoratorOptions))
+		{
+			$this->decorator->loadConfig($opc->paginationDecoratorOptions);
 		}
 		
 		$this->set('all', $all);

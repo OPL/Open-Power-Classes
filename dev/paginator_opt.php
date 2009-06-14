@@ -18,6 +18,8 @@ try
    	$tpl->stripWhitespaces = false;
    	$tpl->setup();
 
+	$opc = new Opc_Class;
+
 	$pager = Opc_Paginator::create(1000, 13); // returns Opc_Paginator_Pager;
 	$pager->all = 1000;
 	$pager->page = isset($_GET['page']) ? $_GET['page'] : 1;

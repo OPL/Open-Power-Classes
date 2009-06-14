@@ -23,7 +23,7 @@ class Opc_Paginator
 	 * @static		 
 	 * @access private		 
 	 * @var array
-	 */		 		
+	 */
 	protected static $_decorators = array(
 		'all'				=> 'Opc_Paginator_Decorator_All',
 		'slider'			=> 'Opc_Paginator_Decorator_Slider',
