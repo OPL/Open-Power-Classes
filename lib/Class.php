@@ -20,10 +20,9 @@
 class Opc_Class extends Opl_Class
 {
 	// Opc_Cache configuration
-	public $cacheDir = null;
+	public $cacheDir = '';
 	public $expiryTime = 3600;
-	public $quantum = 1.0;
-
+	
 	// Opc_Paginator configuration
 	/**
 	 * Default value for Opc_Paginator_Range->limit	

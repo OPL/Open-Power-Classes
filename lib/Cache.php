@@ -192,7 +192,7 @@ class Opc_Cache implements Opt_Caching_Interface
 		if(!$this->_isReadAlready)
 		{
 			$this->_isReadAlready == true;
-			$this->_fileHandle = @fopen($this->_cacheDir.$this->_getFilename(), 'r');
+			$this->_fileHandle = @fopen($this->getCacheDir().$this->_getFilename(), 'r');
 			if($this->_fileHandle === false)
 			{
 				return false;
@@ -207,14 +207,14 @@ class Opc_Cache implements Opt_Caching_Interface
 			{
 				/* When header is not an array it means it is wrong, so file must be deleted
 				   because of that and because it could be bad or unauthorized changed */
-				unlink($this->_cacheDir.$this->_getFilename());
+				unlink($this->getCacheDir().$this->_getFilename());
 				$this->_fileHandle = null;
 				return false;
 			}
-			if($header['timestamp'] < (time() - $header['expiry']))
+			if($header['timestamp'] < (time() - $header['expire']))
 			{
 				/* When cache file is old it should be deleted ;) */
-				unlink($this->_cacheDir.$this->_getFilename());
+				unlink($this->getCacheDir().$this->_getFilename());
 				$this->_fileHandle = null;
 				return false;
 			}
@@ -238,7 +238,7 @@ class Opc_Cache implements Opt_Caching_Interface
 	 */
 	public function clear()
 	{
-		unlink($this->_cacheDir.$this->_getFilename());
+		unlink($this->getCacheDir().$this->_getFilename());
 	} // end clear();
 
 	/**
@@ -261,7 +261,7 @@ class Opc_Cache implements Opt_Caching_Interface
 		else
 		{
 			ob_start();
-			ob_implicit_flush(false);
+			//ob_implicit_flush(false);
 			return false;
 		}
 	} // end templateCacheStart();
@@ -281,6 +281,6 @@ class Opc_Cache implements Opt_Caching_Interface
 		$header = '<'.'?cacheHeader '.serialize($header).'?>'."\n";
 
 		// TODO implement dynamic templates
-		file_put_contents($this->getCacheDir().$this->_getFileName, $header.ob_get_clean());
+		file_put_contents($this->getCacheDir().$this->_getFileName(), $header.ob_get_contents());
 	} // end templateCacheStop();
 } // end Opc_Cache;
