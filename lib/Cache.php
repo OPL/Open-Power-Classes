@@ -166,7 +166,7 @@ class Opc_Cache implements Opt_Caching_Interface
 			$this->_cacheDir = $this->_opc->cacheDir;
 		}
 		return $this->_cacheDir;
-	}
+	} // end getCacheDir();
 
 	/**
 	 * Gets the cache filename with special key.
@@ -198,7 +198,7 @@ class Opc_Cache implements Opt_Caching_Interface
 				return false;
 			}
 			$header = fgets($this->_fileHandle);
-			if($header[0] == '<')
+			if($header{0} == '<')
 			{
 				$header = str_replace(array('<'.'?cacheHeader ','?>'), '', $header);
 			}
