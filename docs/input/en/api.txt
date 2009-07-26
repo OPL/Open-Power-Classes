@@ -1,0 +1,5 @@
+Title: API reference
+
+----
+
+This chapter provides the core API reference.

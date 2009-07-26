@@ -1,0 +1,10 @@
+preface
+installation
+installation.standard
+installation.phar
+classes
+api
+appendix
+appendix.support
+appendix.bugs
+appendix.license

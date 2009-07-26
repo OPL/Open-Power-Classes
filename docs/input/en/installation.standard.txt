@@ -1,0 +1,34 @@
+Title: Standard installation
+
+----
+
+This chapter describes the installation as a set of PHP files.
+
+Directory structure
+===================
+
+In the downloaded archive you can find a directory called `/lib` with all the necessary OPC and OPL source code. Create in your project directory tree a new directory and copy there the contents of `/lib`. If you already use other OPL libraries, copy OPC into the existing directory. Do not be afraid to overwrite the files if you are asked to do so. Unless they are modified, there is nothing to worry.
+
+PHP code and the configuration
+==============================
+
+In the beginning, you must load the OPL core, configure the path to the libraries and set the autoloader. The following code is used then:
+
+~~~~
+[php]
+<?php
+require('./libs/Opl/Base.php'); // 1
+Opl_Loader::setDirectory('./libs/'); // 2
+Opl_Loader::register(); // 3
+
+$opc = new Opc_Class; // 4
+// your script
+~~~~
+
+> [steps]
+> 1. We load the OPL core.
+> 2. We set the library path. It should end with `/`, but it is not necessary. We recommend to set the absolute path, because OPL does not use *include_path* by default. In case of PHP 5.2 this method is required, because it also loads the emulation code for some extra classes from PHP 5.3.
+> 3. We register the autoloader that will automatically locate and load the classes.
+> 4. We create the main Open Power Classes object, which is required to be initiated by some classes.
+
+All the OPL libraries report the errors as exceptions. For OPL, the base exception class is `Opl_Exception` and for OPC - `Opc_Exception`.
