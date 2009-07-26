@@ -17,53 +17,55 @@
  * Jumper decorator class. Page ranges jump between steps.
  *  
  * <1> <11> 21 22 23 [24] 25 26 27 28 29 30 <31> <41> <51> <61>
- */	
+ * 
+ * @author Jacek "eXtreme" Jędrzejewski
+ */
 class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 {
 	/**
-	 * Number of pages per one step			
-	 * @access public		
-	 * @var integer	
-	 */	
+	 * Number of pages per one step
+	 * @access public
+	 * @var integer
+	 */
 	protected $stepping = 10;
 	/**
-	 * Return steps?		
-	 * @access public		
-	 * @var boolean	
-	 */	
+	 * Return steps?
+	 * @access public
+	 * @var boolean
+	 */
 	protected $steps = true;
 	
 	/**
 	 * @access private
-	 * @var integer			 
-	 */	
+	 * @var integer
+	 */
 	protected $_begin;
 	/**
 	 * @access private
-	 * @var integer			 
-	 */	
+	 * @var integer
+	 */
 	protected $_end;
 	/**
 	 * @access private
-	 * @var array		 
-	 */	
+	 * @var array
+	 */
 	protected $_steps = array();
 	
 	/**
 	 * @param string $key
 	 * @param mixed $value
 	 * @return true
-	 */	
+	 */
 	public function set($key, $value)
 	{
 		$key = trim($key, '_');
 		
 		switch($key)
 		{
-			case 'stepping':	
+			case 'stepping':
 				$value = (int)$value;
 				break;
-			case 'steps':	
+			case 'steps':
 				$value = (boolean)$value;
 				break;
 		}
@@ -74,7 +76,7 @@ class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 	/**
 	 * 
 	 * @return void
-	 */	
+	 */
 	public function setup()
 	{
 		$page = $this->_paginator->page;
@@ -100,10 +102,10 @@ class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 		$this->_begin = $step * $this->stepping;
 		$this->_end = $this->_begin + $this->stepping;
 	} // end setup();
-		
+	
 	/**
 	 * @return array
-	 */	
+	 */
 	public function current()
 	{
 		$current = false;

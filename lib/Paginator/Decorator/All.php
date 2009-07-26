@@ -15,14 +15,16 @@
 
 /**
  * Decorator class, which returns all pages.
- */	
+ * 
+ * @author Jacek "eXtreme" Jędrzejewski
+ */
 class Opc_Paginator_Decorator_All extends Opc_Paginator_Decorator
 {
 	/**
 	 * Returns all page numbers
-	 * 		 		
+	 * 
 	 * @return array
-	 */	
+	 */
 	public function current()
 	{
 		$i = $this->_paginator->key();

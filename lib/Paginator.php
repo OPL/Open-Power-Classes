@@ -14,14 +14,16 @@
  */
 
 /**
- *
- */	 	
+ * A factory and global configuration class for Paginator.
+ * 
+ * @author Jacek "eXtreme" Jędrzejewski
+ */
 class Opc_Paginator
 {
 	/**
-	 * List of default decorator aliases	
-	 * @static		 
-	 * @access private		 
+	 * List of default decorator aliases
+	 * @static
+	 * @access private
 	 * @var array
 	 */
 	protected static $_decorators = array(
@@ -34,10 +36,10 @@ class Opc_Paginator
 	
 	/**
 	 * Disabled constructor, because Opc_Paginator is a static class
-	 * 		 			 	
-	 * @access private		
+	 * 
+	 * @access private
 	 * @return false
-	 */		 		
+	 */
 	final private function __construct()
 	{
 		return false;
@@ -45,37 +47,37 @@ class Opc_Paginator
 	
 	/**
 	 * Creates a new instance of paginator
-	 *		 
-	 * @static		 		
+	 * 
+	 * @static
 	 * @param integer $all The amout of all items
-	 * @param integer $limit Items per page		 		 
+	 * @param integer $limit Items per page
 	 * @return Opc_Paginator_Range New paginator
-	 */		 		
+	 */
 	public static function create($all = null, $limit = null)
 	{
-		return new Opc_Paginator_Range($all, $limit);		
+		return new Opc_Paginator_Range($all, $limit);
 	} // end create();
 	
 	/**
 	 * Registers a new alias for a decorator
 	 * 
-	 * @static		 	 		
+	 * @static
 	 * @param string $alias
 	 * @param string $className
-	 * @return void		 		 
-	 */		 		
+	 * @return void
+	 */
 	public static function registerDecorator($alias, $className)
 	{
 		self::$_decorators[$alias] = $className;
-	} // end registerDecorator();	
+	} // end registerDecorator();
 	
 	/**
 	 * Returns a class name for given decorator alias. False when not exists.
-	 * 	
-	 * @static		 	 		
-	 * @param string $alias		 
+	 * 
+	 * @static
+	 * @param string $alias
 	 * @return string|false The class name or error
-	 */		 		
+	 */
 	public static function getDecoratorClassName($alias)
 	{
 		if(isset(self::$_decorators[$alias]))
@@ -83,18 +85,18 @@ class Opc_Paginator
 			return self::$_decorators[$alias];
 		}
 		return false;
-	} // end registerDecorator();	
+	} // end registerDecorator();
 	
 	/**
 	 * Counts an offset for given page
-	 * 	
-	 * @static		 	 		
-	 * @param integer $page		 
-	 * @param integer $limit Items per page 		 
+	 * 
+	 * @static
+	 * @param integer $page
+	 * @param integer $limit Items per page
 	 * @return integer Offset for given page
-	 */		 		
+	 */
 	public static function countOffset($page, $limit)
 	{
 		return ($page-1) * $limit;
-	} // end registerDecorator();	
+	} // end registerDecorator();
 } // end Opc_Paginator;

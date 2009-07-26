@@ -16,6 +16,8 @@
 /**
  * The class manages the configuration and plugin loading utilities for OPC.
  * Furthermore, it serves as a factory object for other classes.
+ * 
+ * @author Tomasz "Zyx" Jędrzejewski
  */
 class Opc_Class extends Opl_Class
 {
@@ -27,17 +29,17 @@ class Opc_Class extends Opl_Class
 	/**
 	 * Default value for Opc_Paginator_Range->limit	
 	 * @var integer
-	 */	 	
+	 */
 	public $itemsPerPage = 10;
 	/**
-	 * Default decorator	
+	 * Default decorator
 	 * @var string|Opc_Paginator_Decorator
-	 */	 
+	 */
 	public $paginatorDecorator = null;
 	/**
-	 * Default decorator's options	
+	 * Default decorator's options
 	 * @var array
-	 */	 
+	 */
 	public $paginatorDecoratorOptions = null;
 
 	// Opc_Visit configuration

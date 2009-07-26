@@ -16,6 +16,8 @@
 /**
  * An utility class that serves various information about the current
  * request.
+ * 
+ * @author Tomasz "Zyx" Jędrzejewski
  */
 class Opc_Visit
 {

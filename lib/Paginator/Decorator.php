@@ -14,21 +14,23 @@
  */
 
 /**
- *
- */	
+ * All decorators must extend and implement that class.
+ * 
+ * @author Jacek "eXtreme" Jędrzejewski
+ */
 abstract class Opc_Paginator_Decorator
 {
 	/**
-	 * Paginator instance		
+	 * Paginator instance
 	 * @var Opc_Paginator_Range
-	 */	
+	 */
 	protected $_paginator = null;
 	
 	/**
 	 * Setup is executed when the pager is in the dirty state.
-	 * Use for init calculations.		 		
+	 * Use for init calculations.
 	 * @return void
-	 */	
+	 */
 	public function setup()
 	{ 
 	} // end setup();
@@ -48,11 +50,11 @@ abstract class Opc_Paginator_Decorator
 	
 	/**
 	 * Magic function so that $obj->key = "value" will work
-	 * 		 		
+	 * 
 	 * @param string $key
 	 * @param mixed $value
 	 * @return true
-	 */	
+	 */
 	final public function __set($key, $value)
 	{ 
 		return $this->set($key, $value);
@@ -62,7 +64,7 @@ abstract class Opc_Paginator_Decorator
 	 * @param string $key
 	 * @param mixed $value
 	 * @return true
-	 */	
+	 */
 	public function set($key, $value)
 	{ 
 		$key = trim($key, '_');
@@ -82,16 +84,16 @@ abstract class Opc_Paginator_Decorator
 	 *
 	 * @param string $key
 	 * @return mixed
-	 */	
+	 */
 	final public function __get($key)
 	{
 		return $this->get($key);
 	} // end __get();
 	
 	/**
-	 * @param string $key		
+	 * @param string $key
 	 * @return mixed
-	 */	
+	 */
 	public function get($key)
 	{ 
 		$key = trim($key, '_');
@@ -107,7 +109,7 @@ abstract class Opc_Paginator_Decorator
 	/**
 	 * @param Opc_Paginator_Range $paginator Current paginator instance
 	 * @return void
-	 */	
+	 */
 	final public function setPaginator(Opc_Paginator_Range $paginator)
 	{
 		$this->_paginator = $paginator; 
@@ -116,8 +118,8 @@ abstract class Opc_Paginator_Decorator
 	/**
 	 * This method should return an array. Used in Iterator interface
 	 * of the paginator.
-	 * 		 		  		
+	 * 
 	 * @return array
-	 */	
+	 */
 	abstract public function current();
 } // end Opc_Paginator_Decorator;

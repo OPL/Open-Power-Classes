@@ -15,6 +15,8 @@
 
 /**
  * The error handler extension for OPC.
+ * 
+ * @author Tomasz "Zyx" Jędrzejewski
  */
 class Opc_ErrorHandler extends Opl_ErrorHandler
 {

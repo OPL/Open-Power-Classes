@@ -14,36 +14,38 @@
  */
 
 /**
- *
- */	
+ * An utility class which helps autoload models in Doctrine ORM.
+ * 
+ * @author Amadeusz "megawebmaster" Starzykiewicz
+ */
 class Opc_DoctrineModels
 {
 	
 	/**
 	 * Models path
-	 * @static		 
-	 * @access private		 
+	 * @static
+	 * @access private
 	 * @var string
 	 */
 	static protected $_modelsPath;
 	/**
 	 * Base model prefix
-	 * @static		 
-	 * @access private		 
+	 * @static
+	 * @access private
 	 * @var string
 	 */
 	static protected $_baseModelPrefix = 'Base';
 	/**
 	 * Generated models directory name
-	 * @static		 
-	 * @access private		 
+	 * @static
+	 * @access private
 	 * @var string
 	 */
 	static protected $_generatedModelsDirectoryName = 'generated';
 	/**
 	 * Class file suffix
-	 * @static		 
-	 * @access private		 
+	 * @static
+	 * @access private
 	 * @var string
 	 */
 	static protected $_classFileSuffix = '.php';
@@ -51,7 +53,7 @@ class Opc_DoctrineModels
 	/**
 	 * An autoloader method.
 	 *
-	 * @static	 
+	 * @static
 	 * @param string $className
 	 * @return boolean
 	 */
@@ -82,7 +84,7 @@ class Opc_DoctrineModels
 	/**
 	 * Allows to set generated base models prefix.
 	 *
-	 * @static	 
+	 * @static
 	 * @param string $name Base model prefix
 	 */
 	static public function setBaseModelPrefix($name)
@@ -93,7 +95,7 @@ class Opc_DoctrineModels
 	/**
 	 * Allows to set different suffix for class files.
 	 *
-	 * @static	 
+	 * @static
 	 * @param string $suffix File suffix
 	 */
 	static public function setClassFileSuffix($suffix)
@@ -104,7 +106,7 @@ class Opc_DoctrineModels
 	/**
 	 * Allows to set generated base models directory name.
 	 *
-	 * @static	 
+	 * @static
 	 * @param string $dir Directory name
 	 */
 	static public function setGeneratedModelsDirectoryName($dir)
@@ -124,7 +126,7 @@ class Opc_DoctrineModels
 	/**
 	 * Specifies directory path to Doctrine models.
 	 *
-	 * @static	 
+	 * @static
 	 * @param string $path Full path to models directory
 	 */
 	static public function setPath($path)
@@ -139,8 +141,8 @@ class Opc_DoctrineModels
 
 	/**
 	 * Registers an autoloader.
-	 * 	 
-	 * @static	 	 
+	 * 
+	 * @static
 	 */
 	static public function register()
 	{

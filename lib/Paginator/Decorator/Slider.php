@@ -18,54 +18,56 @@
  * beggining and at the end and a gap between them.  
  *  
  * 1 2 3 ... 22 23 [24] 25 26 ... 65 66 67
+ * 
+ * @author Jacek "eXtreme" Jędrzejewski
  */	
 class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 {
 	/**
-	 * Number of pages around current 
-	 * For value 2: "5 6 [7] 8 9" 		 
-	 * @access public		 		
-	 * @var integer	
-	 */	
+	 * Number of pages around current
+	 * For value 2: "5 6 [7] 8 9"
+	 * @access public
+	 * @var integer
+	 */
 	protected $around = 2;
 	/**
-	 * Number of pages at the begin and the end 
-	 * @access public		 	 		 		
-	 * @var integer	
-	 */	
+	 * Number of pages at the begin and the end
+	 * @access public
+	 * @var integer
+	 */
 	protected $chunk = 3;
 	
 	/**
 	 * @access private
-	 * @var integer			 
-	 */	
+	 * @var integer
+	 */
 	protected $_allchunk;
 	/**
-	 * Start number before current 		
+	 * Start number before current
 	 * @access private
-	 * @var integer			 
-	 */	
+	 * @var integer
+	 */
 	protected $_back;
 	/**
-	 * End number after current	 		
+	 * End number after current
 	 * @access private
-	 * @var integer		 
-	 */	
+	 * @var integer
+	 */
 	protected $_forward;
 	
 	/**
 	 * @param string $key
 	 * @param mixed $value
 	 * @return true
-	 */	
+	 */
 	public function set($key, $value)
 	{
 		$key = trim($key, '_');
 		
 		switch($key)
 		{
-			case 'chunk':	
-			case 'around':	
+			case 'chunk':
+			case 'around':
 				$value = (int)$value;
 				break;
 		}
@@ -75,9 +77,9 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 	
 	/**
 	 * Setup
-	 * 		 
+	 * 
 	 * @return void
-	 */	
+	 */
 	public function setup()
 	{
 		$this->_allchunk = $this->_paginator->pageCount - $this->chunk;
@@ -87,9 +89,9 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 	
 	/**
 	 * Return current, "around", and "chunk" numbers
-	 *		 		
+	 * 
 	 * @return array
-	 */	
+	 */
 	public function current()
 	{
 		$current = false;
@@ -119,10 +121,10 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 	
 	/**
 	 * Returns a separator-type item, which is not a number 
-	 * 		 		
-	 * @access protected	
+	 * 
+	 * @access protected
 	 * @return array
-	 */	
+	 */
 	protected function _separator()
 	{
 		if($this->chunk == 0)

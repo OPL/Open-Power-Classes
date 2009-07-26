@@ -18,16 +18,18 @@
  * of gaps it returns a clickable "dot"-type pages. 
  * 
  * 1 2 3 ........ 12 13 [14] 15 16 ..... 22 23 24
- */	
+ 
+ * @author Jacek "eXtreme" Jędrzejewski
+ */
 class Opc_Paginator_Decorator_DottingSlider extends Opc_Paginator_Decorator_Slider
 {
 	/**
 	 * Replaces static separator of "Slider" with a dot representing all pages,
-	 * which are not "current", "chunk" and "around".		 
-	 * 		 		
-	 * @access private		
+	 * which are not "current", "chunk" and "around".
+	 * 
+	 * @access private
 	 * @return array
-	 */	
+	 */
 	protected function _separator()
 	{
 		$i = $this->_paginator->key();

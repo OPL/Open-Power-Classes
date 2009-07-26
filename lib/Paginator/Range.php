@@ -14,103 +14,105 @@
  */
  
 /**
- *
- */	
+ * Paginator worker class.
+ * 
+ * @author Jacek "eXtreme" Jędrzejewski
+ */
 class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 {
 	/**
 	 * This constant means the pager needs to be reset 
-	 */	
+	 */
 	const STATE_DIRTY = 1;
 	/**
 	 * Clean state means the pager is reset and ready to work
-	 */	
+	 */
 	const STATE_CLEAN = 2;
 	
 	/**
-	 * Current page	
-	 * @access public		 	
+	 * Current page
+	 * @access public
 	 * @var integer
 	 */	
 	protected $page = 1;
 	/**
 	 * Items per page
-	 * @access public		 		
+	 * @access public
 	 * @var integer
-	 */	
+	 */
 	protected $limit;
 	/**
 	 * All items to be paginated
-	 * @access public		 		
+	 * @access public
 	 * @var integer
-	 */	
+	 */
 	protected $all = 0;
 	/**
-	 * Offset for current page		
-	 * @access public		 
+	 * Offset for current page
+	 * @access public
 	 * @var integer
-	 */	
+	 */
 	protected $offset;
 	/**
 	 * The amount of all pages
-	 * @access public		 		
+	 * @access public
 	 * @var integer
-	 */			
+	 */
 	protected $pageCount = null;
 	/**
 	 * Special value of current page for decorators
-	 * @access public		 	
+	 * @access public
 	 * @var integer
-	 */	
+	 */
 	protected $page_float = null;
 	
 	// Read-only navigation links
 	/**
-	 * @access public		
+	 * @access public
 	 * @var array|false
-	 */		 		
+	 */
 	protected $first;
 	/**
-	 * @access public		
+	 * @access public
 	 * @var array|false
 	 */
 	protected $last;
 	/**
-	 * @access public		
+	 * @access public
 	 * @var array|false
 	 */
 	protected $next;
 	/**
-	 * @access public		
+	 * @access public
 	 * @var array|false
 	 */
 	protected $previous;
 	
 	// Internal properties
-	/**				
-	 * @access private		
+	/**
+	 * @access private
 	 * @var integer
-	 */	
+	 */
 	protected $_state = self::STATE_DIRTY;
 	/**
-	 * @access private		
+	 * @access private
 	 * @var Opc_Paginator_Decorator 
-	 */	
+	 */
 	protected $_decorator = null;
 	/**
 	 * Internal interator counter
-	 * @access private		 
-	 * @var integer		 
-	 */	
+	 * @access private
+	 * @var integer
+	 */
 	protected $_i = 0;
 	
 	/**
 	 * Creates new paginator
-	 * 		 		
+	 * 
 	 * @param integer $all The amout of all items
-	 * @param integer $limit Items per page	
-	 * @return void		 
-	 */	
+	 * @param integer $limit Items per page
+	 * @return void
+	 */
 	public function __construct($all = null, $limit = null)
 	{
 		$opc = Opl_Registry::get('opc');
@@ -136,10 +138,10 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	
 	/**
 	 * Returns currect state. Optional parameter sets the state.
-	 * 		 		
-	 * @param integer $state A new state		 
+	 * 
+	 * @param integer $state A new state
 	 * @return integer Numeral representation of a state constant 
-	 */	
+	 */
 	public function state($state = null)
 	{
 		switch($state)
@@ -154,7 +156,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 				break;
 			default:
 				throw new Opc_Exception('');
-				break;				
+				break;
 		}
 		
 		return $this->_state;
@@ -172,9 +174,9 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	} // end __get();
 
 	/**
-	 * @param string $key		
+	 * @param string $key
 	 * @return mixed
-	 */	
+	 */
 	public function get($key)
 	{
 		switch($key)
@@ -246,11 +248,11 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	
 	/**
 	 * Magic function so that $obj->key = "value" will work
-	 *		 		
+	 * 
 	 * @param string $key
-	 * @param mixed $value		 		
+	 * @param mixed $value
 	 * @return true
-	 */	
+	 */
 	final public function __set($key, $value)
 	{
 		return $this->set($key, $value);
@@ -259,8 +261,8 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	/**
 	 * @param string $key
 	 * @param mixed $value
-	 * @return true		 
-	 */	
+	 * @return true
+	 */
 	public function set($key, $value)
 	{
 		switch($key)
@@ -274,7 +276,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 				$this->$key = $value;
 				$this->page = $this->offset / $this->get('limit') + 1;
 				break;
-			case 'page':				 
+			case 'page':
 				if($value < 1 || $value > $this->get('pageCount'))
 				{
 					throw new Opc_Exception('Page not found ['.$value.']');
@@ -348,7 +350,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	
 	/**
 	 * @return void
-	 */	
+	 */
 	public function setup()
 	{
 		$this->get('pageCount');
@@ -360,9 +362,9 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	// Iterator interface
 	/**
 	 * @return array
-	 */	
+	 */
 	public function current()
-	{						  
+	{
 		$current = $this->get('decorator')->current();
 		
 		if(isset($current['number']))
@@ -375,25 +377,25 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 
 	/**
 	 * @return integer
-	 */	
+	 */
 	public function key()
-	{		   
+	{
 		return $this->_i;
 	} // end key();
 
 	/**
 	 * @return void
-	 */	
+	 */
 	public function next()
-	{	  
+	{
 		$this->_i++;
 	} // end next();
 
 	/**
 	 * @return true
-	 */	
+	 */
 	public function rewind()
-	{		 
+	{
 		$this->_i = 1;
 		
 		if($this->_state == Opc_Paginator_Range::STATE_DIRTY)
@@ -408,7 +410,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 
 	/**
 	 * @return boolean
-	 */	
+	 */
 	public function valid()
 	{			
 		return $this->_i <= $this->pageCount;
@@ -420,7 +422,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	 * @return void
 	 */	
 	public function seek($index)
-	{		
+	{
 		$this->_i = 1;
 		$position = 1;
 
@@ -439,10 +441,10 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	// Countable interface
 	/**
 	 * Returns the amount of all pages.
-	 * Implements Countable interface so that count($pager) will work		 
-	 * 				 
+	 * Implements Countable interface so that count($pager) will work
+	 * 
 	 * @return integer
-	 */	
+	 */
 	public function count()
 	{
 		return $this->pageCount;

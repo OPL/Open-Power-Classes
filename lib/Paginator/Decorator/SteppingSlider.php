@@ -18,34 +18,36 @@
  * of gaps it returns steps. 
  *   
  * 1 2 3 <10> <20> 22 23 [24] 25 26 <30> <40> <50> <60> 65 66 67
+ *
+ * @author Jacek "eXtreme" Jędrzejewski
  */	
 class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Slider
 {
 	/**
-	 * Number of pages per one step		
-	 * @access public		
-	 * @var integer	
-	 */	
+	 * Number of pages per one step
+	 * @access public
+	 * @var integer
+	 */
 	protected $stepping = 10;
 	
 	/**
 	 * @access private
-	 * @var array		 
-	 */	
+	 * @var array
+	 */
 	protected $_steps = array();
 	
 	/**
 	 * @param string $key
 	 * @param mixed $value
 	 * @return true
-	 */	
+	 */
 	public function set($key, $value)
 	{
 		$key = trim($key, '_');
 		
 		switch($key)
 		{
-			case 'stepping':	
+			case 'stepping':
 				$value = (int)$value;
 				break;
 		}
@@ -56,7 +58,7 @@ class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Sli
 	/**
 	 * 
 	 * @return void
-	 */	
+	 */
 	public function setup()
 	{
 		$page = $this->_paginator->page;
@@ -77,7 +79,7 @@ class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Sli
 	
 	/**
 	 * @return array
-	 */	
+	 */
 	protected function _separator()
 	{
 		$current = false;
