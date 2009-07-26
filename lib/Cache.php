@@ -202,10 +202,7 @@ class Opc_Cache implements Opt_Caching_Interface
 			$this->_fileHandle = @fopen($this->getCacheDir().$this->_getFilename(), 'r');
 			if($this->_fileHandle === false)
 			{
-				if($this->_fileHandle === false)
-				{
-					return false;
-				}
+				return false;
 			}
 			$header = fgets($this->_fileHandle);
 			if($header[0] == '<')
