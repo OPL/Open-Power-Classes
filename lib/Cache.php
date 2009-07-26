@@ -75,6 +75,13 @@ class Opc_Cache implements Opt_Caching_Interface
 	private $_fileHandle = null;
 
 	/**
+	 * Presents if the view has dynamic content or not.
+	 *
+	 * @var Boolean
+	 */
+	private $_dynamic = false;
+
+	/**
 	 * Creates a new caching object and connects to it.
 	 * 
 	 * @param Opt_View $view The view 
@@ -195,12 +202,15 @@ class Opc_Cache implements Opt_Caching_Interface
 			$this->_fileHandle = @fopen($this->getCacheDir().$this->_getFilename(), 'r');
 			if($this->_fileHandle === false)
 			{
-				return false;
+				if($this->_fileHandle === false)
+				{
+					return false;
+				}
 			}
 			$header = fgets($this->_fileHandle);
-			if($header{0} == '<')
+			if($header[0] == '<')
 			{
-				$header = str_replace(array('<'.'?cacheHeader ','?>'), '', $header);
+				$header = str_replace(array('<'.'?php /* ','*/ ?>'), '', $header);
 			}
 			$header = unserialize($header);
 			if(!is_array($header))
@@ -218,6 +228,7 @@ class Opc_Cache implements Opt_Caching_Interface
 				$this->_fileHandle = null;
 				return false;
 			}
+			$this->_dynamic = $header['dynamic'];
 			return true;
 		}
 		else
@@ -251,17 +262,25 @@ class Opc_Cache implements Opt_Caching_Interface
 	{
 		if($this->isCached())
 		{
-			while(!feof($this->_fileHandle))
+			if($this->_dynamic)
 			{
-				$buf = fgets($this->_fileHandle, 2048);
-				echo $buf;
+				return $this->getCacheDir().$this->_getFilename();
+			}
+			else
+			{
+				while(!feof($this->_fileHandle))
+				{
+					$buf = fgets($this->_fileHandle, 2048);
+					echo $buf;
+				}
 			}
 			return true;
 		}
 		else
 		{
 			ob_start();
-			//ob_implicit_flush(false);
+			$tpl = Opl_Registry::get('opt');
+			$tpl->setBufferState('cache',true);
 			return false;
 		}
 	} // end templateCacheStart();
@@ -276,11 +295,43 @@ class Opc_Cache implements Opt_Caching_Interface
 	{
 		$header = array(
 			'timestamp' => time(),
-			'expire' => $this->getExpiryTime()
+			'expire' => $this->getExpiryTime(),
+			'dynamic' => $view->hasDynamicContent()?'true':'false'
 		);
-		$header = '<'.'?cacheHeader '.serialize($header).'?>'."\n";
-
-		// TODO implement dynamic templates
-		file_put_contents($this->getCacheDir().$this->_getFileName(), $header.ob_get_contents());
+		$header = '<'.'?php /* '.serialize($header).'*/ ?>'."\n";
+		$tpl = Opl_Registry::get('opt');
+		$tpl->setBufferState('cache',false);
+		
+		if($view->hasDynamicContent())
+		{
+			$buffer = $view->getOutputBuffers();
+			$dyn = file_get_contents($tpl->compileDir.$this->_view->getTemplate().'.php.dyn');
+			if($dyn !== false)
+			{
+				$dynamic = unserialize($dyn);
+				unset($dyn);
+			}
+			else
+			{
+				throw new Opc_ViewHasInvalidDynamicContent_Exception($this->_view->getTemplate());
+			}
+			$content = '';
+			for($i = 0, $endI = count($buffer); $i<$endI; $i++)
+			{
+				$content .= $buffer[$i];
+				$content .= $dynamic[$i];
+			}
+			if(file_put_contents($this->getCacheDir().$this->_getFilename(), $header.$content.ob_get_flush()) === false)
+			{
+				throw new Opc_CannotSaveCacheFile_Exception($this->getCacheDir());
+			}
+		}
+		else
+		{
+			if(file_put_contents($this->getCacheDir().$this->_getFileName(), $header.ob_get_contents()) === false)
+			{
+				throw new Opc_CannotSaveCacheFile_Exception($this->getCacheDir());
+			}
+		}
 	} // end templateCacheStop();
 } // end Opc_Cache;

@@ -142,7 +142,7 @@ class Opc_DoctrineModels
 	 * 	 
 	 * @static	 	 
 	 */
-	static public function registerAutoload()
+	static public function register()
 	{
 		spl_autoload_register(array('Opc_DoctrineModels', 'autoload'));
 	} // end register();
