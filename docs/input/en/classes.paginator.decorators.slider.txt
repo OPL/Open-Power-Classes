@@ -1,0 +1,57 @@
+Title: Slider
+
+----
+
+"Slider", as its name says, slides through all pages, displaying numerical pages at the beginning and the end and around the current page. It also returns a "gap" between those ranges.
+
+Settings
+========
+
+Name     | Type    | Default | Description
+-------- | ------- | ------- |:-----------
+`around` | integer | 2       | Number of pages around current
+`chunk`  | integer | 3       | Number of pages at the begin and the end
+
+Returned elements
+=================
+
+## `current`
+
+`number`
+:   Current page number.
+
+## `number`
+
+`number`
+:   Current page number.
+
+## `gap`
+
+Sample usage
+============
+
+~~~~
+[php]
+$pager->decorator = 'slider';
+$pager->decorator->chunk = 3;
+$pager->decorator->around = 2;
+
+echo '<p>';
+foreach($pager as $page)
+{
+    switch($page['item'])
+    {
+        case 'current':
+            echo ' <strong>['.$page['number'].']</strong> '; break;
+        case 'number':
+            echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+        case 'gap': 
+            echo " ... "; break;
+    }	
+}
+echo '</p>';  
+~~~~
+
+> #### The result:
+>
+> [1](#none) [2](#none) [3](#none) ... [29](#none) [30](#none) **[31]** [32](#none) [33](#none) ... [75](#none) [76](#none) [77](#none)

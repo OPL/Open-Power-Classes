@@ -28,6 +28,7 @@ try
 	$view = new Opt_View('paginator_opt.tpl');
 	$view->pager = $pager;
 	$view->setFormat('pager', 'Objective/Array'); 
+	$view->setFormat('pager.decorator', 'Objective'); 
 
 		
 	$out = new Opt_Output_Http;

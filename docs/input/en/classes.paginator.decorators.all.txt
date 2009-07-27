@@ -1,0 +1,43 @@
+Title: All
+
+----
+
+The simpliest decorator. It returns all page numbers, does not need to be configured.
+
+Returned elements
+=================
+
+## `current`
+
+`number`
+:   Current page number.
+
+## `number`
+
+`number`
+:   Current page number.
+
+Sample usage
+============
+
+~~~~
+[php]
+$pager->decorator = 'all';
+
+echo '<p>';
+foreach($pager as $page)
+{
+    switch($page['item'])
+    {
+        case 'current': 
+            echo ' <strong>['.$page['number'].']</strong> '; break;
+        case 'number': 
+            echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+    }	
+}
+echo '</p>';
+~~~~
+
+> #### The result:
+> 
+> [1](#none) [2](#none) [3](#none) **[4]** [5](#none) [6](#none) [7](#none) [8](#none) 

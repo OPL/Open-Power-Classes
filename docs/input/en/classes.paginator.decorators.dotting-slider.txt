@@ -1,0 +1,62 @@
+Title: Dotting Slider
+
+----
+
+Dotting slider is a combination of ["all"][classes.paginator.decorators.all] and ["slider"][classes.paginator.decorators.slider] decorators. Current page slides through all numbers but dotting slider returns also a "dot" item on every page number out of "around" and "chunk", which can be displayed as a clickable link.
+
+Settings
+========
+
+Name     | Type    | Default | Description
+-------- | ------- | ------- |:-----------
+`around` | integer | 2       | Number of pages around current
+`chunk`  | integer | 3       | Number of pages at the begin and the end
+
+Returned elements
+=================
+
+## `current`
+
+`number`
+:   Current page number.
+
+## `number`
+
+`number`
+:   Current page number.
+
+## `dot`
+
+`number`
+:   Current page number.
+
+Sample usage
+============
+
+~~~~
+[php]
+$pager->decorator = 'dotting_slider';
+$pager->decorator->chunk = 3;
+$pager->decorator->around = 2;
+
+echo '<p>';
+foreach($pager as $page)
+{
+    switch($page['item'])
+    {
+        case 'current':
+            echo ' <strong>['.$page['number'].']</strong> '; break;
+        case 'number':
+            echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+        case 'dot':
+            echo '<a href="?page='.$page['number'].'">.</a>'; break;
+    }	
+}
+echo '</p>';
+~~~~
+
+> #### The result:
+> 
+> [1](#none) [2](#none) [3](#none) [.](#none)[.](#none)[.](#none)[.](#none)[.](#none)[.](#none)[.](#none)[.](#none) [12](#none) [13](#none) **[14]** [15](#none) [16](#none) [.](#none)[.](#none)[.](#none)[.](#none)[.](#none) [22](#none) [23](#none) [24](#none)
+> 
+> *All dots are links to pages.*

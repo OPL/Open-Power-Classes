@@ -9,7 +9,7 @@
 <p>Page {$pager.page} of {$pager.pageCount}</p>
 
 <p>
-{$pager::decorator is 'all'}
+{$pager.decorator is 'all'}
 <opt:selector name="pager">
 	<opt:number> <a parse:href="'?page='~$pager.number">{$pager.number}</a> </opt:number>
 	<opt:current> <strong>[{$pager.number}]</strong> </opt:current> 
@@ -17,8 +17,8 @@
 </p>
 
 <p>
-{$pager::decorator is 'slider'}
-{$pager::decorator::chunk is 5}
+{$pager.decorator is 'slider'}
+{$pager.decorator.chunk is 5}
 <opt:selector name="pager">
 	<opt:number> <a parse:href="'?page='~$pager.number">{$pager.number}</a> </opt:number>
 	<opt:current> <strong>[{$pager.number}]</strong> </opt:current>
@@ -27,9 +27,9 @@
 </p>
 
 <p>
-{$pager::decorator is 'stepping_slider'}
-{$pager::decorator::chunk is 1}
-{$pager::decorator::around is 1}
+{$pager.decorator is 'stepping_slider'}
+{$pager.decorator.chunk is 1}
+{$pager.decorator.around is 1}
 <opt:selector name="pager">
 	<opt:number> <a parse:href="'?page='~$pager.number">{$pager.number}</a> </opt:number>
 	<opt:current> <strong>[{$pager.number}]</strong> </opt:current>
@@ -38,10 +38,10 @@
 </p>
 
 <p>
-	<a parse:href="'?page='~$pager.first.number" opt:if="$pager.first.number">&lArr; first</a>
-	<a parse:href="'?page='~$pager.previous.number" opt:if="$pager.previous.number">&larr; previous</a>
-	<a parse:href="'?page='~$pager.next.number" opt:if="$pager.next.number">next &rarr;</a>
-	<a parse:href="'?page='~$pager.last.number" opt:if="$pager.last.number">last &rArr;</a>
+	<a parse:href="'?page='~$pager.first.number" opt:on="$pager.first.number">&lArr; first</a>
+	<a parse:href="'?page='~$pager.previous.number" opt:on="$pager.previous.number">&larr; previous</a>
+	<a parse:href="'?page='~$pager.next.number" opt:on="$pager.next.number">next &rarr;</a>
+	<a parse:href="'?page='~$pager.last.number" opt:on="$pager.last.number">last &rArr;</a>
 </p>
 </body>
 </html>

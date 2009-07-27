@@ -1,0 +1,60 @@
+Title: Jumper
+
+----
+
+This decorator "jumps" through steps, returning a range between neighbouring steps.
+
+Settings
+========
+
+Name       | Type    | Default | Description
+---------- | ------- | ------- |:-----------
+`stepping` | integer | 10      | Number of pages per one step (and in a range)
+`steps`    | boolean | true    | This setting on "false" makes decorator not return `step` item.
+
+Returned elements
+=================
+
+## `current`
+
+`number`
+:   Current page number.
+
+## `number`
+
+`number`
+:   Current page number.
+
+## `step`
+
+`number`
+:   Step number.
+
+Sample usage
+============
+
+~~~~
+[php]
+$pager->decorator = 'jumper';
+$pager->decorator->stepping = 10;
+$pager->decorator->steps = true;
+
+echo '<p>';
+foreach($pager as $page)
+{
+    switch($page['item'])
+    {
+        case 'current':
+            echo ' <strong>['.$page['number'].']</strong> '; break;
+        case 'number':
+            echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+        case 'step':
+            echo ' <a href="?page='.$page['number'].'"><small>'.$page['number'].'</small></a> '; break;
+    }	
+}
+echo '</p>';
+~~~~
+
+> #### The result:
+> 
+> [<small>1</small>](#none) [<small>11</small>](#none) [<small>21</small>](#none) [31](#none) **[32]** [33](#none) [34](#none) [35](#none) [36](#none) [37](#none) [38](#none) [39](#none) [40](#none) [<small>41</small>](#none) [<small>51</small>](#none) [<small>61</small>](#none) [<small>71</small>](#none)

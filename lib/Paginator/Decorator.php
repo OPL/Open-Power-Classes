@@ -49,7 +49,7 @@ abstract class Opc_Paginator_Decorator
 	} // end loadConfig();
 	
 	/**
-	 * Magic function so that $obj->key = "value" will work
+	 * Magic function so that $obj->key = "value" will work.
 	 * 
 	 * @param string $key
 	 * @param mixed $value
@@ -80,7 +80,7 @@ abstract class Opc_Paginator_Decorator
 	} // end set();
 		
 	/**
-	 * Magic function so that $obj->key will work
+	 * Magic function so that $obj->key will work.
 	 *
 	 * @param string $key
 	 * @return mixed

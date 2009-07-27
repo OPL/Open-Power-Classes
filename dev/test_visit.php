@@ -18,7 +18,10 @@ try
 
 	$visit = Opc_Visit::getInstance();
 
-	echo '<p>Current host: '.$visit->host.'</p>';
+	//echo '<p>Current host: '.$visit->host.'</p>';
+	echo '<pre>';
+	var_dump($visit->toArray());
+	echo '</pre>';
 }
 catch(Opc_Exception $exception)
 {

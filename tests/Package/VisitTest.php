@@ -24,14 +24,14 @@ class Package_VisitTest extends PHPUnit_Framework_TestCase
 	{
 		$visit = Opc_Visit::getInstance();
 		$_SERVER['REMOTE_ADDR'] = '12.34.56.78';
-		$this->assertEquals('12.34.56.78', $visit->IP);
+		$this->assertEquals('12.34.56.78', $visit->ip);
 	} // end testIP();
 
 	public function testNumericIP()
 	{
 		$visit = Opc_Visit::getInstance();
 		$_SERVER['REMOTE_ADDR'] = '12.34.56.78';
-		$this->assertEquals(ip2long('12.34.56.78'), $visit->numericIP);
+		$this->assertEquals(ip2long('12.34.56.78'), $visit->numericIp);
 	} // end testNumericIP();
 
 	public function testHost()

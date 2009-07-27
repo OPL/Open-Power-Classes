@@ -1,0 +1,62 @@
+Title: Stepping Slider
+
+----
+
+"Stepping slider" is similar to ["slider"][classes.paginator.decorators.slider], but instead of a "gap" it returns a page "step" item.
+
+Settings
+========
+
+Name       | Type    | Default | Description
+---------- | ------- | ------- |:-----------
+`around`   | integer | 2       | Number of pages around current
+`chunk`    | integer | 3       | Number of pages at the begin and the end
+`stepping` | integer | 10      | Number of pages per one step
+
+Returned elements
+=================
+
+## `current`
+
+`number`
+:   Current page number.
+
+## `number`
+
+`number`
+:   Current page number.
+
+## `step`
+
+`number`
+:   Step number.
+
+Sample usage
+============
+
+~~~~
+[php]
+$pager->decorator = 'stepping_slider';
+$pager->decorator->chunk = 3;
+$pager->decorator->around = 2;
+$pager->decorator->stepping = 10;
+
+echo '<p>';
+foreach($pager as $page)
+{
+    switch($page['item'])
+    {
+        case 'current':
+            echo ' <strong>['.$page['number'].']</strong> '; break;
+        case 'number':
+            echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+        case 'step':
+            echo ' <a href="?page='.$page['number'].'"><small>'.$page['number'].'</small></a> '; break;
+    }	
+}
+echo '</p>';
+~~~~
+
+> #### The result:
+> 
+> [1](#none) [2](#none) [3](#none) [<small>10</small>](#none) [<small>20</small>](#none) [29](#none) [30](#none) **[31]** [32](#none) [33](#none) [<small>40</small>](#none) [<small>50</small>](#none) [<small>60</small>](#none) [<small>70</small>](#none) [75](#none) [76](#none) [77](#none)

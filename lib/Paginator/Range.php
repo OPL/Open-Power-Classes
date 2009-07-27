@@ -163,8 +163,8 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	} // end state();
 	
 	/**
-	 * Magic function so that $obj->key will work
-	 *
+	 * Magic function so that $obj->key will work.
+	 * 
 	 * @param string $key
 	 * @return mixed
 	 */
@@ -247,7 +247,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	} // end get();
 	
 	/**
-	 * Magic function so that $obj->key = "value" will work
+	 * Magic function so that $obj->key = "value" will work.
 	 * 
 	 * @param string $key
 	 * @param mixed $value

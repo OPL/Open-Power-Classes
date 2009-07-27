@@ -2,3 +2,6 @@ Title: Decorators overview
 
 ----
 
+Decorator is a class, which is used by the paginator to create a list of pages.
+
+Opc_Paginator provides 5 built-in decorators.
