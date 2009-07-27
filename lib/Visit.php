@@ -58,6 +58,14 @@ class Opc_Visit
 	} // end __construct();
 
 	/**
+	 * Resets the internal buffer state.
+	 */
+	public function reset()
+	{
+		$this->_data = array();
+	} // end reset();
+
+	/**
 	 * Gets the value of the specified parameter.
 	 *
 	 * @param String $name The parameter name

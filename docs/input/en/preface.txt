@@ -2,3 +2,19 @@ Title: Preface
 
 ----
 
+Open Power Libs project aims to provide a set of well-designed and specialized PHP libraries. The libraries usually provide several ways to extend them with new features and different interfaces to connect with external components. Open Power Classes contains a collection of utility classes for other OPL libraries that are too small to be released as a separate library, but may be useful for many programmers.
+
+Features
+========
+
+Currently, Open Power Classes provides the following components:
+
+* `Opc_Visit` - HTTP request information manager. It collects all the possible information about the current request, and shares it with an unified API and in more convenient form.
+* `Opc_Paginator` - the pagination class optimized for Open Power Template.
+* `Opc_Cache` - the caching system for Open Power Template.
+* `Opc_DoctrineModels` - an extension of the generic OPL autoloader that allows to load the model classes of [Doctrine ORM](http://www.doctrine-project.org/), so that there is no need to install more massive autoloaders in PHP.
+
+Documentation
+=============
+
+This document covers Open Power Classes library only. More details about other mentioned libraries can be found in their documentations.

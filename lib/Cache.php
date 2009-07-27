@@ -304,7 +304,7 @@ class Opc_Cache implements Opt_Caching_Interface
 		if($view->hasDynamicContent())
 		{
 			$buffer = $view->getOutputBuffers();
-			$dyn = file_get_contents($tpl->compileDir.$this->_view->getTemplate().'.php.dyn');
+			$dyn = file_get_contents($tpl->compileDir.$this->_view->_convert($this->_view->getTemplate()).'.dyn');
 			if($dyn !== false)
 			{
 				$dynamic = unserialize($dyn);
