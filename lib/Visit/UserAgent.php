@@ -35,7 +35,7 @@ class Opc_Visit_UserAgent
 	 */
 	static public function getInstance()
 	{
-		if(is_null(self::$_instance))
+		if(self::$_instance == null)
 		{
 			self::$_instance = new Opc_Visit_UserAgent;
 		}
@@ -78,6 +78,14 @@ class Opc_Visit_UserAgent
 			}
 		}
 		
+		if(empty($return['browser']['name']))
+		{
+			$return['browser'] = array(
+				'name' => 'unknown',
+				'version' => ''
+			);
+		}
+		
 		$systems = parse_ini_file($dir.'systems.ini', true);
 		
 		foreach($systems as $regex => $system)
@@ -99,6 +107,15 @@ class Opc_Visit_UserAgent
 				break;
 			}
 		}
+		
+		if(empty($return['os']['os']))
+		{
+			$return['os'] = array(
+				'os' => 'unknown',
+				'name' => ''
+			);
+		}
+		
 		return $return;
 	} // end analyze();
 }

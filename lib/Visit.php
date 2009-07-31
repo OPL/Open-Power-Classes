@@ -163,7 +163,7 @@ class Opc_Visit
 	 */
 	static public function getInstance()
 	{
-		if(is_null(self::$_instance))
+		if(self::$_instance == null)
 		{
 			self::$_instance = new Opc_Visit;
 		}
@@ -236,7 +236,7 @@ class Opc_Visit
 		}
 		
 		// At first, we check if the data is persisted in a variable.
-		if(!is_null($this->$key))
+		if($this->$key != null)
 		{
 			return $this->$key;
 		}
@@ -376,7 +376,7 @@ class Opc_Visit
 	private function _parseQualityString($string)
 	{
 		$result = array();
-		if(!is_null($string))
+		if($string != null)
 		{
 			$list = explode(',', $string);
 			$proc = array();
