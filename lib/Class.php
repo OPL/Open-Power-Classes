@@ -18,6 +18,7 @@
  * Furthermore, it serves as a factory object for other classes.
  * 
  * @author Tomasz "Zyx" Jędrzejewski
+ * @author Jacek "eXtreme" Jędrzejewski  
  */
 class Opc_Class extends Opl_Class
 {
@@ -42,7 +43,7 @@ class Opc_Class extends Opl_Class
 	 */
 	public $paginatorDecoratorOptions = null;
 
-	// Opc_Visit configuration
+	// Opc_Visit configuration   
 
 	/**
 	 * The class constructor - registers the main object in the
@@ -50,6 +51,10 @@ class Opc_Class extends Opl_Class
 	 */
 	public function __construct()
 	{
+		if(Opl_Registry::exists('opc'))
+		{
+			throw new Opc_CannotCreateAnotherInstance_Exception;
+		}
 		Opl_Registry::register('opc', $this);
 	} // end __construct();
 

@@ -115,6 +115,10 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	 */
 	public function __construct($all = null, $limit = null)
 	{
+		if(!Opl_Registry::exists('opc'))
+		{
+			throw new Opc_ClassInstanteNotExists_Exception;
+		}
 		$opc = Opl_Registry::get('opc');
 		
 		if(is_null($limit))

@@ -15,6 +15,16 @@
 
 class Opc_Exception extends Opl_Exception{}
 
+class Opc_CannotCreateAnotherInstance_Exception extends Opc_Exception
+{
+	protected $_message = 'Cannot create another Opc_Class instance.';
+} // end Opc_InvalidArgumentType_Exception;
+
+class Opc_ClassInstanteNotExists_Exception extends Opc_Exception
+{
+	protected $_message = 'Opc_Class instance not found. It must be created before using Opc_* classes.';
+} // end Opc_InvalidArgumentType_Exception;
+
 class Opc_InvalidArgumentType_Exception extends Opc_Exception
 {
 	protected $_message = 'The method got %s data type, %s expected.';
