@@ -23,115 +23,133 @@
 class Opc_Visit
 {
 	/**
-	 * 
+	 * Dot-decimal client's IP
 	 * @access public
 	 * @var string
 	 */
 	protected $ip;
 	/**
-	 * 
+	 * Decimal client's IP
 	 * @access public
 	 * @var integer
 	 */
 	protected $numericIp;
 	/**
-	 * 
+	 * Client's host
 	 * @access public
 	 * @var string
 	 */
 	protected $host;
 	/**
-	 * 
+	 * Current request protocol
 	 * @access public
 	 * @var string
 	 */
 	protected $protocol;
 	/**
-	 * 
+	 * The referring page 
 	 * @access public
 	 * @var string
 	 */
 	protected $referrer;
 	/**
-	 * 
+	 * Server's port
 	 * @access public
 	 * @var integer
 	 */
 	protected $port;
 	/**
-	 * 
+	 * Is secure connection? It checks if port == 443
 	 * @access public
 	 * @var boolean
 	 */
 	protected $secure;
 	/**
-	 * 
+	 * Current request method
 	 * @access public
 	 * @var string
 	 */
 	protected $requestMethod;
 	/**
-	 * 
+	 * Client's user agent string
 	 * @access public
 	 * @var string
 	 */
 	protected $userAgentString;
 	/**
-	 * 
+	 * Client's detected browser and OS
 	 * @access public
 	 * @var array
 	 */
 	protected $userAgent;
 	/**
-	 * 
+	 * Server name for cookies
 	 * @access public
 	 * @var string
 	 */
 	protected $cookieServer;
 	/**
-	 * 
+	 * Path for cookies
 	 * @access public
 	 * @var string
 	 */
 	protected $cookiePath;
 	/**
-	 * 
+	 * Array of accepted languages, sorted by quality.
+	 * @access public
+	 * @var array
+	 */
+	protected $languages;
+	/**
+	 * Array of supported mime types
+	 * @access public
+	 * @var array
+	 */
+	protected $mimeTypes;
+	/**
+	 * Full request address
 	 * @access public
 	 * @var string
 	 */
 	protected $currentAddress;
 	/**
-	 * 
+	 * Executed file
 	 * @access public
 	 * @var string
 	 */
 	protected $currentFile;
 	/**
-	 * 
+	 * Path info + query string or full address from rewriting
 	 * @access public
 	 * @var string
 	 */
 	protected $currentParams;
 	/**
-	 * 
+	 * Full path with host
 	 * @access public
 	 * @var string
 	 */
 	protected $currentPath;
 	/**
-	 * 
+	 * Full path minus the host	 
 	 * @access public
 	 * @var string
 	 */
 	protected $basePath;
 	/**
-	 * 
+	 * Current path info
 	 * @access public
 	 * @var string
 	 */
 	protected $pathInfo;
 	/**
-	 * 
+	 * Current query string
+	 * @access public
+	 * @var string
+	 */
+	protected $queryString;
+	/**
+	 * Executed file's name
 	 * @access public
 	 * @var string
 	 */
@@ -144,8 +162,8 @@ class Opc_Visit
 	 */
 	private $_fields = array(
 				'ip', 'numericIp', 'host', 'protocol', 'referrer', 'port', 'secure', 'requestMethod', 
-				'userAgentString', 'userAgent', 'cookieServer', 'cookiePath', 'currentAddress', 'currentFile', 
-				'currentParams', 'currentPath', 'basePath', 'pathInfo', 'fileName'
+				'userAgentString', 'userAgent', 'languages', 'mimeTypes', 'cookieServer', 'cookiePath', 'currentAddress', 'currentFile', 
+				'currentParams', 'currentPath', 'basePath', 'pathInfo', 'queryString', 'fileName'
 			);
 
 	/**
@@ -179,6 +197,8 @@ class Opc_Visit
 	} // end __construct();
 	
 	/**
+	 * Returns an array with all fields.
+	 * 	 	
 	 * @return array
 	 */
 	public function toArray()
@@ -309,14 +329,19 @@ class Opc_Visit
 			case 'currentPath':
 			case 'basePath':
 			case 'pathInfo':
+			case 'queryString':
 				$this->currentPath = $this->currentAddress = $this->currentFile = $this->get('protocol').'://';
 				$serverName = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 				
 				$this->currentAddress .= $serverName.$_SERVER['REQUEST_URI'];
 				$this->currentFile .= $serverName.$_SERVER['PHP_SELF'];
-				$this->currentParams = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : $_SERVER['QUERY_STRING'];
+				$this->pathInfo = isset($_SERVER['PATH_INFO']) &&  $_SERVER['PATH_INFO'] != ''  ? $_SERVER['PATH_INFO'] : '';
+				$this->queryString = isset($_SERVER['QUERY_STRING']) &&  $_SERVER['QUERY_STRING'] != '' ? $_SERVER['QUERY_STRING'] : '';
 				$this->fileName = basename($_SERVER['SCRIPT_NAME']);
-				$this->currentPath = $this->currentFile;
+				$this->currentPath = $this->currentFile;     
+				
+				$pos = strpos($this->currentAddress, $this->currentFile);  
+				 
 				if(($pos = strpos($this->currentFile, $this->fileName)) !== false)
 				{
 					$this->currentPath = substr($this->currentFile, 0, $pos);
@@ -328,20 +353,22 @@ class Opc_Visit
 						$this->currentFile = substr($this->currentFile, 0, $pos + strlen($this->fileName));
 					}
 				}
-				if(strpos($this->currentAddress, $this->fileName) === false)
+				
+				if($pos === false || $pos > 0)
 				{
 					// Mod-rewrite used
-					$this->pathInfo = substr($this->currentAddress, strlen($this->currentPath), strlen($this->currentAddress));
-					if($this->pathInfo[0] != '/' && $this->pathInfo[0] != '?')
+					$this->currentParams = substr($this->currentAddress, strlen($this->currentPath));
+					if($this->currentParams[0] != '/' && $this->currentParams[0] != '?')
 					{
-						$this->pathInfo = '/'.$this->pathInfo;
+						$this->currentParams = '/'.$this->currentParams;
 					}
 				}
 				else
 				{
 					// No mod-rewrite enter
-					$this->pathInfo = substr($this->currentAddress, strlen($this->currentFile), strlen($this->currentAddress));
+					$this->currentParams = substr($this->currentAddress, strlen($this->currentFile));
 				}
+				
 				$this->basePath = substr($this->currentPath, strpos($this->currentPath, $serverName) + strlen($serverName));
 				break;
 					
@@ -406,9 +433,9 @@ class Opc_Visit
 	 * The quality comparator for the sorting algorithm.
 	 *
 	 * @internal
-	 * @param Array $a
-	 * @param Array $b
-	 * @return Integer
+	 * @param array $a
+	 * @param array $b
+	 * @return integer
 	 */
 	private function _quality(&$a, &$b)
 	{

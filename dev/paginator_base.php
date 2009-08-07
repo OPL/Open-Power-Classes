@@ -11,6 +11,7 @@ Opl_Registry::setState('opl_extended_errors', true);
 try
 {
 	$opc = new Opc_Class;
+	//$opc = new Opc_Class;
 
 	$pager = Opc_Paginator::create(1000, 13); // returns Opc_Paginator_Pager;
 	$pager->all = 1000;

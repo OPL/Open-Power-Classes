@@ -50,6 +50,12 @@ class Opc_Visit_UserAgent
 		/* null */
 	} // end __construct();
 	
+	/**
+	 * Function performs the analysis of UA string.
+	 * 	 
+	 * @param string $ua User Agent string	 
+	 * @return array	 
+	 */	 	
 	public function analyze($ua)
 	{
 		$return = array('browser' => array(), 'os' => array());

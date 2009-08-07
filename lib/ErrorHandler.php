@@ -41,6 +41,10 @@ class Opc_ErrorHandler extends Opl_ErrorHandler
 	 */
 	protected function _printBasicConfiguration($exception)
 	{
+		if(!Opl_Registry::exists('opc'))
+		{
+			return false;
+		}
 		$opc = Opl_Registry::get('opc');
 		echo '  			<p class="directive">Caching directory: <span>'.htmlspecialchars($opc->cacheDir)."</span></p>\r\n";
 		echo '  			<p class="directive">Caching expiry time: <span>'.htmlspecialchars($opc->expiryTime)."</span></p>\r\n";
