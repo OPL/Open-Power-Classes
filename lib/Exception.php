@@ -65,12 +65,17 @@ class Opc_DoctrineModelsInvalidDirectoryName_Exception extends Opc_Exception
 	protected $_message = 'Given Doctrine generated models folder name is invalid.';
 } // end Opc_DoctrineModelsGeneratedNameInvalid_Exception;
 
-class Opc_CacheInvalidDynamicContent_Exception extends Opc_Exception
+class Opc_View_CacheInvalidDynamicContent_Exception extends Opc_Exception
 {
 	protected $_message = 'View %s has dynamic content, but file with it is broken. Cache cannot be generated.';
 } // end Opc_CacheInvalidDynamicContent_Exception;
 
-class Opc_CacheCannotSaveFile_Exception extends Opc_Exception
+class Opc_View_CacheCannotSaveFile_Exception extends Opc_Exception
 {
 	protected $_message = 'Cache file could not be saved. Has PHP permission to write in cache directory "%s"?';
 } // end Opc_CacheCannotSaveFile_Exception;
+
+class Opc_View_TranslationNotSetTranslationDirectory_Exception extends Opc_Exception
+{
+	protected $_message = 'Directory with translation files is not set! You have to set it before using any functions!';
+} // end Opc_View_TranslationNotSetTranslationDirectory_Exception;

@@ -317,7 +317,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 			}
 			else
 			{
-				throw new Opc_CacheInvalidDynamicContent_Exception($this->_view->getTemplate());
+				throw new Opc_View_CacheInvalidDynamicContent_Exception($this->_view->getTemplate());
 			}
 			$content = '';
 			for($i = 0, $endI = count($buffer); $i<$endI; $i++)
@@ -327,14 +327,14 @@ class Opc_View_Cache implements Opt_Caching_Interface
 			}
 			if(file_put_contents($this->getCacheDir().$this->_getFilename(), $header.$content.ob_get_flush()) === false)
 			{
-				throw new Opc_CacheCannotSaveFile_Exception($this->getCacheDir());
+				throw new Opc_View_CacheCannotSaveFile_Exception($this->getCacheDir());
 			}
 		}
 		else
 		{
 			if(file_put_contents($this->getCacheDir().$this->_getFileName(), $header.ob_get_contents()) === false)
 			{
-				throw new Opc_CacheCannotSaveFile_Exception($this->getCacheDir());
+				throw new Opc_View_CacheCannotSaveFile_Exception($this->getCacheDir());
 			}
 		}
 	} // end templateCacheStop();
