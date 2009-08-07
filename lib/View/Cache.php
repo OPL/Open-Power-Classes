@@ -18,7 +18,7 @@
  * 
  * @author Amadeusz "megawebmaster" Starzykiewicz
  */
-class Opc_Cache implements Opt_Caching_Interface
+class Opc_View_Cache implements Opt_Caching_Interface
 {
 	/**
 	 * The view that the caching system is connected to.
@@ -338,4 +338,4 @@ class Opc_Cache implements Opt_Caching_Interface
 			}
 		}
 	} // end templateCacheStop();
-} // end Opc_Cache;
+} // end Opc_View_Cache;
