@@ -14,50 +14,92 @@
  */
 
 /**
- * The class represents a translation interface for Open Power Template 2.0
+ * The class represents a translation interface for OPL
  *
  * @author Amadeusz "megawebmaster" Starzykiewicz
+ * @author Tomasz "Zyx" Jędrzejewski <http://www.zyxist.com>
  */
-class Opc_View_Translation implements Opl_Translation_Interface
+class Opc_Translate implements Opl_Translation_Interface
 {
-	private
+	protected
 		/**
-		 * It contains default language messages.
+		 * The default adapter.
+		 * @var Opc_Translate_Adapter
+		 */
+		$_defaultAdapter = null,
+		/**
+		 * The group adapters.
 		 * @var Array
 		 */
-		$_default = null,
+		$_groupAdapters = array(),
 		/**
-		 * It contains selected language messages.
-		 * @var Array
-		 */
-		$_translation = null,
-		/**
-		 * Variable contains translation directory.
+		 * Variable contains the currently loaded language identifier.
 		 * @var String
 		 */
-		$_translationsDirectory = null,
-		/**
-		 * Variable contains actually loaded language identifier.
-		 * @var String
-		 */
-		$_actualLanguage = null,
-		/**
-		 * Variable tells if we want to check if file exists.
-		 * @var Boolean
-		 */
-		$_fileCheck = false,
-		/**
-		 * Variable contains string which will be returned when there is no
-		 * translation for an element.
-		 * @var String
-		 */
-		$_unknownMessage = '',
+		$_currentLanguage = null,
 		/**
 		 * Default language to use in case when there is no language selected
 		 * or selected language has not specified required translation.
 		 * @var String
 		 */
 		$_defaultLanguage = 'en';
+
+	/**
+	 * Creates the new translation object.
+	 * @param Opc_Translate_Adapter $adapter The default translation adapter.
+	 */
+	public function __construct(Opc_Translate_Adapter $adapter)
+	{
+		$this->setAdapter($adapter);
+	} // end __construct();
+
+	/**
+	 * Sets the default translation adapter.
+	 * @param Opc_Translate_Adapter $adapter The new default adapter.
+	 * @return Opc_Translate
+	 */
+	public function setAdapter(Opc_Translate_Adapter $adapter)
+	{
+		$this->_defaultAdapter = $adapter;
+		return $this;
+	} // end setAdapter();
+
+	/**
+	 * Returns the current default adapter.
+	 * @return Opc_Translate_Adapter
+	 */
+	public function getAdapter()
+	{
+		return $this->_defaultAdapter;
+	} // end getAdapter();
+
+	/**
+	 * Sets the translation adapter for the specified message group.
+	 * @param String $group The group name.
+	 * @param Opc_Translate_Adapter $adapter The new default adapter.
+	 * @return Opc_Translate
+	 */
+	public function setGroupAdapter($group, Opc_Translate_Adapter $adapter)
+	{
+		$this->_groupAdapters[(string)$group] = $adapter;
+		return $this;
+	} // end setAdapter();
+
+	/**
+	 * Returns the group adapter. If the group does not have
+	 * any adapter set, it returns the default adapter.
+	 *
+	 * @param String $group The group name.
+	 * @return Opc_Translate_Adapter
+	 */
+	public function getGroupAdapter($group)
+	{
+		if(isset($this->_groupAdapters[$group]))
+		{
+			return $this->_groupAdapters[$group];
+		}
+		return $this->_defaultAdapter;
+	} // end getAdapter();
 
 	/**
 	 * Returns translation for specified group and id.
@@ -67,25 +109,26 @@ class Opc_View_Translation implements Opl_Translation_Interface
 	 */
 	public function _($group, $id)
 	{
-		if(isset($this->_translation[$group][$id]))
+		// Select the adapter.
+		if(isset($this->_groupAdapters[$group]))
 		{
-			return $this->_translation[$group][$id];
-		}
-		if(isset($this->_default[$group][$id]))
-		{
-			return $this->_default[$group][$id];
+			$adapter = $this->_groupAdapters[$group];
 		}
 		else
 		{
-			if($this->_loadLanguage($this->_defaultLanguage, 'default'))
-			{
-				if(isset($this->_default[$group][$id]))
-				{
-					return $this->_default[$group][$id];
-				}
-			}
+			$adapter = $this->_defaultAdapter;
 		}
-		return $this->_unknownMessage;
+
+		// Try to select the message.
+		if(($msg = $adapter->getMessage($this->_currentLanguage, $group, $id)) !== null)
+		{
+			return $msg;
+		}
+		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
+		{
+			return $msg;
+		}
+		throw new Opc_MessageNotFound_Exception($group, $id);
 	} // end _();
 
 	public function assign($group, $id)
@@ -129,6 +172,7 @@ class Opc_View_Translation implements Opl_Translation_Interface
 	 */
 	public function setLanguage($lang)
 	{
+		// TODO: There are no directories here, it must be removed.
 		if($this->_translationsDirectory !== null)
 		{
 			if($this->_translation === null)
@@ -155,44 +199,4 @@ class Opc_View_Translation implements Opl_Translation_Interface
 	{
 		$this->_defaultLanguage = $lang;
 	} // end setDefaultLanguage();
-
-	/**
-	 * Sets directory, where translation files are.
-	 * @param String $dir New directory
-	 */
-	public function setLanguageDirectory($dir)
-	{
-		if($dir[strlen($dir)-1] != DIRECTORY_SEPARATOR)
-		{
-			$dir .= DIRECTORY_SEPARATOR;
-		}
-
-		// Prevention against current directory changes in Apache
-		// which affects destructors. We avoid it by switching to the
-		// absolute path.
-
-		if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false)
-		{
-			$dir = realpath($dir).DIRECTORY_SEPARATOR;
-		}
-		$this->_translationsDirectory = $dir;
-	} // end setLanguageDirectory();
-
-	/**
-	 * Sets file existence checking.
-	 * @param Boolean $state New state
-	 */
-	public function setFileCheck($state)
-	{
-		$this->_fileCheck = (boolean)$state;
-	} // end setFileCheck();
-
-	/**
-	 * Sets message which is returned when there is no translation.
-	 * @param String $msg Message
-	 */
-	public function setUnknownMessage($msg)
-	{
-		$this->_unknownMessage = $msg;
-	} // end setUnknownMessage();
 } // end Opc_View_Translation;

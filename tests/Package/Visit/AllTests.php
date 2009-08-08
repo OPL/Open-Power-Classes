@@ -7,12 +7,9 @@
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 
-require_once('TranslateTest.php');
-require_once('VisitTest.php');
+require_once('UserAgentTest.php');
 
-require_once dirname(__FILE__).'/Visit/AllTests.php';
-
-class Package_AllTests extends PHPUnit_Framework_TestSuite
+class Package_Visit_AllTests extends PHPUnit_Framework_TestSuite
 {
 
 	/**
@@ -22,10 +19,8 @@ class Package_AllTests extends PHPUnit_Framework_TestSuite
 	 */
 	public static function suite()
 	{
-		$suite = new Package_AllTests('Package');
-		$suite->addTestSuite('Package_TranslateTest');
-		$suite->addTestSuite('Package_VisitTest');
-		$suite->addTestSuite(Package_Visit_AllTests::suite());
+		$suite = new Package_AllTests('Package_Visit');
+		$suite->addTestSuite('Package_Visit_UserAgentTest');
 
 		return $suite;
 	} // end suite();
@@ -46,4 +41,4 @@ class Package_AllTests extends PHPUnit_Framework_TestSuite
 		/* currently null */
 	} // end tearDown();
 
-} // end Package_AllTests;
+} // end Package_Visit_AllTests;

@@ -7,7 +7,7 @@
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 
-class Package_UserAgentTest extends PHPUnit_Framework_TestCase
+class Package_Visit_UserAgentTest extends PHPUnit_Framework_TestCase
 {
 	protected function setUp()
 	{

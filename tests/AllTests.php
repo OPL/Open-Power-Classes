@@ -19,12 +19,9 @@ class AllTests
 	 */
 	public static function suite()
 	{
-		echo __METHOD__."\n";
 		$suite = new PHPUnit_Framework_TestSuite('Package');
 		$suite->addTest(Package_AllTests::suite());
 
-		Opl_Debug::write('lol');
-
 		return $suite;
 	} // end suite();
-} // end Suite;
+} // end AllTests;
