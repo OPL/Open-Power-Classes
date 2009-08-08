@@ -87,6 +87,7 @@ class Opc_Translate implements Opl_Translation_Interface
 	public function setGroupAdapter($group, Opc_Translate_Adapter $adapter)
 	{
 		$this->_groupAdapters[(string)$group] = $adapter;
+		$adapter->setGroup($group);
 		return $this;
 	} // end setAdapter();
 
@@ -134,7 +135,7 @@ class Opc_Translate implements Opl_Translation_Interface
 		{
 			return $msg;
 		}
-		throw new Opc_TranslateMessageNotFound_Exception($group, $id);
+		throw new Opc_TranslateMessageNotFound_Exception($group, $id, $adapter->getLanguage());
 	} // end _();
 
 	public function assign($group, $id)

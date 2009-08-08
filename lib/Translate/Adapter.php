@@ -51,11 +51,20 @@ abstract class Opc_Translate_Adapter
 	abstract public function setLanguage($language);
 
 	/**
+	 * Returns current language.
+	 *
+	 * @return String
+	 */
+	abstract public function getLanguage();
+
+	/**
 	 * Sets and loads language for specified group.
 	 *
 	 * @param string $group Group name
 	 * @param string $language New language
 	 * @return boolean
 	 */
-	abstract public function setGroupLanguage($group, $language);
+	abstract public function setGroupLanguage($language);
+
+	abstract public function setGroup($group);
 } // end Opc_Translate_Adapter;

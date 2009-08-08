@@ -1,7 +1,6 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ==========================================
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -48,7 +47,7 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		 * Another language set groups.
 		 * @var array
 		 */
-		$_groups = array(),
+		$_group = null,
 		/**
 		 * File existence checking state.
 		 * @var boolean
@@ -147,24 +146,23 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	/**
 	 * Loads a group of messages in the specified language.
 	 *
-	 * @param string $language The language name.
-	 * @param string $group The group name
+	 * @param String $language The language name.
 	 */
-	protected function _loadGroup($language, $group)
+	protected function _loadGroup($language)
 	{
-		$data = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini');
+		$data = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$this->_group.'.ini');
 		if($data === false)
 		{
-			if($this->_fileCheck)
+			if($this->_fileCheck && !file_exists($this->_directory.$language.DIRECTORY_SEPARATOR.$this->_group.'.ini'))
 			{
-				throw new Opc_TranslateGroupFileNotFound_Exception($group, $language);
+				throw new Opc_TranslateGroupFileNotFound_Exception($this->_group, $language);
 			}
 			else
 			{
 				return false;
 			}
 		}
-		$this->_translation[$group] = $data;
+		$this->_translation[$this->_group] = $data;
 		return true;
 	} // end _loadGroup();
 
@@ -180,7 +178,7 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		$data = @parse_ini_file($this->_directory.$language.'.ini',true);
 		if($data === false)
 		{
-			if($this->_fileCheck)
+			if($this->_fileCheck && !file_exists($this->_directory.$language.'.ini'))
 			{
 				throw new Opc_TranslateFileNotFound_Exception($language, $type);
 			}
@@ -211,6 +209,7 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	{
 		if($this->_directory !== null)
 		{
+			$this->_current = $language;
 			if($this->_translation === null)
 			{
 				return $this->_loadLanguage($language, 'translation');
@@ -228,24 +227,34 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	} // end setLanguage();
 
 	/**
+	 * Returns current language.
+	 * 
+	 * @return String
+	 */
+	public function getLanguage()
+	{
+		return $this->_current;
+	}
+
+	/**
 	 * Sets the new language for specified group.
 	 *
 	 * @param string $group Group name
 	 * @param string $language New language
 	 * @return boolean
 	 */
-	public function setGroupLanguage($group, $language)
+	public function setGroupLanguage($language)
 	{
 		if($this->_directory !== null)
 		{
-			if(!isset($this->_groups[$group]))
+			$this->_current = $language;
+			if($this->_translation === null)
 			{
-				return $this->_loadGroup($group, $language);
+				return $this->_loadGroup($language);
 			}
-			elseif($this->_groups[$group] != $language)
+			elseif($this->_current != $language)
 			{
-				$this->_translation[$group] = array();
-				return $this->_loadGroup($group, $language);
+				return $this->_loadGroup($language);
 			}
 		}
 		else
@@ -260,6 +269,11 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 * 
 	 * @param boolean $state File existence checking state
 	 */
+	public function setGroup($group)
+	{
+		$this->_group = $group;
+	}
+
 	public function setFileCheck($state)
 	{
 		$this->_fileCheck = (boolean)$state;

@@ -76,7 +76,7 @@ class Opc_Class extends Opl_Class
 	 */
 	public function cacheFactory(Opt_View $view)
 	{
-		$cache = new Opc_Cache($view);
+		$cache = new Opc_View_Cache($view);
 		$cache->setExpiryTime($this->expiryTime);
 
 		return $cache;

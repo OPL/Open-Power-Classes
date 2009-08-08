@@ -77,15 +77,15 @@ class Opc_TranslateNotSetTranslationDirectory_Exception extends Opc_Exception
 
 class Opc_TranslateMessageNotFound_Exception extends Opc_Exception
 {
-	protected $_message = 'Translation message in group %s ID: %s is not found!';
+	protected $_message = 'Translation message in group `%s` ID: `%s` is not found! Language used `%s`';
 } // end Opc_TranslateMessageNotFound_Exception;
 
 class Opc_TranslateFileNotFound_Exception extends Opc_Exception
 {
-	protected $_message = 'Translation file is not found for language %s! Type of translation: %s';
+	protected $_message = 'Translation file is not found for language `%s`! Type of translation: `%s`';
 } // end Opc_TranslateFileNotFound_Exception;
 
 class Opc_TranslateGroupFileNotFound_Exception extends Opc_Exception
 {
-	protected $_message = 'Translation file for group %s is not found for language %s!';
+	protected $_message = 'Translation file for group `%s` is not found for language %s!';
 } // end Opc_TranslateGroupFileNotFound_Exception;
