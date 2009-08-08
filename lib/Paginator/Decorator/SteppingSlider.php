@@ -20,11 +20,12 @@
  * 1 2 3 <10> <20> 22 23 [24] 25 26 <30> <40> <50> <60> 65 66 67
  *
  * @author Jacek "eXtreme" Jędrzejewski
- */	
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
 class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Slider
 {
 	/**
-	 * Number of pages per one step
+	 * Number of pages per one step.
 	 * @access public
 	 * @var integer
 	 */
@@ -37,7 +38,9 @@ class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Sli
 	protected $_steps = array();
 	
 	/**
-	 * @param string $key
+	 * A function for setting fields.
+	 *
+	 * @param string $key Object's field name.
 	 * @param mixed $value
 	 * @return true
 	 */
@@ -56,6 +59,7 @@ class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Sli
 	} // end set();
 	
 	/**
+	 * Base initation.
 	 * 
 	 * @return void
 	 */
@@ -78,6 +82,9 @@ class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Sli
 	} // end setup();
 	
 	/**
+	 * Replaces static separator of "Slider" with a step number.
+	 * 
+	 * @access private
 	 * @return array
 	 */
 	protected function _separator()

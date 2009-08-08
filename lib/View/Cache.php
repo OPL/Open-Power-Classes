@@ -17,6 +17,7 @@
  * The class represents a caching system for Open Power Template 2.
  * 
  * @author Amadeusz "megawebmaster" Starzykiewicz
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_View_Cache implements Opt_Caching_Interface
 {
@@ -37,49 +38,49 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	/**
 	 * Cache dir.
 	 * 
-	 * @var String
+	 * @var string
 	 */
 	private $_cacheDir = null;
 
 	/**
 	 * The caching extra key.
 	 *
-	 * @var String
+	 * @var string
 	 */
 	private $_key = null;
 
 	/**
 	 * The caching validity time.
 	 *
-	 * @var Integer
+	 * @var integer
 	 */
 	private $_time = null;
 
 	/**
 	 * Cache file name.
 	 *
-	 * @var String
+	 * @var string
 	 */
 	private $_filename = null;
 
 	/**
 	 * Determines if file was read or not.
 	 *
-	 * @var Boolean
+	 * @var boolean
 	 */
 	private $_isReadAlready = false;
 
 	/**
 	 * File handle.
 	 *
-	 * @var Resource|Null
+	 * @var resource|null
 	 */
 	private $_fileHandle = null;
 
 	/**
 	 * Presents if the view has dynamic content or not.
 	 *
-	 * @var Boolean
+	 * @var boolean
 	 */
 	private $_dynamic = false;
 
@@ -101,7 +102,8 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	
 	/**
 	 * Sets the extra key for the cache.
-	 * @param String|Null $key The extra key
+	 * 
+	 * @param string|null $key The extra key
 	 */
 	public function setKey($key)
 	{
@@ -111,7 +113,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	/**
 	 * Sets the expiry time for the specified caching object.
 	 * 
-	 * @param Integer $time The new expiry time. 
+	 * @param integer $time The new expiry time. 
 	 */
 	public function setExpiryTime($time)
 	{
@@ -127,7 +129,8 @@ class Opc_View_Cache implements Opt_Caching_Interface
 
 	/**
 	 * Sets directory for cache files.
-	 * @param String $dir New directory
+	 * 
+	 * @param string $dir New directory
 	 */
 	public function setCacheDir($dir)
 	{
@@ -149,7 +152,8 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	
 	/**
 	 * Returns the current extra caching key.
-	 * @return String|Null
+	 * 
+	 * @return string|null
 	 */
 	public function getKey()
 	{
@@ -158,7 +162,8 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	
 	/**
 	 * Returns the current expiry time for the cache.
-	 * @return Integer
+	 * 
+	 * @return integer
 	 */
 	public function getExpiryTime()
 	{
@@ -171,7 +176,8 @@ class Opc_View_Cache implements Opt_Caching_Interface
 
 	/**
 	 * Returns cache directory.
-	 * @return String
+	 * 
+	 * @return string
 	 */
 	public function getCacheDir()
 	{
@@ -185,7 +191,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	/**
 	 * Gets the cache filename with special key.
 	 *
-	 * @return String
+	 * @return string
 	 */
 	private function _getFilename()
 	{

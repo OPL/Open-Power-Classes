@@ -17,11 +17,12 @@
  * Decorator class, which returns all pages.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_Paginator_Decorator_All extends Opc_Paginator_Decorator
 {
 	/**
-	 * Returns all page numbers
+	 * Returns all page numbers.
 	 * 
 	 * @return array
 	 */

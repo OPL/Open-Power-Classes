@@ -17,50 +17,51 @@
  * Paginator worker class.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 {
 	/**
-	 * This constant means the pager needs to be reset 
+	 * This constant means the pager needs to be reset.
 	 */
 	const STATE_DIRTY = 1;
 	/**
-	 * Clean state means the pager is reset and ready to work
+	 * Clean state means the pager is reset and ready to work.
 	 */
 	const STATE_CLEAN = 2;
 	
 	/**
-	 * Current page
+	 * Current page.
 	 * @access public
 	 * @var integer
-	 */	
+	 */
 	protected $page = 1;
 	/**
-	 * Items per page
+	 * Items per page.
 	 * @access public
 	 * @var integer
 	 */
 	protected $limit;
 	/**
-	 * All items to be paginated
+	 * All items to be paginated.
 	 * @access public
 	 * @var integer
 	 */
 	protected $all = 0;
 	/**
-	 * Offset for current page
+	 * Offset for current page.
 	 * @access public
 	 * @var integer
 	 */
 	protected $offset;
 	/**
-	 * The amount of all pages
+	 * The amount of all pages.
 	 * @access public
 	 * @var integer
 	 */
 	protected $pageCount = null;
 	/**
-	 * Special value of current page for decorators
+	 * Special value of current page for decorators.
 	 * @access public
 	 * @var integer
 	 */
@@ -68,21 +69,25 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	
 	// Read-only navigation links
 	/**
+	 * Returns an item of first page.
 	 * @access public
 	 * @var array|false
 	 */
 	protected $first;
 	/**
+	 * Returns an item of last page.
 	 * @access public
 	 * @var array|false
 	 */
 	protected $last;
 	/**
+	 * Returns an item of next page.
 	 * @access public
 	 * @var array|false
 	 */
 	protected $next;
 	/**
+	 * Returns an item of previous page.
 	 * @access public
 	 * @var array|false
 	 */
@@ -90,24 +95,26 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	
 	// Internal properties
 	/**
+	 * Current paginator's state;
 	 * @access private
 	 * @var integer
 	 */
 	protected $_state = self::STATE_DIRTY;
 	/**
+	 * Decorator object instance.
 	 * @access private
-	 * @var Opc_Paginator_Decorator 
+	 * @var Opc_Paginator_Decorator
 	 */
 	protected $_decorator = null;
 	/**
-	 * Internal interator counter
+	 * Internal interator counter.
 	 * @access private
 	 * @var integer
 	 */
 	protected $_i = 0;
 	
 	/**
-	 * Creates new paginator
+	 * Creates new paginator.
 	 * 
 	 * @param integer $all The amout of all items
 	 * @param integer $limit Items per page
@@ -169,7 +176,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	/**
 	 * Magic function so that $obj->key will work.
 	 * 
-	 * @param string $key
+	 * @param string $key Object's field name.
 	 * @return mixed
 	 */
 	final public function __get($key)
@@ -178,7 +185,9 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	} // end __get();
 
 	/**
-	 * @param string $key
+	 * A function for retrieving fields.
+	 * 
+	 * @param string $key Object's field name.
 	 * @return mixed
 	 */
 	public function get($key)
@@ -253,7 +262,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	/**
 	 * Magic function so that $obj->key = "value" will work.
 	 * 
-	 * @param string $key
+	 * @param string $key Object's field name.
 	 * @param mixed $value
 	 * @return true
 	 */
@@ -263,7 +272,9 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	} // end __set();
 	
 	/**
-	 * @param string $key
+	 * A function to setting fields.
+	 * 
+	 * @param string $key Object's field name.
 	 * @param mixed $value
 	 * @return true
 	 */
@@ -353,6 +364,9 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	} // end set();
 	
 	/**
+	 * This function is executed on starting the pagination loop
+	 * with "dirty" state.
+	 * 
 	 * @return void
 	 */
 	public function setup()
@@ -424,7 +438,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	/**
 	 * @param integer $index
 	 * @return void
-	 */	
+	 */
 	public function seek($index)
 	{
 		$this->_i = 1;
@@ -445,7 +459,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	// Countable interface
 	/**
 	 * Returns the amount of all pages.
-	 * Implements Countable interface so that count($pager) will work
+	 * Implements Countable interface so that count($pager) will work.
 	 * 
 	 * @return integer
 	 */

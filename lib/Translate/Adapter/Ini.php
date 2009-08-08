@@ -9,6 +9,8 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
+ * 
+ * $Id$
  */
 
 /**
@@ -17,44 +19,46 @@
  *
  * @author Tomasz Jędrzejewski <http://www.zyxist.com>
  * @author Amadeusz 'megawebmaster' Starzykiewicz
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 {
 	protected
 		/**
 		 * Language files directory.
-		 * @var String
+		 * @var string
 		 */
 		$_directory = null,
 		/**
 		 * Loaded translation.
-		 * @var Array
+		 * @var array
 		 */
 		$_translation = null,
 		/**
 		 * Loaded default translation.
-		 * @var Array
+		 * @var array
 		 */
 		$_default = null,
 		/**
 		 * Current loaded language.
-		 * @var String
+		 * @var string
 		 */
 		$_current = null,
 		/**
 		 * Another language set groups.
-		 * @var Array
+		 * @var array
 		 */
 		$_groups = array(),
 		/**
 		 * File existence checking state.
-		 * @var Boolean
+		 * @var boolean
 		 */
 		$_fileCheck = false;
 
 	/**
 	 * Creates the adapter and applies the options.
-	 * @param Array $options The adapter options.
+	 * 
+	 * @param array $options The adapter options.
 	 */
 	public function __construct(Array $options)
 	{
@@ -70,7 +74,8 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 
 	/**
 	 * Sets the message directory.
-	 * @param String $directory The new directory.
+	 * 
+	 * @param string $directory The new directory.
 	 */
 	public function setDirectory($directory)
 	{
@@ -83,7 +88,8 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 
 	/**
 	 * Returns the current directory.
-	 * @return String
+	 * 
+	 * @return string
 	 */
 	public function getDirectory()
 	{
@@ -93,10 +99,10 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	/**
 	 * Returns translation for specified group and id.
 	 * 
-	 * @param String $language The language
-	 * @param String $group The message group
-	 * @param String $msg The message identifier
-	 * @return String|Null
+	 * @param string $language The language
+	 * @param string $group The message group
+	 * @param string $msg The message identifier
+	 * @return string|null
 	 */
 	public function getMessage($language, $group, $id, $type='translation')
 	{
@@ -128,9 +134,9 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	/**
 	 * Assings the data to the specified message.
 	 *
-	 * @param String $language The language
-	 * @param String $group The message group
-	 * @param String $msg The message identifier
+	 * @param string $language The language
+	 * @param string $group The message group
+	 * @param string $msg The message identifier
 	 * @param ... The data to assign.
 	 */
 	public function assign($language, $group, $msg)
@@ -141,8 +147,8 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	/**
 	 * Loads a group of messages in the specified language.
 	 *
-	 * @param String $language The language name.
-	 * @param String $group The group name
+	 * @param string $language The language name.
+	 * @param string $group The group name
 	 */
 	protected function _loadGroup($language, $group)
 	{
@@ -165,9 +171,9 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	/**
 	 * Loads language file for whole translation.
 	 *
-	 * @param String $language Language to be loaded
-	 * @param String $type Type of loaded language
-	 * @return Boolean
+	 * @param string $language Language to be loaded
+	 * @param string $type Type of loaded language
+	 * @return boolean
 	 */
 	protected function _loadLanguage($language, $type)
 	{
@@ -198,8 +204,8 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	/**
 	 * Sets the new language for whole translation.
 	 *
-	 * @param String $language Language to load
-	 * @return Boolean
+	 * @param string $language Language to load
+	 * @return boolean
 	 */
 	public function setLanguage($language)
 	{
@@ -224,9 +230,9 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	/**
 	 * Sets the new language for specified group.
 	 *
-	 * @param String $group Group name
-	 * @param String $language New language
-	 * @return Boolean
+	 * @param string $group Group name
+	 * @param string $language New language
+	 * @return boolean
 	 */
 	public function setGroupLanguage($group, $language)
 	{
@@ -248,7 +254,12 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		}
 		return true;
 	} // end setGroupLanguage();
-
+	
+	/**
+	 * Sets a new state for file existence checking.
+	 * 
+	 * @param boolean $state File existence checking state
+	 */
 	public function setFileCheck($state)
 	{
 		$this->_fileCheck = (boolean)$state;

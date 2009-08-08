@@ -20,18 +20,19 @@
  * 1 2 3 ... 22 23 [24] 25 26 ... 65 66 67
  * 
  * @author Jacek "eXtreme" Jędrzejewski
- */	
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
 class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 {
 	/**
-	 * Number of pages around current
+	 * Number of pages around current.
 	 * For value 2: "5 6 [7] 8 9"
 	 * @access public
 	 * @var integer
 	 */
 	protected $around = 2;
 	/**
-	 * Number of pages at the begin and the end
+	 * Number of pages at the begin and the end.
 	 * @access public
 	 * @var integer
 	 */
@@ -43,7 +44,7 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 	 */
 	protected $_allchunk;
 	/**
-	 * Start number before current
+	 * Start number before current.
 	 * @access private
 	 * @var integer
 	 */
@@ -56,7 +57,9 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 	protected $_forward;
 	
 	/**
-	 * @param string $key
+	 * A function for setting fields.
+	 *
+	 * @param string $key Object's field name.
 	 * @param mixed $value
 	 * @return true
 	 */
@@ -76,7 +79,7 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 	} // end set();
 	
 	/**
-	 * Setup
+	 * Base initation.
 	 * 
 	 * @return void
 	 */
@@ -88,7 +91,7 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 	} // end setup();
 	
 	/**
-	 * Return current, "around", and "chunk" numbers
+	 * Returns current, "around", and "chunk" numbers.
 	 * 
 	 * @return array
 	 */
@@ -120,7 +123,7 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 	} // end current();
 	
 	/**
-	 * Returns a separator-type item, which is not a number 
+	 * Returns a separator-type item, which is not a number.
 	 * 
 	 * @access protected
 	 * @return array

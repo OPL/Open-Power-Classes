@@ -17,6 +17,7 @@
  * An utility class which helps autoload models in Doctrine ORM.
  * 
  * @author Amadeusz "megawebmaster" Starzykiewicz
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_DoctrineModels
 {

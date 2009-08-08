@@ -9,6 +9,8 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
+ * 
+ * $Id$
  */
 
 /**
@@ -16,6 +18,7 @@
  *
  * @author Amadeusz "megawebmaster" Starzykiewicz
  * @author Tomasz "Zyx" Jędrzejewski <http://www.zyxist.com>
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_Translate implements Opl_Translation_Interface
 {
@@ -27,23 +30,24 @@ class Opc_Translate implements Opl_Translation_Interface
 		$_defaultAdapter = null,
 		/**
 		 * The group adapters.
-		 * @var Array
+		 * @var array
 		 */
 		$_groupAdapters = array(),
 		/**
 		 * Variable contains the currently loaded language identifier.
-		 * @var String
+		 * @var string
 		 */
 		$_currentLanguage = null,
 		/**
 		 * Default language to use in case when there is no language selected
 		 * or selected language has not specified required translation.
-		 * @var String
+		 * @var string
 		 */
 		$_defaultLanguage = 'en';
 
 	/**
 	 * Creates the new translation object.
+	 * 
 	 * @param Opc_Translate_Adapter $adapter The default translation adapter.
 	 */
 	public function __construct(Opc_Translate_Adapter $adapter)
@@ -53,6 +57,7 @@ class Opc_Translate implements Opl_Translation_Interface
 
 	/**
 	 * Sets the default translation adapter.
+	 * 
 	 * @param Opc_Translate_Adapter $adapter The new default adapter.
 	 * @return Opc_Translate
 	 */
@@ -64,6 +69,7 @@ class Opc_Translate implements Opl_Translation_Interface
 
 	/**
 	 * Returns the current default adapter.
+	 * 
 	 * @return Opc_Translate_Adapter
 	 */
 	public function getAdapter()
@@ -73,7 +79,8 @@ class Opc_Translate implements Opl_Translation_Interface
 
 	/**
 	 * Sets the translation adapter for the specified message group.
-	 * @param String $group The group name.
+	 * 
+	 * @param string $group The group name.
 	 * @param Opc_Translate_Adapter $adapter The new default adapter.
 	 * @return Opc_Translate
 	 */
@@ -87,7 +94,7 @@ class Opc_Translate implements Opl_Translation_Interface
 	 * Returns the group adapter. If the group does not have
 	 * any adapter set, it returns the default adapter.
 	 *
-	 * @param String $group The group name.
+	 * @param string $group The group name.
 	 * @return Opc_Translate_Adapter
 	 */
 	public function getGroupAdapter($group)
@@ -101,9 +108,10 @@ class Opc_Translate implements Opl_Translation_Interface
 
 	/**
 	 * Returns translation for specified group and id.
-	 * @param String|Integer $group Group name
-	 * @param String|Integer $id Id
-	 * @return String
+	 * 
+	 * @param string|integer $group Group name
+	 * @param string|integer $id Id
+	 * @return string
 	 */
 	public function _($group, $id)
 	{
@@ -148,8 +156,8 @@ class Opc_Translate implements Opl_Translation_Interface
 	 * Returns true if there is language file in translations directory and function
 	 * is able to load it, otherwise it returns false and uses default language.
 	 * 
-	 * @param String $language New language
-	 * @return Boolean
+	 * @param string $language New language
+	 * @return boolean
 	 */
 	public function setLanguage($language)
 	{
@@ -172,9 +180,9 @@ class Opc_Translate implements Opl_Translation_Interface
 	/**
 	 * Sets language to specified group.
 	 *
-	 * @param String $group Group name
-	 * @param String $language New language
-	 * @return Boolean
+	 * @param string $group Group name
+	 * @param string $language New language
+	 * @return boolean
 	 */
 	public function setGroupLanguage($group, $language)
 	{
@@ -190,7 +198,8 @@ class Opc_Translate implements Opl_Translation_Interface
 	
 	/**
 	 * Gives access to control default language.
-	 * @param String $language New default language
+	 * 
+	 * @param string $language New default language
 	 */
 	public function setDefaultLanguage($language)
 	{

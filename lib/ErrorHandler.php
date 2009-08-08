@@ -17,6 +17,7 @@
  * The error handler extension for OPC.
  * 
  * @author Tomasz "Zyx" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_ErrorHandler extends Opl_ErrorHandler
 {
@@ -46,7 +47,7 @@ class Opc_ErrorHandler extends Opl_ErrorHandler
 			return false;
 		}
 		$opc = Opl_Registry::get('opc');
-		echo '  			<p class="directive">Caching directory: <span>'.htmlspecialchars($opc->cacheDir)."</span></p>\r\n";
-		echo '  			<p class="directive">Caching expiry time: <span>'.htmlspecialchars($opc->expiryTime)."</span></p>\r\n";
+		echo '<p class="directive">Caching directory: <span>'.htmlspecialchars($opc->cacheDir)."</span></p>\r\n";
+		echo '<p class="directive">Caching expiry time: <span>'.htmlspecialchars($opc->expiryTime)."</span></p>\r\n";
 	} // end _printBasicConfiguration();
 } // end Opc_ErrorHandler;

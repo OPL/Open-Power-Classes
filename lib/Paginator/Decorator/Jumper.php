@@ -19,11 +19,12 @@
  * <1> <11> 21 22 23 [24] 25 26 27 28 29 30 <31> <41> <51> <61>
  * 
  * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 {
 	/**
-	 * Number of pages per one step
+	 * Number of pages per one step.
 	 * @access public
 	 * @var integer
 	 */
@@ -52,7 +53,9 @@ class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 	protected $_steps = array();
 	
 	/**
-	 * @param string $key
+	 * A function for setting fields.
+	 *
+	 * @param string $key Object's field name.
 	 * @param mixed $value
 	 * @return true
 	 */
@@ -74,6 +77,7 @@ class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 	} // end set();
 	
 	/**
+	 * Base initation.
 	 * 
 	 * @return void
 	 */
@@ -104,6 +108,8 @@ class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 	} // end setup();
 	
 	/**
+	 * Returns "number", "current" and "step" items.
+	 * 
 	 * @return array
 	 */
 	public function current()

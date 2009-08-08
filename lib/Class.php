@@ -18,32 +18,41 @@
  * Furthermore, it serves as a factory object for other classes.
  * 
  * @author Tomasz "Zyx" Jędrzejewski
- * @author Jacek "eXtreme" Jędrzejewski  
+ * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License 
  */
 class Opc_Class extends Opl_Class
 {
 	// Opc_Cache configuration
+	/**
+	 * Default cache directory.
+	 * @var string
+	 */
 	public $cacheDir = '';
+	/**
+	 * Cache expiry time.
+	 * @var integer
+	 */
 	public $expiryTime = 3600;
 	
 	// Opc_Paginator configuration
 	/**
-	 * Default value for Opc_Paginator_Range->limit	
+	 * Default value for Opc_Paginator_Range->limit
 	 * @var integer
 	 */
 	public $itemsPerPage = 10;
 	/**
 	 * Default decorator
-	 * @var string|Opc_Paginator_Decorator
+	 * @var string|Opc_Paginator_Decorator|null
 	 */
 	public $paginatorDecorator = null;
 	/**
 	 * Default decorator's options
-	 * @var array
+	 * @var array|null
 	 */
 	public $paginatorDecoratorOptions = null;
 
-	// Opc_Visit configuration   
+	// Opc_Visit configuration
 
 	/**
 	 * The class constructor - registers the main object in the
@@ -77,9 +86,9 @@ class Opc_Class extends Opl_Class
 	 * The plugin loader for OPC.
 	 *
 	 * @internal
-	 * @param String $directory The plugin location
+	 * @param string $directory The plugin location
 	 * @param SplFileInfo $file The plugin file information
-	 * @return String
+	 * @return string
 	 */
 	protected function _pluginLoader($directory, SplFileInfo $file)
 	{

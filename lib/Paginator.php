@@ -17,6 +17,7 @@
  * A factory and global configuration class for Paginator.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_Paginator
 {

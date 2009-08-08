@@ -19,77 +19,78 @@
  * 
  * @author Tomasz "Zyx" Jędrzejewski
  * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License 
  */
 class Opc_Visit
 {
 	/**
-	 * Dot-decimal client's IP
+	 * Dot-decimal client's IP.
 	 * @access public
 	 * @var string
 	 */
 	protected $ip;
 	/**
-	 * Decimal client's IP
+	 * Decimal client's IP.
 	 * @access public
 	 * @var integer
 	 */
 	protected $numericIp;
 	/**
-	 * Client's host
+	 * Client's host.
 	 * @access public
 	 * @var string
 	 */
 	protected $host;
 	/**
-	 * Current request protocol
+	 * Current request protocol.
 	 * @access public
 	 * @var string
 	 */
 	protected $protocol;
 	/**
-	 * The referring page 
+	 * The referring page.
 	 * @access public
 	 * @var string
 	 */
 	protected $referrer;
 	/**
-	 * Server's port
+	 * Server's port.
 	 * @access public
 	 * @var integer
 	 */
 	protected $port;
 	/**
-	 * Is secure connection? It checks if port == 443
+	 * Is secure connection? It checks if port == 443.
 	 * @access public
 	 * @var boolean
 	 */
 	protected $secure;
 	/**
-	 * Current request method
+	 * Current request method.
 	 * @access public
 	 * @var string
 	 */
 	protected $requestMethod;
 	/**
-	 * Client's user agent string
+	 * Client's user agent string.
 	 * @access public
 	 * @var string
 	 */
 	protected $userAgentString;
 	/**
-	 * Client's detected browser and OS
+	 * Client's detected browser and OS.
 	 * @access public
 	 * @var array
 	 */
 	protected $userAgent;
 	/**
-	 * Server name for cookies
+	 * Server name for cookies.
 	 * @access public
 	 * @var string
 	 */
 	protected $cookieServer;
 	/**
-	 * Path for cookies
+	 * Path for cookies.
 	 * @access public
 	 * @var string
 	 */
@@ -101,13 +102,13 @@ class Opc_Visit
 	 */
 	protected $languages;
 	/**
-	 * Array of supported mime types
+	 * Array of supported mime types.
 	 * @access public
 	 * @var array
 	 */
 	protected $mimeTypes;
 	/**
-	 * Full request address
+	 * Full request address.
 	 * @access public
 	 * @var string
 	 */
@@ -119,37 +120,37 @@ class Opc_Visit
 	 */
 	protected $currentFile;
 	/**
-	 * Path info + query string or full address from rewriting
+	 * Path info + query string or full address from rewriting.
 	 * @access public
 	 * @var string
 	 */
 	protected $currentParams;
 	/**
-	 * Full path with host
+	 * Full path with host.
 	 * @access public
 	 * @var string
 	 */
 	protected $currentPath;
 	/**
-	 * Full path minus the host	 
+	 * Full path minus the host.
 	 * @access public
 	 * @var string
 	 */
 	protected $basePath;
 	/**
-	 * Current path info
+	 * Current path info.
 	 * @access public
 	 * @var string
 	 */
 	protected $pathInfo;
 	/**
-	 * Current query string
+	 * Current query string.
 	 * @access public
 	 * @var string
 	 */
 	protected $queryString;
 	/**
-	 * Executed file's name
+	 * Executed file's name.
 	 * @access public
 	 * @var string
 	 */
@@ -167,14 +168,14 @@ class Opc_Visit
 			);
 
 	/**
-	 * The singleton instance
+	 * The singleton instance.
 	 * @static
 	 * @var Opc_Visit
 	 */
 	static private $_instance = null;
 
 	/**
-	 * Singleton implementation
+	 * Singleton implementation.
 	 *
 	 * @static
 	 * @return Opc_Visit
@@ -198,7 +199,7 @@ class Opc_Visit
 	
 	/**
 	 * Returns an array with all fields.
-	 * 	 	
+	 * 
 	 * @return array
 	 */
 	public function toArray()
@@ -322,7 +323,6 @@ class Opc_Visit
 			case 'cookiePath':
 				$this->cookiePath = substr($this->get('currentPath'), strpos($this->get('currentPath'), $this->get('cookieServer')) + strlen($this->get('cookieServer')), strlen($this->get('currentPath')));
 				break;
-				
 			case 'currentAddress':
 			case 'currentFile':
 			case 'currentParams':
@@ -371,7 +371,6 @@ class Opc_Visit
 				
 				$this->basePath = substr($this->currentPath, strpos($this->currentPath, $serverName) + strlen($serverName));
 				break;
-					
 			default:
 				throw new Opc_OptionNotExists_Exception($key, get_class($this));
 				break;

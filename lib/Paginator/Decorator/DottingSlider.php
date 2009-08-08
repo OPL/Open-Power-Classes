@@ -20,6 +20,7 @@
  * 1 2 3 ........ 12 13 [14] 15 16 ..... 22 23 24
  
  * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_Paginator_Decorator_DottingSlider extends Opc_Paginator_Decorator_Slider
 {

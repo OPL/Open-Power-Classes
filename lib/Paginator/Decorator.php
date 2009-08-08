@@ -17,11 +17,12 @@
  * All decorators must extend and implement that class.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 abstract class Opc_Paginator_Decorator
 {
 	/**
-	 * Paginator instance
+	 * Paginator instance.
 	 * @var Opc_Paginator_Range
 	 */
 	protected $_paginator = null;
@@ -29,6 +30,7 @@ abstract class Opc_Paginator_Decorator
 	/**
 	 * Setup is executed when the pager is in the dirty state.
 	 * Use for init calculations.
+	 * 
 	 * @return void
 	 */
 	public function setup()
@@ -51,7 +53,7 @@ abstract class Opc_Paginator_Decorator
 	/**
 	 * Magic function so that $obj->key = "value" will work.
 	 * 
-	 * @param string $key
+	 * @param string $key Object's field name.
 	 * @param mixed $value
 	 * @return true
 	 */
@@ -61,7 +63,9 @@ abstract class Opc_Paginator_Decorator
 	} // end __set();
 	
 	/**
-	 * @param string $key
+	 * A function for setting fields.
+	 * 
+	 * @param string $key Object's field name.
 	 * @param mixed $value
 	 * @return true
 	 */
@@ -82,7 +86,7 @@ abstract class Opc_Paginator_Decorator
 	/**
 	 * Magic function so that $obj->key will work.
 	 *
-	 * @param string $key
+	 * @param string $key Object's field name.
 	 * @return mixed
 	 */
 	final public function __get($key)
@@ -91,7 +95,9 @@ abstract class Opc_Paginator_Decorator
 	} // end __get();
 	
 	/**
-	 * @param string $key
+	 * A function for retrieving fields.
+	 * 
+	 * @param string $key Object's field name.
 	 * @return mixed
 	 */
 	public function get($key)

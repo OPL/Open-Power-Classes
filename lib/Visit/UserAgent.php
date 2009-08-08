@@ -17,18 +17,19 @@
  * Browser and OS detector.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Opc_Visit_UserAgent
 {
 	/**
-	 * The singleton instance
+	 * The singleton instance.
 	 * @static
-	 * @var Opc_Visit_UserAgent
+	 * @var Opc_Visit_UserAgent|null
 	 */
 	static private $_instance = null;
 	
 	/**
-	 * Singleton implementation
+	 * Singleton implementation.
 	 *
 	 * @static
 	 * @return Opc_Visit
@@ -53,9 +54,9 @@ class Opc_Visit_UserAgent
 	/**
 	 * Function performs the analysis of UA string.
 	 * 	 
-	 * @param string $ua User Agent string	 
-	 * @return array	 
-	 */	 	
+	 * @param string $ua User Agent string
+	 * @return array
+	 */
 	public function analyze($ua)
 	{
 		$return = array('browser' => array(), 'os' => array());
@@ -124,4 +125,4 @@ class Opc_Visit_UserAgent
 		
 		return $return;
 	} // end analyze();
-}
+} // end Opc_Visit_UserAgent;
