@@ -9,8 +9,6 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
- *
- * $Id: Cache.php 189 2009-08-07 12:44:37Z megawebmaster $
  */
 
 /**
@@ -124,42 +122,25 @@ class Opc_Translate implements Opl_Translation_Interface
 		{
 			return $msg;
 		}
-		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
+		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id, 'default')) !== null)
 		{
 			return $msg;
 		}
-		throw new Opc_MessageNotFound_Exception($group, $id);
+		throw new Opc_TranslateMessageNotFound_Exception($group, $id);
 	} // end _();
 
 	public function assign($group, $id)
 	{
-		// TODO: Implement this
-		// null
-	} // end assign();
-
-	private function _loadLanguage($lang, $type = 'translation')
-	{
-		// TODO: Make loader for translation files.
-		if($this->_fileCheck)
+		if(isset($this->_groupAdapters[$group]))
 		{
-			// Check if file exists
-		}
-		if($type == 'translation')
-		{
-			$this->_translation = array();
-			// Load file for translation
-		}
-		elseif($type == 'default')
-		{
-			$this->_default = array();
-			// Load default translation file
+			$adapter = $this->_groupAdapters[$group];
 		}
 		else
 		{
-			return false;
+			$adapter = $this->_defaultAdapter;
 		}
-		return true;
-	} // end _loadLanguage();
+		$adapter->assign(func_get_args());
+	} // end assign();
 
 	/**
 	 * Function chooses new language for messages.
@@ -167,36 +148,52 @@ class Opc_Translate implements Opl_Translation_Interface
 	 * Returns true if there is language file in translations directory and function
 	 * is able to load it, otherwise it returns false and uses default language.
 	 * 
-	 * @param String $lang New language
+	 * @param String $language New language
 	 * @return Boolean
 	 */
-	public function setLanguage($lang)
+	public function setLanguage($language)
 	{
-		// TODO: There are no directories here, it must be removed.
-		if($this->_translationsDirectory !== null)
+		if($this->_defaultAdapter->setLanguage($language))
 		{
-			if($this->_translation === null)
-			{
-				return $this->_loadLanguage($lang);
-			}
-			elseif($this->_actualLanguage != $lang)
-			{
-				return $this->_loadLanguage($lang);
-			}
+			$this->_currentLanguage = $language;
+			return true;
+		}
+		elseif($this->_defaultAdapter->setLanguage($this->_defaultLanguage))
+		{
+			$this->_currentLanguage = $this->_defaultLanguage;
+			return false;
 		}
 		else
 		{
-			throw new Opc_View_TranslationNotSetTranslationDirectory_Exception();
+			throw new Opc_TranslateFileNotFound_Exception($language);
 		}
-		return true;
 	} // end setLanguage();
+
+	/**
+	 * Sets language to specified group.
+	 *
+	 * @param String $group Group name
+	 * @param String $language New language
+	 * @return Boolean
+	 */
+	public function setGroupLanguage($group, $language)
+	{
+		if(isset($this->_groupAdapters[(string)$group]))
+		{
+			return $this->_groupAdapters[(string)$group]->setGroupLanguage($language);
+		}
+		else
+		{
+			return $this->_defaultAdapter->setGroupLanguage($group, $language);
+		}
+	} // end setGroupLanguage();
 	
 	/**
 	 * Gives access to control default language.
-	 * @param String $lang New default language
+	 * @param String $language New default language
 	 */
-	public function setDefaultLanguage($lang)
+	public function setDefaultLanguage($language)
 	{
-		$this->_defaultLanguage = $lang;
+		$this->_defaultLanguage = $language;
 	} // end setDefaultLanguage();
 } // end Opc_View_Translation;

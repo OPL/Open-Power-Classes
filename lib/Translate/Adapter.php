@@ -9,14 +9,13 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
- *
- * $Id: Cache.php 189 2009-08-07 12:44:37Z megawebmaster $
  */
 
 /**
  * The translation adapter representing the message format.
  *
  * @author Tomasz Jędrzejewski <http://www.zyxist.com>
+ * @author Amadeusz 'megawebmaster' Starzykiewicz
  */
 abstract class Opc_Translate_Adapter
 {
@@ -39,4 +38,21 @@ abstract class Opc_Translate_Adapter
 	 * @param ... The data to assign.
 	 */
 	abstract public function assign($language, $group, $msg);
+
+	/**
+	 * Sets and loads new language files.
+	 *
+	 * @param String $language New language
+	 * @return Boolean
+	 */
+	abstract public function setLanguage($language);
+
+	/**
+	 * Sets and loads language for specified group.
+	 *
+	 * @param String $group Group name
+	 * @param String $language New language
+	 * @return Boolean
+	 */
+	abstract public function setGroupLanguage($group, $language);
 } // end Opc_Translate_Adapter;
