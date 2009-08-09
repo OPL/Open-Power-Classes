@@ -1,3 +1,5 @@
-Title: Paginator
+Title: Opc_Paginator
 
 ----
+
+`Opc_Paginator` is a class for paginating on data sets. 

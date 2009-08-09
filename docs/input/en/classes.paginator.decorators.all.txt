@@ -7,15 +7,12 @@ The simpliest decorator. It returns all page numbers, does not need to be config
 Returned elements
 =================
 
-## `current`
-
-`number`
-:   Current page number.
-
-## `number`
-
-`number`
-:   Current page number.
+Item      | Keys     | Description
+--------- | -------- |:-----------
+`current` | `number` | Current page number.
+          | `offset` | The offset of current number.
+`number`  | `number` | Current page number.
+          | `offset` | The offset of current number.
 
 Sample usage
 ============

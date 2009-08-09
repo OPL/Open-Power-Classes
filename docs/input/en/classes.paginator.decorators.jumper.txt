@@ -15,20 +15,14 @@ Name       | Type    | Default | Description
 Returned elements
 =================
 
-## `current`
-
-`number`
-:   Current page number.
-
-## `number`
-
-`number`
-:   Current page number.
-
-## `step`
-
-`number`
-:   Step number.
+Item      | Keys     | Description
+--------- | -------- |:-----------
+`current` | `number` | Current page number.
+          | `offset` | The offset of current number.
+`number`  | `number` | Current page number.
+          | `offset` | The offset of current number.
+`step`    | `number` | Step number. Only with `steps` setting turned **on**.
+          | `offset` | The offset of that step.
 
 Sample usage
 ============
