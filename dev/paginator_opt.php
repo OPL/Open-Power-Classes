@@ -16,6 +16,9 @@ try
    	$tpl->charset = 'utf-8';
    	$tpl->compileMode = Opt_Class::CM_REBUILD;
    	$tpl->stripWhitespaces = false;
+   	
+   	//$tpl->register(Opt_Class::OPT_FORMAT, 'Paginator', 'Opc_Paginator_DataFormat');
+   	
    	$tpl->setup();
 
 	$opc = new Opc_Class;
@@ -27,6 +30,8 @@ try
 	
 	$view = new Opt_View('paginator_opt.tpl');
 	$view->pager = $pager;
+	//$view->setFormat('pager', 'Paginator'); 
+	
 	$view->setFormat('pager', 'Objective/Array'); 
 	$view->setFormat('pager.decorator', 'Objective'); 
 

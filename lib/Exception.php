@@ -27,7 +27,7 @@ class Opc_ClassInstanteNotExists_Exception extends Opc_Exception
 
 class Opc_InvalidArgumentType_Exception extends Opc_Exception
 {
-	protected $_message = 'The method got %s data type, %s expected.';
+	protected $_message = 'The method got "%s" data type, "%s" expected.';
 } // end Opc_InvalidArgumentType_Exception;
 
 class Opc_OptionNotExists_Exception extends Opc_Exception
@@ -37,12 +37,12 @@ class Opc_OptionNotExists_Exception extends Opc_Exception
 
 class Opc_OptionReadOnly_Exception extends Opc_Exception
 {
-	protected $_message = 'The option "%s" is read-only in %s and cannot be set.';
+	protected $_message = 'The option "%s" is read-only in "%s" and cannot be set.';
 } // end Opc_OptionNotExists_Exception;
 
 class Opc_OptionInvalid_Exception extends Opc_Exception
 {
-	protected $_message = 'The option "%s" in %s is invalid. Expected: %s.';
+	protected $_message = 'The option "%s" in "%s" is invalid. Expected: "%s".';
 } // end Opc_OptionNotExists_Exception;
 
 class Opc_PaginatorUndefinedDecorator_Exception extends Opc_Exception
@@ -77,17 +77,17 @@ class Opc_TranslateNotSetTranslationDirectory_Exception extends Opc_Exception
 
 class Opc_TranslateMessageNotFound_Exception extends Opc_Exception
 {
-	protected $_message = 'Translation message in group `%s` ID: `%s` is not found! Language used `%s`';
+	protected $_message = 'Translation message in group "%s" ID: "%s" is not found! Language used "%s"';
 } // end Opc_TranslateMessageNotFound_Exception;
 
 class Opc_TranslateFileNotFound_Exception extends Opc_Exception
 {
-	protected $_message = 'Translation file is not found for language `%s`! Type of translation: `%s`';
+	protected $_message = 'Translation file is not found for language "%s"! Type of translation: "%s"';
 } // end Opc_TranslateFileNotFound_Exception;
 
 class Opc_TranslateGroupFileNotFound_Exception extends Opc_Exception
 {
-	protected $_message = 'Translation file for group `%s` is not found for language %s!';
+	protected $_message = 'Translation file for group "%s" is not found for language "%s"!';
 } // end Opc_TranslateGroupFileNotFound_Exception;
 
 class Opc_TranslateCannotAssignData_Exception extends Opc_Exception

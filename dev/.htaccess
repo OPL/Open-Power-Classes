@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase /~Opl/components/Opc/trunk/dev/
+
+RewriteRule ^testvisit(.*)$ test_visit.php$1 [L,QSA]

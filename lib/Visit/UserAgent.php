@@ -59,7 +59,19 @@ class Opc_Visit_UserAgent
 	 */
 	public function analyze($ua)
 	{
-		$return = array('browser' => array(), 'os' => array());
+		$return = array(
+			'browser' => array(
+				'name' => '',
+				'version' => '',
+				'extra' => '',
+			), 
+			'os' => array(
+				'system' => '',
+				'name' => '',
+				'version' => '',
+				'extra' => '',
+			)
+		);
 		
 		$dir = dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR;
 		
@@ -89,7 +101,8 @@ class Opc_Visit_UserAgent
 		{
 			$return['browser'] = array(
 				'name' => 'unknown',
-				'version' => ''
+				'version' => '',
+				'extra' => '',
 			);
 		}
 		
@@ -115,11 +128,13 @@ class Opc_Visit_UserAgent
 			}
 		}
 		
-		if(empty($return['os']['os']))
+		if(empty($return['os']['system']))
 		{
 			$return['os'] = array(
-				'os' => 'unknown',
-				'name' => ''
+				'system' => 'unknown',
+				'name' => '',
+				'version' => '',
+				'extra' => '',
 			);
 		}
 		
