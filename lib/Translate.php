@@ -39,6 +39,11 @@ class Opc_Translate implements Opl_Translation_Interface
 		 */
 		$_currentLanguage = null,
 		/**
+		 * Array contains groups and its languages when they are other than main.
+		 * @var array
+		 */
+		$_groupsLanguage = array(),
+		/**
 		 * Default language to use in case when there is no language selected
 		 * or selected language has not specified required translation.
 		 * @var string
@@ -87,7 +92,6 @@ class Opc_Translate implements Opl_Translation_Interface
 	public function setGroupAdapter($group, Opc_Translate_Adapter $adapter)
 	{
 		$this->_groupAdapters[(string)$group] = $adapter;
-		$adapter->setGroup($group);
 		return $this;
 	} // end setAdapter();
 
@@ -116,21 +120,37 @@ class Opc_Translate implements Opl_Translation_Interface
 	 */
 	public function _($group, $id)
 	{
+		$groupAdapter = false;
+		$adapter = null;
 		// Select the adapter.
 		if(isset($this->_groupAdapters[$group]))
 		{
 			$adapter = $this->_groupAdapters[$group];
+			$groupAdapter = true;
 		}
 		else
 		{
 			$adapter = $this->_defaultAdapter;
 		}
 
-		// Try to select the message.
+		// Check if there is set language.
+		if($this->_currentLanguage === null)
+		{
+			if($groupAdapter)
+			{
+				$this->setGroupLanguage($group, $this->_defaultLanguage);
+			}
+			else
+			{
+				$this->setLanguage($this->_defaultLanguage);
+			}
+		}
+		// Try to get translated message.
 		if(($msg = $adapter->getMessage($this->_currentLanguage, $group, $id)) !== null)
 		{
 			return $msg;
 		}
+		// Try to get default message.
 		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id, 'default')) !== null)
 		{
 			return $msg;
@@ -141,6 +161,7 @@ class Opc_Translate implements Opl_Translation_Interface
 	public function assign($group, $id)
 	{
 		$data = func_get_args();
+		$adapter = null;
 		unset($data[0],$data[1]);
 		if(isset($this->_groupAdapters[$group]))
 		{
@@ -164,12 +185,12 @@ class Opc_Translate implements Opl_Translation_Interface
 	 */
 	public function setLanguage($language)
 	{
-		if($this->_defaultAdapter->setLanguage($language))
+		if($this->_defaultAdapter->loadLanguage($language))
 		{
 			$this->_currentLanguage = $language;
 			return true;
 		}
-		elseif($this->_defaultAdapter->setLanguage($this->_defaultLanguage))
+		elseif($this->_defaultAdapter->loadLanguage($this->_defaultLanguage, 'default'))
 		{
 			$this->_currentLanguage = $this->_defaultLanguage;
 			return false;
@@ -189,13 +210,35 @@ class Opc_Translate implements Opl_Translation_Interface
 	 */
 	public function setGroupLanguage($group, $language)
 	{
-		if(isset($this->_groupAdapters[(string)$group]))
+		if(isset($this->_groupAdapters[$group]))
 		{
-			return $this->_groupAdapters[(string)$group]->setGroupLanguage($language);
+			if($this->_groupAdapters[$group]->loadGroupLanguage($group, $language))
+			{
+				$this->_groupsLanguage[$group] = $language;
+				return true;
+			}
+			elseif($this->_groupAdapters[$group]->loadGroupLanguage($group, $this->_defaultLanguage, 'default'))
+			{
+				$this->_groupsLanguage[$group] = $this->_defaultLanguage;
+				return false;
+			}
+			else
+			{
+				throw new Opc_TranslateFileNotFound_Exception($language, 'translation');
+			}
 		}
 		else
 		{
-			return $this->_defaultAdapter->setGroupLanguage($group, $language);
+			if($this->_defaultAdapter->loadGroupLanguage($group, $language))
+			{
+				$this->_groupsLanguage[$group] = $language;
+				return true;
+			}
+			elseif($this->_defaultAdapter->loadGroupLanguage($group, $this->_defaultLanguage, 'default'))
+			{
+				$this->_groupsLanguage[$group] = $this->_defaultLanguage;
+			}
+			return false;
 		}
 	} // end setGroupLanguage();
 	
