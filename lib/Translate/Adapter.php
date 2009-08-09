@@ -35,12 +35,11 @@ abstract class Opc_Translate_Adapter
 	/**
 	 * Assings the data to the specified message.
 	 *
-	 * @param string $language The language
 	 * @param string $group The message group
-	 * @param string $msg The message identifier
-	 * @param ... The data to assign.
+	 * @param string $id The message identifier
+	 * @param array $data The data to assign.
 	 */
-	abstract public function assign($language, $group, $msg);
+	abstract public function assign($group, $id, $data);
 
 	/**
 	 * Sets and loads new language files.
@@ -66,5 +65,10 @@ abstract class Opc_Translate_Adapter
 	 */
 	abstract public function setGroupLanguage($language);
 
+	/**
+	 * Tells the adapter which group it is using.
+	 *
+	 * @param String $group Group name
+	 */
 	abstract public function setGroup($group);
 } // end Opc_Translate_Adapter;

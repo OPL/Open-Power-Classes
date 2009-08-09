@@ -89,3 +89,8 @@ class Opc_TranslateGroupFileNotFound_Exception extends Opc_Exception
 {
 	protected $_message = 'Translation file for group `%s` is not found for language %s!';
 } // end Opc_TranslateGroupFileNotFound_Exception;
+
+class Opc_TranslateCannotAssignData_Exception extends Opc_Exception
+{
+	protected $_message = 'Cannot assign new data to message! Group `%s`, ID `%s`.';
+} // end Opc_TranslateCannotAssignData_Exception;

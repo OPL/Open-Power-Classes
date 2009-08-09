@@ -39,6 +39,11 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		 */
 		$_default = null,
 		/**
+		 * Assigned from template values.
+		 * @var array
+		 */
+		$_assigned = null,
+		/**
 		 * Current loaded language.
 		 * @var string
 		 */
@@ -111,6 +116,10 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 			{
 				$this->_loadLanguage($language,$type);
 			}
+			if(isset($this->_assigned[$group][$id]))
+			{
+				return $this->_assigned[$group][$id];
+			}
 			if(isset($this->_translation[$group][$id]))
 			{
 				return $this->_translation[$group][$id];
@@ -121,6 +130,10 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 			if($this->_default === null)
 			{
 				$this->_loadLanguage($language,$type);
+			}
+			if(isset($this->_assigned[$group][$id]))
+			{
+				return $this->_assigned[$group][$id];
 			}
 			if(isset($this->_default[$group][$id]))
 			{
@@ -133,14 +146,24 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	/**
 	 * Assings the data to the specified message.
 	 *
-	 * @param string $language The language
 	 * @param string $group The message group
-	 * @param string $msg The message identifier
-	 * @param ... The data to assign.
+	 * @param string $id The message identifier
+	 * @param array $data The data to assign.
 	 */
-	public function assign($language, $group, $msg)
+	public function assign($group, $id, $data)
 	{
-		// TODO: Implement
+		if(isset($this->_translation[$group][$id]))
+		{
+			$this->_assigned[$group][$id] = vsprintf($this->_translation[$group][$id], $data);
+		}
+		elseif(isset($this->_default[$group][$id]))
+		{
+			$this->_assigned[$group][$id] = vsprintf($this->_default[$group][$id], $data);
+		}
+		else
+		{
+			throw new Opc_TranslateCannotAssignData_Exception($group, $id);
+		}
 	} // end assign();
 
 	/**

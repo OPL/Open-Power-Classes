@@ -140,6 +140,8 @@ class Opc_Translate implements Opl_Translation_Interface
 
 	public function assign($group, $id)
 	{
+		$data = func_get_args();
+		unset($data[0],$data[1]);
 		if(isset($this->_groupAdapters[$group]))
 		{
 			$adapter = $this->_groupAdapters[$group];
@@ -148,7 +150,7 @@ class Opc_Translate implements Opl_Translation_Interface
 		{
 			$adapter = $this->_defaultAdapter;
 		}
-		$adapter->assign(func_get_args());
+		$adapter->assign($group, $id, $data);
 	} // end assign();
 
 	/**
