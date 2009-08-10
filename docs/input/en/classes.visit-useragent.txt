@@ -1,3 +1,41 @@
 Title: Opc_Visit_UserAgent
 
 ----
+
+`Opc_Visit_UserAgent` is an user agent string analyzer. It detects most of popular web browsers and operating systems.
+
+
+##### Example code:
+
+~~~
+[php]
+$userAgentString = 'Opera/9.80 (Windows NT 5.1; U; pl) Presto/2.2.15 Version/10.00';
+$agent = Opc_Visit_UserAgent::analyze($userAgentString);
+
+print_r($agent);
+~~~
+
+##### The result:
+
+~~~
+Array
+(
+	[browser] => Array
+		(
+			[name] => Opera
+			[version] => 10.00
+			[extra] => 
+		)
+
+	[os] => Array
+		(
+			[system] => Windows
+			[name] => XP
+			[version] => 
+			[extra] => 
+		)
+
+)
+~~~
+
+When `Opc_Visit_UserAgent` can't recognize a browser or an OS it returns `unknown` value under `[browser][name]` and `[os][system]`.

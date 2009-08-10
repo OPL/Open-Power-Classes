@@ -23,7 +23,7 @@
  */
 class Opc_Class extends Opl_Class
 {
-	// Opc_Cache configuration
+	// Opc_View_Cache configuration
 	/**
 	 * Default cache directory.
 	 * @var string

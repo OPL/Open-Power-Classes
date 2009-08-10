@@ -32,6 +32,7 @@ class Opc_Paginator
 		'slider'			=> 'Opc_Paginator_Decorator_Slider',
 		'dotting_slider'	=> 'Opc_Paginator_Decorator_DottingSlider',
 		'stepping_slider'	=> 'Opc_Paginator_Decorator_SteppingSlider',
+		'range_slider'		=> 'Opc_Paginator_Decorator_RangeSlider',
 		'jumper'			=> 'Opc_Paginator_Decorator_Jumper',
 	);
 	

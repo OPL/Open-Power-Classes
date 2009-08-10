@@ -1,3 +1,81 @@
 Title: Opc_Visit
 
 ----
+
+`Opc_Visit` is a class which provides unified data about some request parameters. 
+
+`Opc_Visit` requires to have a generic `Opc_Class` instanted at the beginning of the script.
+
+    [php]
+    $opc = new Opc_Class;
+
+> [important]
+> Remember to do this only **once** in whole your script. Otherwise another instances will throw `Opc_CannotCreateAnotherInstance_Exception` exception.
+
+This class implements singleton, so to have the access to its instance you have to write:
+
+    [php]
+    $visit = Opc_Visit::getInstance();
+
+Now you can read values:
+
+~~~
+[php]
+echo $visit->ip;
+
+if($visit->secure)
+{
+	echo 'secure connection';
+}
+
+setcookie('cookie_name', 'value', time()+3600, $visit->cookiePath, $visit->cookieServer);
+~~~
+
+You can retrieve all data with `toArray()` method:
+
+~~~
+[php]
+echo '<pre>';
+var_dump($visit->toArray());
+echo '</pre>';
+~~~
+
+Available data
+==============
+
+Name              | Description
+:---------------- |:-----------
+`ip`              | Dot-decimal client's IP.
+`numericIp`       | Decimal client's IP.
+`host`            | Client's host.
+`protocol`        | Current request protocol.
+`referrer`        | The referring page.
+`port`            | Server's port.
+`secure`          | Is secure connection? It checks if port == 443.
+`requestMethod`   | Current request method.
+`userAgentString` | Client's user agent string.
+`userAgent`       | Client's detected browser and OS. See [Opc_Visit_UserAgent][classes.visit-useragent].
+`languages`       | Array of accepted languages, sorted by quality.
+`mimeTypes`       | Array of supported mime types.
+`cookieServer`    | Server name for cookies.
+`cookiePath`      | Path for cookies.
+`currentAddress`  | Full request address.
+`currentFile`     | Executed file.
+`currentParams`   | Path info + query string or full address from rewriting.
+`currentPath`     | Full path with host.
+`basePath`        | Full path minus the host.
+`pathInfo`        | Current path info.
+`queryString`     | Current query string.
+`fileName`        | Executed file's name.
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,9 +16,9 @@ try
 	$pager = Opc_Paginator::create(1000, 13); // returns Opc_Paginator_Pager;
 	$pager->all = 1000;
 	$pager->page = isset($_GET['page']) ? $_GET['page'] : 1;
-	//$pager->offset = 13;
+	//$pager->offset = 174;
 	
-		
+	
 	echo "<ul>";
 	foreach(new LimitIterator(new ArrayIterator(range(1, $pager->all)), $pager->offset, $pager->limit) as $i)
 	{
@@ -116,6 +116,35 @@ try
 	}
 	echo '</p>';
 	
+
+	$pager->decorator = 'range_slider';
+	$pager->decorator->range = 10;
+	
+	echo '<p>';
+	foreach($pager as $page)
+	{
+		switch($page['item'])
+		{
+			case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
+			case 'number': echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+		}	
+	}
+	echo '</p>';
+	
+	$pager->decorator = 'range_slider';
+	$pager->decorator->range = 9;
+	
+	echo '<p>';
+	foreach($pager as $page)
+	{
+		switch($page['item'])
+		{
+			case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
+			case 'number': echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+		}	
+	}
+	echo '</p>';
+
 	echo '<p>';
 	
 	$first = $pager->first;

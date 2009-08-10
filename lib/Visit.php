@@ -114,7 +114,7 @@ class Opc_Visit
 	 */
 	protected $currentAddress;
 	/**
-	 * Executed file
+	 * Executed file.
 	 * @access public
 	 * @var string
 	 */

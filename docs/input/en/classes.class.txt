@@ -1,0 +1,53 @@
+Title: Opc_Class
+
+---
+
+The main class for **Open Power Classes**. It contains few factories for some classes and some default configuration options for them.
+
+Some of OPC classes also require the existance of `Opc_Class` instance in the code.
+
+    [php]
+    $opc = new Opc_Class;
+
+> [important]
+> It is suggested to create an instance of `Opc_Class` even you use a class which does not require it.
+
+Default configurations
+======================
+
+With `$opc` instance we can now configure some default option values for some classes.
+
+### For `Opc_View_Cache`
+
+`cacheDir`
+:  Default cache directory.
+
+`expiryTime`
+:  Cache expiry time. Default: **3600**.
+
+### For `Opc_Paginator`
+
+`itemsPerPage`
+:  Default value for Opc_Paginator_Range->limit - the items per page number. Default: **10**.
+
+`paginatorDecorator`
+:  Default paginator decorator. Defualt: `all`.
+
+`paginatorDecoratorOptions`
+:  Default options for default decorator.
+
+Example usage
+-------------
+
+~~~
+[php]
+$opc->cacheDir = dirname(__FILE__).'/cache/';
+$opc->expiryTime = 86400;
+
+$opc->itemsPerPage = 15;
+$opc->paginatorDecorator = 'slider';
+$opc->paginatorDecoratorOptions = array(
+		'chunk' => 5,
+		'around' => 3
+);
+~~~

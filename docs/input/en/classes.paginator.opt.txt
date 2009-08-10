@@ -2,3 +2,67 @@ Title: Integration with Open Power Template 2
 
 ----
 
+Using `Opc_Paginator` with **Open Power Template 2** is really easy. You don't need to add any adapter of change the class. The only work you need to do in the PHP side is to define data formats:
+
+~~~
+[php]
+$view = new Opt_View('news.tpl');
+
+$pager = Opc_Paginator::create(1000, 13);
+$pager->page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+$view->pager = $pager;
+$view->setFormat('pager', 'Objective/Array'); 
+$view->setFormat('pager.decorator', 'Objective'); 
+~~~
+
+> [important]
+> As OPC is in early development stage, setting dataformats isn't "user-friendly". We will later work on custom "Paginator" dataformat. But by now it must be defined in this way.
+
+On the template side `Opc_Paginator` excellently works with  `opt:selector` instruction. It is also easy to change a decorator and set it's options.
+
+~~~
+[xml]
+<p>
+{$pager.decorator is 'slider'}
+{$pager.decorator.chunk is 5}
+<opt:selector name="pager">
+	<opt:number> <a parse:href="'?page='~$pager.number">{$pager.number}</a> </opt:number>
+	<opt:current> <strong>[{$pager.number}]</strong> </opt:current>
+	<opt:gap> ... </opt:gap>
+</opt:selector>
+</p>
+~~~
+
+Item types become `<opt:itemName>` nodes.
+
+Working with snippets
+=====================
+
+It isn't necessary to repeat the design for decorators all the time, because OPT2 provides a system called "snippets". Snippets are pieces of code which can be reused in different contextes.
+
+~~~
+[xml]
+<opt:snippet name="pagerSlider">
+	<opt:number> <a parse:href="'?page='~$pagerSlider.number">{$pagerSlider.number}</a> </opt:number>
+	<opt:current> <strong>[{$pagerSlider.number}]</strong> </opt:current>
+	<opt:gap> ... </opt:gap>
+</opt:snippet>
+
+<opt:snippet name="pagerSteppingSlider">
+	<opt:number> <a parse:href="'?page='~$pagerSteppingSlider.number">{$pagerSteppingSlider.number}</a> </opt:number>
+	<opt:current> <strong>[{$pagerSteppingSlider.number}]</strong> </opt:current>
+	<opt:step> <a parse:href="'?page='~$pagerSteppingSlider.number"><small>{$pagerSteppingSlider.number}</small></a> </opt:step>
+</opt:snippet>
+~~~
+
+Then we can use those snippets with pagers:
+
+~~~
+[xml]
+{$pager1.decorator is 'slider'}
+<p><opt:selector name="pager1" opt:use="pagerSlider" /></p>
+
+{$pager2.decorator is 'stepping_slider'}
+<p><opt:selector name="pager2" opt:use="pagerSteppingSlider" /></p>
+~~~

@@ -2,6 +2,23 @@ Title: Decorators overview
 
 ----
 
-Decorator is a class, which is used by the paginator to create a list of pages.
+Decorator is a class, which is used by the paginator to create a range pages.
 
-Opc_Paginator provides 5 built-in decorators.
+Opc_Paginator provides 6 built-in decorators.
+
+Name            | Alias             | Class name
+:-------------- |:----------------- |:----------
+All             | `all`             | `Opc_Paginator_Decorator_All`
+Jumper          | `jumper`          | `Opc_Paginator_Decorator_Jumper`
+Slider          | `slider`          | `Opc_Paginator_Decorator_Slider`
+Dotting Slider  | `dotting_slider`  | `Opc_Paginator_Decorator_DottingSlider`
+Range Slider    | `range_slider`    | `Opc_Paginator_Decorator_RangeSlider`
+Stepping Slider | `stepping_slider` | `Opc_Paginator_Decorator_SteppingSlider`
+
+Registering an alias of custom decorator
+========================================
+
+~~~
+[php]
+Opc_Paginator::registerDecorator($aliasName, $className);
+~~~

@@ -30,7 +30,7 @@ foreach($pager as $page)
             echo ' <strong>['.$page['number'].']</strong> '; break;
         case 'number': 
             echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
-    }	
+    }
 }
 echo '</p>';
 ~~~~

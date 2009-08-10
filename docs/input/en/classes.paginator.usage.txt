@@ -1,0 +1,160 @@
+Title: Usage
+
+---
+
+As the most of OPC classes, `Opc_Paginator` requires to have a generic `Opc_Class` instanted at the beginning of the script.
+
+    [php]
+    $opc = new Opc_Class;
+
+> [important]
+> Remember to do this only **once** in whole your script. Otherwise another instances will throw `Opc_CannotCreateAnotherInstance_Exception` exception.
+
+To create an instance of `Opc_Paginator` you can use a static factory:
+
+    [php]
+    $pager = Opc_Paginator::create($allItemsCount, $itemsPerPage); 
+
+This factory returns a `Opc_Paginator_Range` object - and it is also allowed to create a direct instance of it:
+
+    [php]
+    $pager = new Opc_Paginator_Range($allItemsCount, $itemsPerPage); 
+
+Both methods take as parameters the amount of all items to paginate and items per page number. They are optional and can be provided later.
+
+> [information]
+> The second parameter (items per page) when not provided takes a default value from `Opc_Class` instance configuration. More details can be found [here][classes.class].
+
+Then you should tell your `$pager` what page number is requested.
+
+    [php]
+    $pager->page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+Instead of requested page, you can also provide an offset. It is a number of item to be shown as first in current resultset.
+
+    [php]
+    $pager->offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
+
+> [information]
+> It is better to use pages instead of an offset. However, both methods are fully supported. Also, don't set both `page` and `offset` for your pager, because they overwrite each other.
+
+Now, your pager is ready to work.
+
+Limiting the datasource
+=======================
+
+All alone pager is nothing without displaying items we paginate. `Opc_Paginator` does not provide any automatic adapters to limit the datasource but it allows to use `offset`, `page` and `limit` values, which can be used for example in a SQL query. 
+
+~~~
+[php]
+$result = $conn->query('SELECT * FROM news LIMIT '.$pager->offset.','.$pager->limit);
+~~~
+
+It is an example of PDO query, but `offset` and `limit` can be also used with iterators and `LimitIterator`:
+
+~~~
+[php]
+foreach(new LimitIterator($ItemIterator, $pager->offset, $pager->limit) as $item)
+{
+    echo $item;
+}
+~~~
+
+The page range
+==============
+
+Once we have the pager and limited resultset we can display the page range.
+
+`Opc_Paginator` uses **decorators** to create different styles of page ranges. All details about configuring them can be found in [this chapter][classes.paginator.decorators], here we will just present only one of them for this tutorial.
+
+A default decorator is called ["All"][classes.paginator.decorators.all] and it returns all page numbers. Here, we will change it to ["Slider"][classes.paginator.decorators.slider].
+
+> [information]
+> A default decorator and its options can be defined in global configuration of `Opc_Class` instance configuration. More details can be found [here][classes.class].
+
+    [php]
+    $pager->decorator = 'slider';
+
+`decorator` option can take three kind of options:
+
+1. A string alias of registered decorators,
+2. A string class name of a decorator,
+3. An object of decorator.
+
+After providing a one of these values `$pager->decorator` becomes an object of chosen decorator and allows to be configured. Not every decorrator requires configuring, they also have their default values.
+
+"Slider" is a decorator which returns pages around current page and at the beginning and the end of the range, with a gap between.
+
+~~~
+[php]
+$pager->decorator->chunk = 2;
+$pager->decorator->around = 1;
+~~~
+
+* `chunk` is a number of pages displayed at the beginning and at the end.
+* `around` is a number of pages *around* current page.
+
+Displaying
+----------
+
+With decorator defined and configured we can finally display pages. `Opc_Paginator_Range` is an iterator which returns an array value from decorator. The type of returned value is stored in `item` array key.
+
+~~~
+[php]
+echo '<p>';
+foreach($pager as $page)
+{
+	switch($page['item'])
+	{
+		case 'current': echo ' <strong>['.$page['number'].']</strong> '; break;
+		case 'number': echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+		case 'gap': echo ' ... '; break;
+	}
+}
+echo '</p>';  
+~~~
+
+"Slider" returns three value items:
+
+1. `number`, which is a page number from "chunk" and "around",
+2. `current`, which is a current page number,
+3. `gap`, which is displayed between "chunk" and "around".
+
+The result of above code will look like this:
+
+> [1](#none) [2](#none) ... [6](#none) **[7]** [8](#none) ... [12](#none) [13](#none)
+
+We can also display a short info for current page:
+
+~~~
+[php]
+echo '<p>Page '.$pager->page.' of '.$pager->pageCount.'</p>';
+~~~
+
+Navigation links
+----------------
+
+To make it easier to navigate through all pages, we should also create "previous", "next", "first" and "last" links. They are stored in `$pager` instance:
+
+~~~
+[php]
+if($pager->first)
+{
+	echo ' <a href="?page='.$pager->first['number'].'">&lArr; first</a> ';
+}
+if($pager->previous)
+{
+	echo ' <a href="?page='.$pager->previous['number'].'">&larr; previous</a> ';
+}
+if($pager->next)
+{
+	echo ' <a href="?page='.$pager->next['number'].'">next &rarr;</a> ';
+}
+if($pager->last)
+{
+	echo ' <a href="?page='.$pager->last['number'].'">last &rArr;</a> ';
+}
+~~~
+
+> [information]
+> Navigation links and all decorators items with `number` value return also an `offset`, so it is possible to create a pager with offset instead page navigation.

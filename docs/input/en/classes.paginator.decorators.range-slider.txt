@@ -1,0 +1,50 @@
+Title: Range Slider
+
+---
+
+Range slider is a next variation of ["slider"][classes.paginator.decorators.slider] decorator. It allways returns a defined number of pages, even if the current is at the beginning, in the middle or at the end.
+
+Settings
+========
+
+Name    | Type    | Default | Description
+------- | ------- | ------- |:-----------
+`range` | integer | 9       | Number of pages in range.
+
+Returned elements
+=================
+
+Item      | Keys     | Description
+--------- | -------- |:-----------
+`current` | `number` | Current page number.
+          | `offset` | The offset of current number.
+`number`  | `number` | Current page number.
+          | `offset` | The offset of current number.
+
+Sample usage
+============
+
+~~~~
+[php]
+$pager->decorator = 'range_slider';
+$pager->decorator->range = 9;
+
+echo '<p>';
+foreach($pager as $page)
+{
+    switch($page['item'])
+    {
+        case 'current':
+            echo ' <strong>['.$page['number'].']</strong> '; break;
+        case 'number':
+            echo ' <a href="?page='.$page['number'].'">'.$page['number'].'</a> '; break;
+    }
+}
+echo '</p>';
+~~~~
+
+> #### The results:
+>
+> [1](#none) **[2]** [3](#none) [4](#none) [5](#none)  [6](#none) [7](#none) [8](#none) [9](#none)
+
+> [27](#none) [28](#none) [29](#none) [30](#none) **[31]** [32](#none) [33](#none) [34](#none) [35](#none)

@@ -3,3 +3,8 @@ Title: Opc_Paginator
 ----
 
 `Opc_Paginator` is a class for paginating on data sets. 
+
+1. `Opc_Paginator` is datasource-independent - no need to create any adapters for arrays, iterators, database etc.
+2. The class provides 6 built-in page range decorators.
+3. Paging outputs are fully customizable.
+4. The class can be easily integrated with Open Power Template 2.
