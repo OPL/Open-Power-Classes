@@ -1,3 +1,5 @@
 Title: Opc_DoctrineModels
 
 ----
+
+This chapter describes how to use Doctrine Models Autoloader to work with Open Power Libraries.

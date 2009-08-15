@@ -1,0 +1,70 @@
+Title: Using other functions
+
+----
+
+How to set up another base model prefix?
+========================================
+
+If you have changed your base models prefix you have to tell Opc_DoctrineModels autoloader how he should name it now.
+It is simple - just use Opc_DoctrineModels::setBaseModelPrefix() method.
+
+~~~~
+[php]
+<?php
+// Setup Opl_Loader
+Opc_DoctrineModels::setPath('./models/'); // 1
+Opc_DoctrineModels::register(); // 2
+Opc_DoctrineModels::setBaseModelPrefix('Sth'); // 3
+~~~~
+
+> [steps]
+> 1. Set path to models directory.
+> 2. Register Doctrine models autoloader.
+> 3. Set base model prefix.
+
+Basically base model prefix is just Base (and model is named like Base_Table.php) - in this example we changed its name to
+Sth_Table.php.
+
+And that it - now Opc_DoctrineModels will load your files.
+
+How to set up another generated models directory name?
+======================================================
+
+As above - if you changed directory name for generated base models you have to tell Opc_DoctrineModels its name.
+
+~~~~
+[php]
+<?php
+// Setup Opl_Loader
+Opc_DoctrineModels::setPath('./models/'); // 1
+Opc_DoctrineModels::register(); // 2
+Opc_DoctrineModels::setGeneratedModelsDirectoryName('sth'); // 3
+~~~~
+
+> [steps]
+> 1. Set path to models directory.
+> 2. Register Doctrine models autoloader.
+> 3. Set new name for generated base models directory.
+
+How to change class file suffix?
+================================
+
+Doctrine allows to change class file suffix from `.php` to another. And Opc_DoctrineModels supports this case.
+
+Lets have a look at code.
+
+~~~~
+[php]
+<?php
+// Setup Opl_Loader
+Opc_DoctrineModels::setPath('./models/'); // 1
+Opc_DoctrineModels::register(); // 2
+Opc_DoctrineModels::setClassFileSuffix('.mdl'); // 3
+~~~~
+
+> [steps]
+> 1. Set path to models directory.
+> 2. Register Doctrine models autoloader.
+> 3. Set new suffix.
+
+In Open Power Classes dev2 there will be possibility to set `suffix` instead of `.suffix`.

@@ -1,0 +1,63 @@
+Title: Advanced setup
+----
+
+In this chapter you will read more about setting up our translation interface.
+
+Setup
+=====
+
+Firstly you should configure Opl_Loader and create Opt_Class object. Then we can
+configure our Opc_Translate.
+
+~~~~
+[php]
+<?php
+// code before is setting up Opl_Loader
+$tpl = new Opt_Class; // 1
+$adapter = new Opc_Translate_Adapter_Ini('./langs/'); // 2
+$t = new Opc_Translate($adapter); // 3
+$tpl->setTranslationInterface($t); // 4
+~~~~
+
+> [steps]
+> 1. We create Opt_Class object.
+> 2. Now we have to create at least one adapter for Opc_Translate. Adapters loads language files from format you have selected.
+> 3. Here we create Opc_Translate object. Its constructor needs to have default adapter - adapter witch it will use for all operations.
+> 4. And at last we registers translation interface to OPT.
+
+Advanced options
+================
+
+Basic configuration is not what tigers likes the most.
+If you want to change basic language - there is nothing simple like this.
+
+~~~~
+[php]
+<?php
+// code before is setting up Opl_Loader
+$tpl = new Opt_Class;
+$adapter = new Opc_Translate_Adapter_Ini('./langs/');
+$t = new Opc_Translate($adapter);
+$tpl->setTranslationInterface($t);
+$t->setLanguage('pl'); // 1
+// or
+$t->setDefaultLanguage('pl'); // 2
+~~~~
+
+> [steps]
+> 1. By using setLanguage() method we set new basic language for our application.
+> 2. Another method is to use setDefaultLanguage(); Difference is that in first case language is loaded immidiately in second - when view wants to get translation.
+
+Isn't it simple?
+
+Setting language for groups
+===========================
+
+You can set another language for groups in your translations.
+
+~~~~
+[php]
+$t->setGroupLanguage('groupName', 'pl');
+~~~~
+
+Just use setGroupLanguage() method and that's it - now adapter will load language for this group.

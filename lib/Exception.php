@@ -92,5 +92,5 @@ class Opc_TranslateGroupFileNotFound_Exception extends Opc_Exception
 
 class Opc_TranslateCannotAssignData_Exception extends Opc_Exception
 {
-	protected $_message = 'Cannot assign new data to message! Group `%s`, ID `%s`.';
+	protected $_message = 'Cannot assign new data to message! Group "%s", ID "%s".';
 } // end Opc_TranslateCannotAssignData_Exception;

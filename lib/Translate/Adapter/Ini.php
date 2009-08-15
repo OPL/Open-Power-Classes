@@ -15,7 +15,6 @@
 
 /**
  * The translation adapter for INI files representing the message format.
- * Needs to be completed.
  *
  * @author Tomasz Jędrzejewski <http://www.zyxist.com>
  * @author Amadeusz 'megawebmaster' Starzykiewicz

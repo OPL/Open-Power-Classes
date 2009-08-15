@@ -1,0 +1,28 @@
+Title: Basic setup
+----
+
+In this chapter you will read about using translation interface.
+
+Setup
+=====
+
+Firstly you should configure Opl_Loader and create Opt_Class object. Then we can
+configure our Opc_Translate.
+
+~~~~
+[php]
+<?php
+// code before is setting up Opl_Loader
+$tpl = new Opt_Class; // 1
+$adapter = new Opc_Translate_Adapter_Ini('./langs/'); // 2
+$t = new Opc_Translate($adapter); // 3
+$tpl->setTranslationInterface($t); // 4
+~~~~
+
+> [steps]
+> 1. We create Opt_Class object.
+> 2. Now we have to create at least one adapter for Opc_Translate. Adapters loads language files from format you have selected.
+> 3. Here we create Opc_Translate object. Its constructor needs to have default adapter - adapter witch it will use for all operations.
+> 4. And at last we registers translation interface to OPT.
+
+And that's basic configuration. It uses default language - of course English.

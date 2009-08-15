@@ -101,6 +101,10 @@ class Opc_DoctrineModels
 	 */
 	static public function setClassFileSuffix($suffix)
 	{
+		if($suffix[0] != '.')
+		{
+			$suffix = '.'.$suffix;
+		}
 		self::$_classFileSuffix = $suffix;
 	} // end setClassFileSuffix();
 
