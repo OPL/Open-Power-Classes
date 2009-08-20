@@ -155,7 +155,7 @@ class Opc_Translate implements Opl_Translation_Interface
 		{
 			return $msg;
 		}
-		throw new Opc_TranslateMessageNotFound_Exception($group, $id, $adapter->getLanguage());
+		throw new Opc_TranslateMessageNotFound_Exception($group, $id, $this->_currentLanguage);
 	} // end _();
 
 	public function assign($group, $id)

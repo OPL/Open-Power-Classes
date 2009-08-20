@@ -67,4 +67,8 @@ Opc_DoctrineModels::setClassFileSuffix('.mdl'); // 3
 > 2. Register Doctrine models autoloader.
 > 3. Set new suffix.
 
-In Open Power Classes dev2 there will be possibility to set `suffix` instead of `.suffix`.
+<!-- # -->
+
+> [warning]
+> ### Important thing
+> In Open Power Classes dev2 there will be possibility to set `suffix` instead of `.suffix`.

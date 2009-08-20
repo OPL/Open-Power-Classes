@@ -10,17 +10,17 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  * 
- * $Id$
+ * $Id: Ini.php 201 2009-08-09 19:19:16Z extremo $
  */
 
 /**
- * The translation adapter for INI files representing the message format.
+ * The translation adapter for XML files representing the message format.
+ * Needs to be completed.
  *
- * @author Tomasz Jędrzejewski <http://www.zyxist.com>
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
+class Opc_Translate_Adapter_Xml extends Opc_Translate_Adapter
 {
 	protected
 		/**
@@ -104,17 +104,17 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 */
 	public function getMessage($language, $group, $id)
 	{
-		if(isset($this->_assigned[$group][$id]))
+		if(isset($this->_assigned->$group->$id))
 		{
-			return $this->_assigned[$group][$id];
+			return $this->_assigned->$group->$id;
 		}
-		if(isset($this->_translation[$group][$id]))
+		if(isset($this->_translation->$group->$id))
 		{
-			return $this->_translation[$group][$id];
+			return $this->_translation->$group->$id;
 		}
-		if(isset($this->_default[$group][$id]))
+		if(isset($this->_default->$group->$id))
 		{
-			return $this->_default[$group][$id];
+			return $this->_default->$group->$id;
 		}
 		return null;
 	} // end getMessage();
@@ -128,13 +128,28 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 */
 	public function assign($group, $id, $data)
 	{
-		if(isset($this->_translation[$group][$id]))
+		if($this->_assigned === null)
 		{
-			$this->_assigned[$group][$id] = vsprintf($this->_translation[$group][$id], $data);
+			if($this->_translation !== null)
+			{
+				$this->_assigned = $this->_translation;
+			}
+			elseif($this->_default !== null)
+			{
+				$this->_assigned = $this->_default;
+			}
+			else
+			{
+				throw new Opc_TranslateNotLoadedTranslation();
+			}
 		}
-		elseif(isset($this->_default[$group][$id]))
+		if(isset($this->_translation->$group->$id))
 		{
-			$this->_assigned[$group][$id] = vsprintf($this->_default[$group][$id], $data);
+			$this->_assigned->$group->$id = vsprintf($this->_translation->$group->$id, $data);
+		}
+		elseif(isset($this->_default->$group->$id))
+		{
+			$this->_assigned->$group->$id = vsprintf($this->_default->$group->$id, $data);
 		}
 		else
 		{
@@ -152,7 +167,13 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 */
 	public function loadGroupLanguage($group, $language, $type = 'translation')
 	{
-		$data = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini');
+$empty = <<<XML
+<?xml version='1.0' standalone='yes'?>
+ <data>
+ </data>
+XML;
+
+		$data = @simplexml_load_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.xml');
 		if($data === false)
 		{
 			if($this->_fileCheck)
@@ -164,13 +185,28 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 				return false;
 			}
 		}
+		
 		switch($type)
 		{
 			case 'translation':
-				$this->_translation[$group] = $data;
+				if($this->_translation === null)
+				{
+					$this->_translation = new SimpleXMLElement($empty);
+				}
+				foreach($data as $key => $value)
+				{
+					$this->_translation->$group->$key = $value;
+				}
 				break;
 			case 'default':
-				$this->_default[$group] = $data;
+				if($this->_default === null)
+				{
+					$this->_default = new SimpleXMLElement($empty);
+				}
+				foreach($data as $key => $value)
+				{
+					$this->_default->$group->$key = $value;
+				}
 				break;
 		}
 		return true;
@@ -185,7 +221,7 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 */
 	public function loadLanguage($language, $type = 'translation')
 	{
-		$data = @parse_ini_file($this->_directory.$language.'.ini',true);
+		$data = @simplexml_load_file($this->_directory.$language.'.xml');
 		if($data === false)
 		{
 			if($this->_fileCheck)
