@@ -140,7 +140,7 @@ class Opc_Translate_Adapter_Xml extends Opc_Translate_Adapter
 			}
 			else
 			{
-				throw new Opc_TranslateNotLoadedTranslation();
+				throw new Opc_TranslateNotLoadedTranslation_Exception();
 			}
 		}
 		if(isset($this->_translation->$group->$id))

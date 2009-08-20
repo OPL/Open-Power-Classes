@@ -95,7 +95,7 @@ class Opc_TranslateCannotAssignData_Exception extends Opc_Exception
 	protected $_message = 'Cannot assign new data to message! Group "%s", ID "%s".';
 } // end Opc_TranslateCannotAssignData_Exception;
 
-class Opc_TranslateNotLoadedTranslation extends Opc_Exception
+class Opc_TranslateNotLoadedTranslation_Exception extends Opc_Exception
 {
 	protected $_message = 'There is no translation loaded! Translation interface cannot assign new data.';
-} // end Opc_TranslateNotLoadedTranslation;
+} // end Opc_TranslateNotLoadedTranslation_Exception;
