@@ -42,14 +42,6 @@ abstract class Opc_Translate_Adapter
 	abstract public function assign($group, $id, $data);
 
 	/**
-	 * Loads new language.
-	 *
-	 * @param string $language New language
-	 * @param string $type Type of translation
-	 */
-	abstract public function loadLanguage($language, $type = 'translation');
-
-	/**
 	 * Loads new language for specified group.
 	 *
 	 * @param string $group Group name

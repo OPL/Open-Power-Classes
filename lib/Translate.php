@@ -150,10 +150,28 @@ class Opc_Translate implements Opl_Translation_Interface
 		{
 			return $msg;
 		}
+		// Try to load current language
+		if($adapter->loadGroupLanguage($group, $this->_currentLanguage))
+		{
+			// Try to get translated message if language is loaded now
+			if(($msg = $adapter->getMessage($this->_currentLanguage, $group, $id)) !== null)
+			{
+				return $msg;
+			}
+		}
 		// Try to get default message.
 		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id, 'default')) !== null)
 		{
 			return $msg;
+		}
+		// Try to load default language
+		if($adapter->loadGroupLanguage($group, $this->_defaultLanguage))
+		{
+			// Try to get default message if language is loaded now
+			if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
+			{
+				return $msg;
+			}
 		}
 		throw new Opc_TranslateMessageNotFound_Exception($group, $id, $this->_currentLanguage);
 	} // end _();
@@ -177,28 +195,15 @@ class Opc_Translate implements Opl_Translation_Interface
 	/**
 	 * Function chooses new language for messages.
 	 *
-	 * Returns true if there is language file in translations directory and function
-	 * is able to load it, otherwise it returns false and uses default language.
+	 * Sets langauge for translation.
 	 * 
 	 * @param string $language New language
 	 * @return boolean
 	 */
 	public function setLanguage($language)
 	{
-		if($this->_defaultAdapter->loadLanguage($language))
-		{
-			$this->_currentLanguage = $language;
-			return true;
-		}
-		elseif($this->_defaultAdapter->loadLanguage($this->_defaultLanguage, 'default'))
-		{
-			$this->_currentLanguage = $this->_defaultLanguage;
-			return false;
-		}
-		else
-		{
-			throw new Opc_TranslateFileNotFound_Exception($language);
-		}
+		$this->_currentLanguage = $language;
+		return true;
 	} // end setLanguage();
 
 	/**

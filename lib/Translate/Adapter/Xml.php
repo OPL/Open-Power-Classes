@@ -212,39 +212,6 @@ XML;
 		return true;
 	} // end loadGroupLanguage();
 
-	/**
-	 * Loads language file for whole translation.
-	 *
-	 * @param string $language Language to be loaded
-	 * @param string $type Type of translation
-	 * @return boolean
-	 */
-	public function loadLanguage($language, $type = 'translation')
-	{
-		$data = @simplexml_load_file($this->_directory.$language.'.xml');
-		if($data === false)
-		{
-			if($this->_fileCheck)
-			{
-				throw new Opc_TranslateFileNotFound_Exception($language, $type);
-			}
-			else
-			{
-				return false;
-			}
-		}
-		switch($type)
-		{
-			case 'translation':
-				$this->_translation = $data;
-				break;
-			case 'default':
-				$this->_default = $data;
-				break;
-		}
-		return true;
-	} // end loadLanguage();
-
 	public function setFileCheck($state)
 	{
 		$this->_fileCheck = (boolean)$state;
