@@ -42,7 +42,7 @@ class Opc_Translate implements Opl_Translation_Interface
 		 * Array contains groups and its languages when they are other than main.
 		 * @var array
 		 */
-		$_groupsLanguage = array(),
+		$_groupLanguages = array(),
 		/**
 		 * Default language to use in case when there is no language selected
 		 * or selected language has not specified required translation.
@@ -133,42 +133,19 @@ class Opc_Translate implements Opl_Translation_Interface
 			$adapter = $this->_defaultAdapter;
 		}
 
-		// Check if there is set language.
-		if($this->_currentLanguage === null)
+		// Select the language
+		$languages = array();
+		if(isset($this->_groupLanguages[$group]))
 		{
-			if($groupAdapter)
-			{
-				$this->setGroupLanguage($group, $this->_defaultLanguage);
-			}
-			else
-			{
-				$this->setLanguage($this->_defaultLanguage);
-			}
+			$languages[] = $this->_groupLanguages[$group];
 		}
+		$languages[] = $this->_currentLanguage;
+		$languages[] = $this->_defaultLanguage;
+
 		// Try to get translated message.
-		if(($msg = $adapter->getMessage($this->_currentLanguage, $group, $id)) !== null)
+		foreach($languages as $lang)
 		{
-			return $msg;
-		}
-		// Try to load current language
-		if($adapter->loadGroupLanguage($group, $this->_currentLanguage))
-		{
-			// Try to get translated message if language is loaded now
-			if(($msg = $adapter->getMessage($this->_currentLanguage, $group, $id)) !== null)
-			{
-				return $msg;
-			}
-		}
-		// Try to get default message.
-		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id, 'default')) !== null)
-		{
-			return $msg;
-		}
-		// Try to load default language
-		if($adapter->loadGroupLanguage($group, $this->_defaultLanguage))
-		{
-			// Try to get default message if language is loaded now
-			if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
+			if(($msg = $adapter->getMessage($lang, $group, $id)) !== null)
 			{
 				return $msg;
 			}
@@ -180,7 +157,16 @@ class Opc_Translate implements Opl_Translation_Interface
 	{
 		$data = func_get_args();
 		$adapter = null;
-		unset($data[0],$data[1]);
+		// Filter arrays
+		if(is_array($data[2]))
+		{
+			$data = $data[2];
+		}
+		else
+		{
+			unset($data[0], $data[1]);
+		}
+		// Load the adapter
 		if(isset($this->_groupAdapters[$group]))
 		{
 			$adapter = $this->_groupAdapters[$group];
@@ -189,7 +175,22 @@ class Opc_Translate implements Opl_Translation_Interface
 		{
 			$adapter = $this->_defaultAdapter;
 		}
-		$adapter->assign($group, $id, $data);
+		// Select the language
+		$languages = array();
+		if(isset($this->_groupLanguages[$group]))
+		{
+			$languages[] = $this->_groupLanguages[$group];
+		}
+		$languages[] = $this->_currentLanguage;
+		$languages[] = $this->_defaultLanguage;
+		
+		foreach($languages as $lang)
+		{
+			if($adapter->assign($lang, $group, $id, $data))
+			{
+				break;
+			}
+		}
 	} // end assign();
 
 	/**
@@ -207,45 +208,38 @@ class Opc_Translate implements Opl_Translation_Interface
 	} // end setLanguage();
 
 	/**
-	 * Sets language to specified group.
+	 * Sets the group-specific language for the group. The
+	 * null value removes the group language.
 	 *
 	 * @param string $group Group name
-	 * @param string $language New language
-	 * @return boolean
+	 * @param string $language The group language
 	 */
 	public function setGroupLanguage($group, $language)
 	{
-		if(isset($this->_groupAdapters[$group]))
+		if($language === null)
 		{
-			if($this->_groupAdapters[$group]->loadGroupLanguage($group, $language))
-			{
-				$this->_groupsLanguage[$group] = $language;
-				return true;
-			}
-			elseif($this->_groupAdapters[$group]->loadGroupLanguage($group, $this->_defaultLanguage, 'default'))
-			{
-				$this->_groupsLanguage[$group] = $this->_defaultLanguage;
-				return false;
-			}
-			else
-			{
-				throw new Opc_TranslateFileNotFound_Exception($language, 'translation');
-			}
+			unset($this->_groupLanguages[$group]);
 		}
 		else
 		{
-			if($this->_defaultAdapter->loadGroupLanguage($group, $language))
-			{
-				$this->_groupsLanguage[$group] = $language;
-				return true;
-			}
-			elseif($this->_defaultAdapter->loadGroupLanguage($group, $this->_defaultLanguage, 'default'))
-			{
-				$this->_groupsLanguage[$group] = $this->_defaultLanguage;
-			}
-			return false;
+			$this->_groupLanguages[$group] = (string)$language;
 		}
 	} // end setGroupLanguage();
+
+	/**
+	 * If the group has a custom language defined, returns this
+	 * language name. In any other case, it return null.
+	 * @param string $group The group name
+	 * @return string|null
+	 */
+	public function getGroupLanguage($group)
+	{
+		if(isset($this->_groupLanguages[$group]))
+		{
+			return $this->_groupLanguages[$group];
+		}
+		return null;
+	} // end getGroupLanguage();
 	
 	/**
 	 * Gives access to control default language.

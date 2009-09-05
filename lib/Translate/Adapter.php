@@ -33,20 +33,14 @@ abstract class Opc_Translate_Adapter
 	abstract public function getMessage($language, $group, $msg);
 
 	/**
-	 * Assings the data to the specified message.
+	 * Assings the data to the specified message. The method must return
+	 * true, if the assignment was successful and false otherwise.
 	 *
+	 * @param string $language The language
 	 * @param string $group The message group
 	 * @param string $id The message identifier
 	 * @param array $data The data to assign
+	 * @return boolean
 	 */
-	abstract public function assign($group, $id, $data);
-
-	/**
-	 * Loads new language for specified group.
-	 *
-	 * @param string $group Group name
-	 * @param string $language New language
-	 * @param string $type Type of translation
-	 */
-	abstract public function loadGroupLanguage($group, $language, $type = 'translation');
+	abstract public function assign($language, $group, $id, Array $data);
 } // end Opc_Translate_Adapter;

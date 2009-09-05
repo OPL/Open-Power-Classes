@@ -29,20 +29,15 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		 */
 		$_directory = null,
 		/**
-		 * Loaded translation.
+		 * Loaded messages
 		 * @var array
 		 */
-		$_translation = null,
-		/**
-		 * Loaded default translation.
-		 * @var array
-		 */
-		$_default = null,
+		$_messages = array(),
 		/**
 		 * Assigned from template values.
 		 * @var array
 		 */
-		$_assigned = null,
+		$_assigned = array(),
 		/**
 		 * File existence checking state.
 		 * @var boolean
@@ -104,17 +99,21 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 */
 	public function getMessage($language, $group, $id)
 	{
-		if(isset($this->_assigned[$group][$id]))
+		if(isset($this->_assigned[$group]) && $this->_assigned[$group][$id])
 		{
 			return $this->_assigned[$group][$id];
 		}
-		if(isset($this->_translation[$group][$id]))
+		if(!isset($this->_messages[$language]))
 		{
-			return $this->_translation[$group][$id];
+			$this->_messages[$language] = array();
 		}
-		if(isset($this->_default[$group][$id]))
+		if(!isset($this->_messages[$language][$group]))
 		{
-			return $this->_default[$group][$id];
+			$this->loadGroup($language, $group);
+		}
+		if(isset($this->_messages[$language][$group][$id]))
+		{
+			return $this->_messages[$language][$group][$id];
 		}
 		return null;
 	} // end getMessage();
@@ -125,21 +124,17 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 * @param string $group The message group
 	 * @param string $id The message identifier
 	 * @param array $data The data to assign.
+	 * @return boolean
 	 */
-	public function assign($group, $id, $data)
+	public function assign($language, $group, $id, Array $data)
 	{
-		if(isset($this->_translation[$group][$id]))
+		$message = $this->getMessage($language, $group, $id);
+		if($message === null)
 		{
-			$this->_assigned[$group][$id] = vsprintf($this->_translation[$group][$id], $data);
+			return false;
 		}
-		elseif(isset($this->_default[$group][$id]))
-		{
-			$this->_assigned[$group][$id] = vsprintf($this->_default[$group][$id], $data);
-		}
-		else
-		{
-			throw new Opc_TranslateCannotAssignData_Exception($group, $id);
-		}
+		$this->_assigned[$group][$id] = vsprintf($message, $data);
+		return true;
 	} // end assign();
 
 	/**
@@ -148,32 +143,20 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 * @param string $group Group name
 	 * @param string $language The language name.
 	 * @param string $type Type of translation
-	 * @return boolean
+	 * @throws Opc_TranslateGroupFileNotFound_Exception
 	 */
-	public function loadGroupLanguage($group, $language, $type = 'translation')
+	public function loadGroup($language, $group)
 	{
-		$data = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini');
-		if($data === false)
+		if(!isset($this->_messages[$language]))
 		{
-			if($this->_fileCheck)
-			{
-				throw new Opc_TranslateGroupFileNotFound_Exception($group, $language);
-			}
-			else
-			{
-				return false;
-			}
+			$this->_messages[$language] = array();
 		}
-		switch($type)
+		$this->_messages[$language][$group] = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini');
+		if($this->_messages[$language][$group] === false)
 		{
-			case 'translation':
-				$this->_translation[$group] = $data;
-				break;
-			case 'default':
-				$this->_default[$group] = $data;
-				break;
+			unset($this->_messages[$language][$group]);
+			throw new Opc_TranslateGroupFileNotFound_Exception($group, $language);
 		}
-		return true;
 	} // end loadGroupLanguage();
 
 
