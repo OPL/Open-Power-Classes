@@ -30,7 +30,8 @@ class Opc_ErrorHandler extends Opl_ErrorHandler
 				execution.'),
 		),
 		'__UNKNOWN__' => array(
-			'BasicConfiguration' => array()
+			'BasicConfiguration' => array(),
+			'Backtrace' => array()
 		),
 	);
 
