@@ -166,7 +166,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case null:
 				break;
 			default:
-				throw new Opc_Exception('');
+				throw new Opc_InvalidArgumentType_Exception(gettype($state), 'Opc_Paginator_Range::STATE_*');
 				break;
 		}
 		
@@ -198,6 +198,10 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 				if(is_null($this->pageCount))
 				{
 					$this->pageCount = ceil($this->get('all') / $this->get('limit'));
+				}
+				if($this->pageCount < 1)
+				{
+					$this->pageCount = 1;
 				}
 				
 				return $this->pageCount;
@@ -285,7 +289,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case 'offset':
 				if($value >= $this->get('all'))
 				{
-					throw new Opc_Exception('Page not found [offset: '.$value.']');
+					throw new Opc_PaginatorPageNotFound_Exception('offset: '.$value);
 				}
 				
 				$this->$key = $value;
@@ -294,7 +298,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case 'page':
 				if($value < 1 || $value > $this->get('pageCount'))
 				{
-					throw new Opc_Exception('Page not found ['.$value.']');
+					throw new Opc_PaginatorPageNotFound_Exception($value);
 				}
 				
 				$this->$key = (int)$value;

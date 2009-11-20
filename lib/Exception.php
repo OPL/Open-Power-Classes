@@ -20,7 +20,7 @@ class Opc_CannotCreateAnotherInstance_Exception extends Opc_Exception
 	protected $_message = 'Cannot create another Opc_Class instance.';
 } // end Opc_InvalidArgumentType_Exception;
 
-class Opc_ClassInstanteNotExists_Exception extends Opc_Exception
+class Opc_ClassInstanceNotExists_Exception extends Opc_Exception
 {
 	protected $_message = 'Opc_Class instance not found. It must be created before using Opc_* classes.';
 } // end Opc_InvalidArgumentType_Exception;
@@ -28,7 +28,7 @@ class Opc_ClassInstanteNotExists_Exception extends Opc_Exception
 class Opc_InvalidArgumentType_Exception extends Opc_Exception
 {
 	protected $_message = 'The method got "%s" data type, "%s" expected.';
-} // end Opc_InvalidArgumentType_Exception;
+} // end Opc_InvalidArgumentType_Exception;    
 
 class Opc_OptionNotExists_Exception extends Opc_Exception
 {
@@ -53,6 +53,11 @@ class Opc_PaginatorUndefinedDecorator_Exception extends Opc_Exception
 class Opc_PaginatorWrongSubclassDecorator_Exception extends Opc_Exception
 {
 	protected $_message = 'Given decorator "%s" is not a subclass of "Opc_Paginator_Decorator".';
+} // end Opc_PaginatorWrongSubclassDecorator_Exception;
+
+class Opc_PaginatorPageNotFound_Exception extends Opc_Exception
+{
+	protected $_message = 'Page "%s" was not found.';
 } // end Opc_PaginatorWrongSubclassDecorator_Exception;
 
 class Opc_DoctrineModelsInvalidDirectoryName_Exception extends Opc_Exception

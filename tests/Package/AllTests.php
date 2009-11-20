@@ -25,6 +25,7 @@ class Package_AllTests extends PHPUnit_Framework_TestSuite
 		$suite = new Package_AllTests('Package');
 		$suite->addTestSuite('Package_TranslateTest');
 		$suite->addTestSuite('Package_VisitTest');
+		$suite->addTestSuite('Package_PaginatorTest');
 		$suite->addTestSuite(Package_Visit_AllTests::suite());
 
 		return $suite;

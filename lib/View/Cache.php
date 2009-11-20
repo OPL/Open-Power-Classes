@@ -93,7 +93,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanteNotExists_Exception;
+			throw new Opc_ClassInstanceNotExists_Exception;
 		}
 		$this->_opc = Opl_Registry::get('opc');
 		
