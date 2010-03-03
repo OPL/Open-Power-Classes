@@ -70,27 +70,47 @@ class Opc_View_CacheCannotSaveFile_Exception extends Opc_Exception
 	protected $_message = 'Cache file could not be saved. Has PHP permission to write in cache directory "%s"?';
 } // end Opc_CacheCannotSaveFile_Exception;
 
-class Opc_TranslateNotSetTranslationDirectory_Exception extends Opc_Exception
+class Opc_Translate_NotSetTranslationDirectory_Exception extends Opc_Exception
 {
 	protected $_message = 'Directory with translation files is not set! You have to set it before using any functions!';
-} // end Opc_View_TranslationNotSetTranslationDirectory_Exception;
+} // end Opc_TranslateNotSetTranslationDirectory_Exception;
 
-class Opc_TranslateMessageNotFound_Exception extends Opc_Exception
+class Opc_Translate_MessageNotFound_Exception extends Opc_Exception
 {
 	protected $_message = 'Translation message in group "%s" ID: "%s" is not found! Language used "%s"';
 } // end Opc_TranslateMessageNotFound_Exception;
 
-class Opc_TranslateFileNotFound_Exception extends Opc_Exception
+class Opc_Translate_Adapter_FileNotFound_Exception extends Opc_Exception
 {
 	protected $_message = 'Translation file is not found for language "%s"! Type of translation: "%s"';
 } // end Opc_TranslateFileNotFound_Exception;
 
-class Opc_TranslateGroupFileNotFound_Exception extends Opc_Exception
+class Opc_Translate_Adapter_GroupFileNotFound_Exception extends Opc_Exception
 {
 	protected $_message = 'Translation file for group "%s" is not found for language "%s"!';
 } // end Opc_TranslateGroupFileNotFound_Exception;
 
-class Opc_TranslateCannotAssignData_Exception extends Opc_Exception
+class Opc_Translate_Adapter_CannotAssignData_Exception extends Opc_Exception
 {
-	protected $_message = 'Cannot assign new data to message! Group `%s`, ID `%s`.';
+	protected $_message = 'Cannot assign new data to message! Group "%s", ID "%s".';
 } // end Opc_TranslateCannotAssignData_Exception;
+
+class Opc_Translate_Adapter_Yaml_CompileWriteFile_Exception extends Opc_Exception
+{
+	protected $_message = 'File "%s.%s" could not be written in cache.';
+} // end Opc_Translate_Adapter_Yaml_CompileWriteFile_Exception;
+
+class Opc_Translate_Adapter_YamlParser_Exception extends Opc_Exception
+{
+	protected $_message = 'There is an error in file "%s". Returned error message: "%s"';
+} // end Opc_Translate_Adapter_YamlParser_Exception;
+
+class Opc_Translate_Adapter_Xml_NoTranslationLoaded_Exception extends Opc_Exception
+{
+	protected $_message = 'There is no language loaded yet, so assignment couldn\'t be successful.';
+} // end Opc_Translate_Adapter_Xml_NoTranslationLoaded_Exception;
+
+class Opc_Calendar_NotSetUpCorrectly_Exception extends Opc_Exception
+{
+	protected $_message = 'You have to set month and year before using Opc_Calendar.';
+} // end Opc_Calendar_NotSetUpCorrectly_Exception;

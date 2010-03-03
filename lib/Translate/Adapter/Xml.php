@@ -9,18 +9,18 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
- * 
- * $Id$
+ *
+ * $Id: Xml.php 201 2010-03-03 21:56:16Z megawebmaster $
  */
 
 /**
- * The translation adapter for INI files representing the message format.
+ * The translation adapter for XML files representing the message format.
+ * Needs to be completed.
  *
- * @author Tomasz Jędrzejewski <http://www.zyxist.com>
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
+class Opc_Translate_Adapter_Xml extends Opc_Translate_Adapter
 {
 	protected
 		/**
@@ -28,6 +28,11 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		 * @var string
 		 */
 		$_directory = null,
+		/**
+		 * File existence checking state.
+		 * @var boolean
+		 */
+		$_fileExistsCheck = false,
 		/**
 		 * Loaded translation.
 		 * @var array
@@ -37,12 +42,7 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		 * Assigned from template values.
 		 * @var array
 		 */
-		$_assigned = null,
-		/**
-		 * File existence checking state.
-		 * @var boolean
-		 */
-		$_fileCheck = false;
+		$_assigned = null;
 
 	/**
 	 * Creates the adapter and applies the options.
@@ -55,9 +55,9 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		{
 			$this->setDirectory($options['directory']);
 		}
-		if(!empty($options['fileCheck']))
+		if(!empty($options['fileExistsCheck']))
 		{
-			$this->_fileCheck = (boolean)$options['fileCheck'];
+			$this->_fileExistsCheck = (boolean)$options['fileExistsCheck'];
 		}
 	} // end __construct();
 
@@ -68,9 +68,17 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 */
 	public function setDirectory($directory)
 	{
-		if($directory[strlen($directory)-1] != DIRECTORY_SEPARATOR)
+		if($directory != '')
 		{
-			$directory .= DIRECTORY_SEPARATOR;
+			if($directory[strlen($directory)-1] != DIRECTORY_SEPARATOR)
+			{
+				$directory .= DIRECTORY_SEPARATOR;
+			}
+		}
+
+		if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false)
+		{
+			$directory = realpath($directory).DIRECTORY_SEPARATOR;
 		}
 		$this->_directory = $directory;
 	} // end setDirectory();
@@ -86,26 +94,22 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	} // end getDirectory();
 
 	/**
-	 * Sets file checking on.
-	 *
-	 * Class checks if file exists before loading it.
-	 *
-	 * @param boolean $state State of feature
+	 * Sets file exists checking on or off.
+	 * @param boolean $state State
 	 */
-	public function setFileCheck($state)
+	public function setFileExistsCheck($state)
 	{
-		$this->_fileCheck = (boolean)$state;
-	} // end setFileCheck();
+		$this->_fileExistsCheck = (bool)$state;
+	} // end setFileExistsCheck();
 
 	/**
-	 * Returns state of feature.
-	 *
-	 * @return boolean
+	 * Returns state of file existence checking.
+	 * @return boolean State
 	 */
-	public function getFileCheck()
+	public function getFileExistsCheck()
 	{
-		return $this->_fileCheck;
-	} // end getFileCheck();
+		return $this->_fileExistsCheck;
+	} // end getFileExistsCheck();
 
 	/**
 	 * Returns translation for specified group and id.
@@ -117,13 +121,13 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 */
 	public function getMessage($language, $group, $id)
 	{
-		if(isset($this->_assigned[$group][$id]))
+		if(isset($this->_assigned->$group->$id))
 		{
-			return $this->_assigned[$group][$id];
+			return $this->_assigned->$group->$id;
 		}
-		if(isset($this->_messages[$group][$id]))
+		if(isset($this->_messages->$group->$id))
 		{
-			return $this->_messages[$group][$id];
+			return $this->_messages->$group->$id;
 		}
 		return null;
 	} // end getMessage();
@@ -140,9 +144,20 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 */
 	public function assign($language, $group, $id, array $data)
 	{
-		if(isset($this->_messages[$group][$id]))
+		if($this->_assigned === null)
 		{
-			$this->_assigned[$group][$id] = vsprintf($this->_translation[$group][$id], $data);
+			if($this->_messages !== null)
+			{
+				$this->_assigned = $this->_messages;
+			}
+			else
+			{
+				throw new Opc_Translate_Adapter_Xml_NoTranslationLoaded_Exception();
+			}
+		}
+		if(isset($this->_messsages->$group->$id))
+		{
+			$this->_assigned->$group->$id = vsprintf($this->_messages->$group->$id, $data);
 			return true;
 		}
 		return false;
@@ -152,15 +167,21 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 * Loads a group of messages in the specified language.
 	 *
 	 * @param string $language The language name.
-	 * @param string $group Group name.
+	 * @param string $group Group name
 	 * @return boolean
 	 */
 	public function loadGroupLanguage($language, $group)
 	{
-		$data = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini');
+$empty = <<<XML
+<?xml version='1.0' standalone='yes'?>
+ <data>
+ </data>
+XML;
+
+		$data = @simplexml_load_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.xml');
 		if($data === false)
 		{
-			if($this->_fileCheck && !file_exists($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini'))
+			if($this->_fileExistsCheck)
 			{
 				throw new Opc_Translate_Adapter_GroupFileNotFound_Exception($group, $language);
 			}
@@ -169,22 +190,34 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 				return false;
 			}
 		}
-		$this->_messages[$group] = $data;
+		if($this->_messages === null)
+		{
+			$this->_messages = new SimpleXMLElement($empty);
+		}
+		foreach($data as $key => $value)
+		{
+			$this->_messages->$group->$key = $value;
+		}
 		return true;
 	} // end loadGroupLanguage();
 
 	/**
-	 * Loads language file for whole translation.
+	 * Loads new language.
 	 *
-	 * @param string $language Language to be loaded
-	 * @return boolean
+	 * @param string $language New language
 	 */
 	public function loadLanguage($language)
 	{
-		$data = @parse_ini_file($this->_directory.$language.'.ini',true);
+$empty = <<<XML
+<?xml version='1.0' standalone='yes'?>
+ <data>
+ </data>
+XML;
+
+		$data = @simplexml_load_file($this->_directory.$language.'.xml');
 		if($data === false)
 		{
-			if($this->_fileCheck)
+			if($this->_fileExistsCheck)
 			{
 				throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
 			}
@@ -193,7 +226,14 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 				return false;
 			}
 		}
-		$this->_messages = $data;
+		if($this->_messages === null)
+		{
+			$this->_messages = new SimpleXMLElement($empty);
+		}
+		foreach($data as $key => $value)
+		{
+			$this->_messages->$key = $value;
+		}
 		return true;
 	} // end loadLanguage();
-} // end Opc_Translate_Adapter_Ini;
+} // end Opc_Translate_Adapter_Xml;
