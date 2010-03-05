@@ -232,7 +232,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 				$this->_fileHandle = null;
 				return false;
 			}
-			$this->_dynamic = (boolean)$header['dynamic'];
+			$this->_dynamic = $header['dynamic'];
 			return true;
 		}
 		else
@@ -269,7 +269,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	{
 		if($this->isCached($view))
 		{
-			if($this->_dynamic)
+			if($this->_dynamic == 'true')
 			{
 				return $this->getCacheDir().$this->_getFilename($view);
 			}
@@ -278,11 +278,6 @@ class Opc_View_Cache implements Opt_Caching_Interface
 				while(!feof($this->_fileHandle))
 				{
 					$buf = fgets($this->_fileHandle, 2048);
-					if($buf === false)
-					{
-						throw new Opc_View_Cache_ReadingError_Exception();
-						return false;
-					}
 					echo $buf;
 				}
 			}

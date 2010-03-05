@@ -70,11 +70,6 @@ class Opc_View_Cache_CannotSaveFile_Exception extends Opc_Exception
 	protected $_message = 'Cache file could not be saved. Has PHP permission to write in cache directory "%s"?';
 } // end Opc_View_Cache_CannotSaveFile_Exception;
 
-class Opc_View_Cache_ReadingError_Exception extends Opc_Exception
-{
-	protected $_message = 'Caching system encountered some problems while reading cache file.';
-} // end Opc_View_Cache_ReadingError_Exception;
-
 class Opc_Translate_NotSetTranslationDirectory_Exception extends Opc_Exception
 {
 	protected $_message = 'Directory with translation files is not set! You have to set it before using any functions!';

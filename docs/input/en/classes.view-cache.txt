@@ -2,7 +2,7 @@ Title: Opc_View_Cache
 
 ----
 
-This is simple class to use Open Power Template caching system. Handles `opt:dynamic` instruction.
+This is simple class to use Open Power Template caching system.
 
 Basic setup
 ===========
