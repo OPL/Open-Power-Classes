@@ -19,7 +19,7 @@
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  */
 // TODO: Add getting initial configuration from Opc_Class
-class Opc_Translate_Adapter_Yaml extends Opc_Translate_Adapter
+class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 {
 	protected
 		/**
@@ -52,6 +52,26 @@ class Opc_Translate_Adapter_Yaml extends Opc_Translate_Adapter
 		 * @var array
 		 */
 		$_assigned = null;
+
+	/**
+	 * Configures adapter with provided options.
+	 * @param array $options Options
+	 */
+	public function __construct(array $options = array())
+	{
+		if(isset($options['fileExistsCheck']))
+		{
+			$this->setFileExistsCheck($options['fileExistsCheck']);
+		}
+		if(isset($options['directory']))
+		{
+			$this->setDirectory($options['directory']);
+		}
+		if(isset($options['compileResult']))
+		{
+			$this->setCompileResult($options['compileResult']);
+		}
+	} // end __construct();
 
 	/**
 	 * Sets files directory.
@@ -118,26 +138,6 @@ class Opc_Translate_Adapter_Yaml extends Opc_Translate_Adapter
 	{
 		return $this->_compileResult;
 	} // end getFileExistsCheck();
-
-	/**
-	 * Configures adapter with provided options.
-	 * @param array $options Options
-	 */
-	public function __construct(array $options)
-	{
-		if(isset($options['fileExistsCheck']))
-		{
-			$this->setFileExistsCheck($options['fileExistsCheck']);
-		}
-		if(isset($options['directory']))
-		{
-			$this->setDirectory($options['directory']);
-		}
-		if(isset($options['compileResult']))
-		{
-			$this->setCompileResult($options['compileResult']);
-		}
-	} // end __construct();
 
 	/**
 	 * Returns the message in the specified language.

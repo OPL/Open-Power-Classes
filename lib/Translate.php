@@ -48,7 +48,12 @@ class Opc_Translate implements Opl_Translation_Interface
 		 * or selected language has not specified required translation.
 		 * @var string
 		 */
-		$_defaultLanguage = 'en';
+		$_defaultLanguage = 'en',
+		/**
+		 * Opc_Class instance.
+		 * @var Opc_Class
+		 */
+		$_opc = null;
 
 	/**
 	 * Creates the new translation object.
@@ -57,7 +62,13 @@ class Opc_Translate implements Opl_Translation_Interface
 	 */
 	public function __construct(Opc_Translate_Adapter $adapter)
 	{
-		$this->setAdapter($adapter);
+		if(!Opl_Registry::exists('opc'))
+		{
+			throw new Opc_ClassInstanceNotExists_Exception;
+		}
+		$this->_opc = Opl_Registry::get('opc');
+		$this->_defaultLanguage = $this->_opc->defaultLanugage;
+		$this->_defaultAdapter = $adapter;
 	} // end __construct();
 
 	/**
@@ -151,11 +162,11 @@ class Opc_Translate implements Opl_Translation_Interface
 			return $msg;
 		}
 		// Try to get default message.
-		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id, 'default')) !== null)
+		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
 		{
 			return $msg;
 		}
-		throw new Opc_TranslateMessageNotFound_Exception($group, $id, $adapter->getLanguage());
+		throw new Opc_Translate_MessageNotFound_Exception($group, $id, $adapter->getLanguage());
 	} // end _();
 
 	public function assign($group, $id)
@@ -171,7 +182,8 @@ class Opc_Translate implements Opl_Translation_Interface
 		{
 			$adapter = $this->_defaultAdapter;
 		}
-		$adapter->assign($group, $id, $data);
+		$language = null;
+		$adapter->assign($language, $group, $id, $data);
 	} // end assign();
 
 	/**
@@ -190,16 +202,17 @@ class Opc_Translate implements Opl_Translation_Interface
 			$this->_currentLanguage = $language;
 			return true;
 		}
-		elseif($this->_defaultAdapter->loadLanguage($this->_defaultLanguage, 'default'))
+		elseif($this->_defaultAdapter->loadLanguage($this->_defaultLanguage))
 		{
 			$this->_currentLanguage = $this->_defaultLanguage;
 			return false;
 		}
-		else
-		{
-			throw new Opc_TranslateFileNotFound_Exception($language);
-		}
 	} // end setLanguage();
+
+	public function getLanguage()
+	{
+		return $this->_currentLanguage;
+	} // end getLanguage();
 
 	/**
 	 * Sets language to specified group.
@@ -217,14 +230,14 @@ class Opc_Translate implements Opl_Translation_Interface
 				$this->_groupsLanguage[$group] = $language;
 				return true;
 			}
-			elseif($this->_groupAdapters[$group]->loadGroupLanguage($group, $this->_defaultLanguage, 'default'))
+			elseif($this->_groupAdapters[$group]->loadGroupLanguage($group, $this->_defaultLanguage))
 			{
 				$this->_groupsLanguage[$group] = $this->_defaultLanguage;
 				return false;
 			}
 			else
 			{
-				throw new Opc_TranslateFileNotFound_Exception($language, 'translation');
+				throw new Opc_Translate_NoTranslationLoaded_Exception();
 			}
 		}
 		else
@@ -234,13 +247,22 @@ class Opc_Translate implements Opl_Translation_Interface
 				$this->_groupsLanguage[$group] = $language;
 				return true;
 			}
-			elseif($this->_defaultAdapter->loadGroupLanguage($group, $this->_defaultLanguage, 'default'))
+			elseif($this->_defaultAdapter->loadGroupLanguage($group, $this->_defaultLanguage))
 			{
 				$this->_groupsLanguage[$group] = $this->_defaultLanguage;
+				return false;
 			}
-			return false;
+			else
+			{
+				throw new Opc_Translate_NoTranslationLoaded_Exception();
+			}
 		}
 	} // end setGroupLanguage();
+
+	public function getGroupLanguage($group)
+	{
+		return $this->_groupsLanguage[$group];
+	} // end getGroupLanguage();
 	
 	/**
 	 * Gives access to control default language.
@@ -251,4 +273,9 @@ class Opc_Translate implements Opl_Translation_Interface
 	{
 		$this->_defaultLanguage = $language;
 	} // end setDefaultLanguage();
+
+	public function getDefaultLanguage()
+	{
+		return $this->_defaultLanguage;
+	} // end getDefaultLanguage();
 } // end Opc_View_Translation;

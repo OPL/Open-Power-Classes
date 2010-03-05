@@ -1,0 +1,5 @@
+Title: Opc_Translate_Adapter
+
+----
+
+This class is only an interface, which you have to implement when you want to make you own adapter.

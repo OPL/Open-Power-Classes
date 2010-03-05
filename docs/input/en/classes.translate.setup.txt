@@ -1,0 +1,99 @@
+Title: Basic setup
+----
+
+In this chapter you will read about using translation interface.
+
+Basic Setup
+===========
+
+Firstly you should configure Opl_Loader and create an instance of Opc_Class.
+Then we can configure our Opc_Translate.
+
+~~~~
+[php]
+<?php
+// code before is setting up Opl_Loader
+$tpl = new Opt_Class; // 1
+$adapter = new Opc_Translate_Adapter_Ini(array('directory' => './langs/')); // 2
+$t = new Opc_Translate($adapter); // 3
+$tpl->setTranslationInterface($t); // 4
+~~~~
+
+> [steps]
+> 1. We create Opt_Class object.
+> 2. Now we have to create adapter for Opc_Translate, which handles specific file format.
+> 3. Here we create Opc_Translate object. It's constructor needs to have default adapter - adapter witch it will use for all operations.
+> 4. And at last we registers translation interface to OPT. It is not needed to completly configure translation interface before setting it to template.
+
+And that's basic configuration. It uses default language - of course English.
+
+More translation adapters
+=========================
+
+If you need more adapters for your translation - it is possible to set diffrent adapters to diffrent groups of translation.
+
+As before you need to configure Opl_Loaded by yourself.
+
+~~~~
+[php]
+<?php
+// code before
+$tpl = new Opt_Class;
+$adapter = new Opc_Translate_Adapter_Ini(array('directory' => './langs/')); // 1
+$t = new Opc_Translate($adapter);
+$tpl->setTranslationInterface($t);
+$t->setGroupAdapter('groupName', new Opc_Translate_Adapter_Yaml(array('directory' => './yaml_langs/')); // 3
+~~~~
+
+> [steps]
+> 1. Creating default adapter.
+> 2. Creating additional adapter for group 'groupName'.
+
+As you can see, that additional adapter is completly diffrent (uses other file format and path to language files).
+
+Setting language
+================
+
+Setting language is the easiest part of using Opc_Translate.
+
+~~~~
+[php]
+<?php
+// code before
+$tpl = new Opt_Class;
+$adapter = new Opc_Translate_Adapter_Ini(array('directory' => './langs/'));
+$t = new Opc_Translate($adapter);
+$tpl->setTranslationInterface($t);
+$t->setDefaultLanguage('pl'); // 1
+$t->setLanguage('pl'); // 2
+$t->setGroupLanguage('groupName', 'pl'); // 3
+~~~~
+
+> [steps]
+> 1. Setting default language.
+> 2. Setting language to load - it's loaded immidiately.
+> 3. Setting language for specified group - it's loaded immiadiately.
+
+When you access to inexistent language Opc_Translate will try to look for default language files.
+
+----
+
+Of course you can get language for every group you want just by using:
+~~~~
+[php]
+<?php
+// code before
+$t->getDefaultLanguage(); // 1
+$t->getLanguage(); // 2
+$t->getGroupLanguage('groupName'); // 3
+~~~~
+
+> [steps]
+> 1. Getting default language.
+> 2. Getting main language.
+> 3. Getting specified group language.
+
+Adapters
+--------
+
+All adapters are described in details in sections destined to them. All options are described in these sections too.

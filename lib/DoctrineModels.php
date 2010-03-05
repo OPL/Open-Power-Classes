@@ -119,7 +119,7 @@ class Opc_DoctrineModels
 		}
 		else
 		{
-			throw new Opc_DoctrineModelsInvalidDirectoryName_Exception();
+			throw new Opc_DoctrineModels_InvalidDirectoryName_Exception();
 		}
 
 	} // end setGeneratedModelsDirectoryName();

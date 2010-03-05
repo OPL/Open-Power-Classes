@@ -124,7 +124,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanteNotExists_Exception;
+			throw new Opc_ClassInstanceNotExists_Exception;
 		}
 		$opc = Opl_Registry::get('opc');
 		

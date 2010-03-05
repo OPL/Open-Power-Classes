@@ -1,0 +1,58 @@
+Title: Opc_Translate_Adapter_Yaml
+
+----
+
+Adapter which uses Yaml files as source. It uses sfYaml component, which is mantained
+and created by Symfony and Sensio Labs.
+
+Available options
+=================
+
+Option            | Required? | Default value | Description
+------------------|-----------|---------------|-------------
+`directory`       | Yes       | null          | Directory, where adapter is searching for language files.
+`fileExistsCheck` | No        | false         | File existence checking before loading file state.
+`compileResult`   | No        | true          | State of compiling results to an php array and saving them to file.
+
+Compiling results **needs** cache directory which should be placed in language files directory,
+e.g. we have language directory `./langs/`, so we have to create directory `./langs/cache/`,
+where adapter will store all compiled result files. It is *important* to make PHP available to
+write to this directory.
+
+How to set options to adapter?
+==============================
+
+We have 2 ways of setting options to adapter.
+
+First
+-----
+
+We could use array use it while constructing new object.
+
+~~~~
+[php]
+$options = array('directory' => './langs/', 'compileResult' => false); // 1
+$adapter = new Opc_Translate_Adapter_Yaml($options); // 2
+~~~~
+
+> [steps]
+> 1. Our options array.
+> 2. Using it while constructing new object.
+
+Second
+------
+
+We could use setters for every option.
+
+~~~~
+[php]
+$adapter = new Opc_Translate_Adapter_Yaml();
+$adapter->setDirectory('./langs/');
+$adapter->setFileExistsCheck(false);
+$adapter->setCompileResult(true);
+~~~~
+
+As you can see, all setters have exactly the same name as configuration option.
+Remember just to set at least all required options.
+
+It is possible to get states of features just by replacing `set` by `get` in these methods.

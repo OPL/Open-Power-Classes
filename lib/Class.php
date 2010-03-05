@@ -34,6 +34,13 @@ class Opc_Class extends Opl_Class
 	 * @var integer
 	 */
 	public $expiryTime = 3600;
+
+	// Opc_Translate configuration
+	/**
+	 * Default language.
+	 * @var string
+	 */
+	public $defaultLanugage = 'en';
 	
 	// Opc_Paginator configuration
 	/**

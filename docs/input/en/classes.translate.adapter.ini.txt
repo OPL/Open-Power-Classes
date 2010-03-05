@@ -1,0 +1,50 @@
+Title: Opc_Translate_Adapter_Ini
+
+----
+
+Adapter which uses Ini files as source.
+
+Available options
+=================
+
+Option            | Required? | Default value | Description
+------------------|-----------|---------------|-------------
+`directory`       | Yes       | null          | Directory, where adapter is searching for language files.
+`fileExistsCheck` | No        | false         | File existence checking before loading file state.
+
+How to set options to adapter?
+==============================
+
+We have 2 ways of setting options to adapter.
+
+First
+-----
+
+We could use array use it while constructing new object.
+
+~~~~
+[php]
+$options = array('directory' => './langs/', 'fileExistsCheck' => false); // 1
+$adapter = new Opc_Translate_Adapter_Ini($options); // 2
+~~~~
+
+> [steps]
+> 1. Our options array.
+> 2. Using it while constructing new object.
+
+Second
+------
+
+We could use setters for every option.
+
+~~~~
+[php]
+$adapter = new Opc_Translate_Adapter_Ini();
+$adapter->setDirectory('./langs/');
+$adapter->setFileExistsCheck(false);
+~~~~
+
+As you can see, all setters have exactly the same name as configuration option.
+Remember just to set at least all required options.
+
+It is possible to get states of features just by replacing `set` by `get` in these methods.

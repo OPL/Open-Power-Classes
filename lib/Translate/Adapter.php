@@ -20,7 +20,7 @@
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-abstract class Opc_Translate_Adapter
+interface Opc_Translate_Adapter
 {
 	/**
 	 * Returns the message in the specified language.
@@ -30,7 +30,7 @@ abstract class Opc_Translate_Adapter
 	 * @param string $msg The message identifier
 	 * @return string
 	 */
-	abstract public function getMessage($language, $group, $msg);
+	public function getMessage($language, $group, $msg);
 
 	/**
 	 * Assings the data to the specified message. The method must return
@@ -42,14 +42,14 @@ abstract class Opc_Translate_Adapter
 	 * @param array $data The data to assign
 	 * @return boolean
 	 */
-	abstract public function assign($language, $group, $id, array $data);
+	public function assign($language, $group, $id, array $data);
 
 	/**
 	 * Loads new language.
 	 *
 	 * @param string $language New language
 	 */
-	abstract public function loadLanguage($language);
+	public function loadLanguage($language);
 
 	/**
 	 * Loads new language for specified group.
@@ -57,5 +57,5 @@ abstract class Opc_Translate_Adapter
 	 * @param string $language New language
 	 * @param string $group Group name
 	 */
-	abstract public function loadGroupLanguage($language, $group);
+	public function loadGroupLanguage($language, $group);
 } // end Opc_Translate_Adapter;

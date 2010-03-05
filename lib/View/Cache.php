@@ -22,13 +22,6 @@
 class Opc_View_Cache implements Opt_Caching_Interface
 {
 	/**
-	 * The view that the caching system is connected to.
-	 *
-	 * @var Opt_View
-	 */
-	private $_view;
-
-	/**
 	 * The Opc_Class object.
 	 *
 	 * @var Opc_Class
@@ -54,14 +47,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	 *
 	 * @var integer
 	 */
-	private $_time = null;
-
-	/**
-	 * Cache file name.
-	 *
-	 * @var string
-	 */
-	private $_filename = null;
+	private $_expiryTime = null;
 
 	/**
 	 * Determines if file was read or not.
@@ -87,28 +73,48 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	/**
 	 * Creates a new caching object and connects to it.
 	 * 
-	 * @param Opt_View $view The view 
+	 * @param array $options Options
 	 */
-	public function __construct(Opt_View $view)
+	public function __construct(array $options = array())
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanteNotExists_Exception;
+			throw new Opc_ClassInstanceNotExists_Exception;
 		}
 		$this->_opc = Opl_Registry::get('opc');
-		
-		$this->_view = $view;
+		if(isset($options['cacheDir']))
+		{
+			$this->setCacheDir($options['cacheDir']);
+		}
+		if(isset($options['expiryTime']))
+		{
+			$this->setExpiryTime($options['expiryTime']);
+		}
+		if(isset($options['key']))
+		{
+			$this->setKey($options['key']);
+		}
 	} // end __construct();
 	
 	/**
-	 * Sets the extra key for the cache.
+	 * Sets the extra key for the cache. Deleting key is setting it to null.
 	 * 
 	 * @param string|null $key The extra key
 	 */
 	public function setKey($key)
 	{
-		$this->_key = $key;
+		$this->_key = (string)$key;
 	} // end setKey();
+
+	/**
+	 * Returns the current extra caching key.
+	 *
+	 * @return string|null
+	 */
+	public function getKey()
+	{
+		return $this->_key;
+	} // end getKey();
 	
 	/**
 	 * Sets the expiry time for the specified caching object.
@@ -117,15 +123,29 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	 */
 	public function setExpiryTime($time)
 	{
-		if(is_integer($time))
+		if(is_integer($time) || is_numeric($time))
 		{
-			$this->_time = $time;
+			$this->_expiryTime = (int)$time;
 		}
 		else
 		{
 			throw new Opc_InvalidArgumentType_Exception(gettype($time), 'integer');
 		}
 	} // end setExpiryTime();
+
+	/**
+	 * Returns the current expiry time for the cache.
+	 *
+	 * @return integer
+	 */
+	public function getExpiryTime()
+	{
+		if($this->_expiryTime === null)
+		{
+			$this->_expiryTime = $this->_opc->expiryTime;
+		}
+		return $this->_expiryTime;
+	} // end getExpiryTime();
 
 	/**
 	 * Sets directory for cache files.
@@ -149,30 +169,6 @@ class Opc_View_Cache implements Opt_Caching_Interface
 		}
 		$this->_cacheDir = $dir;
 	} // end setCacheDir();
-	
-	/**
-	 * Returns the current extra caching key.
-	 * 
-	 * @return string|null
-	 */
-	public function getKey()
-	{
-		return $this->_key;
-	} // end getKey();
-	
-	/**
-	 * Returns the current expiry time for the cache.
-	 * 
-	 * @return integer
-	 */
-	public function getExpiryTime()
-	{
-		if($this->_time === null)
-		{
-			$this->_time = $this->_opc->expiryTime;
-		}
-		return $this->_time;
-	} // end getExpiryTime();
 
 	/**
 	 * Returns cache directory.
@@ -191,28 +187,26 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	/**
 	 * Gets the cache filename with special key.
 	 *
+	 * @param Opt_View $view View.
 	 * @return string
 	 */
-	private function _getFilename()
+	private function _getFilename(Opt_View $view)
 	{
-		if($this->_filename == null)
-		{
-			$this->_filename = $this->_key.'_'.$this->_view->getTemplate().'.cch';
-		}
-		return $this->_filename;
+		return ($this->_key !== null?$this->_key.'_':'').$view->getTemplate().'.cch';
 	} // end _getFilename();
 
 	/**
 	 * Checks if the specified view is cached.
 	 *
+	 * @param Opt_View $view View.
 	 * @return boolean
 	 */
-	public function isCached()
+	public function isCached(Opt_View $view)
 	{
 		if(!$this->_isReadAlready)
 		{
 			$this->_isReadAlready == true;
-			$this->_fileHandle = @fopen($this->getCacheDir().$this->_getFilename(), 'r');
+			$this->_fileHandle = @fopen($this->getCacheDir().$this->_getFilename($view), 'r');
 			if($this->_fileHandle === false)
 			{
 				return false;
@@ -227,18 +221,18 @@ class Opc_View_Cache implements Opt_Caching_Interface
 			{
 				/* When header is not an array it means it is wrong, so file must be deleted
 				   because of that and because it could be bad or unauthorized changed */
-				unlink($this->getCacheDir().$this->_getFilename());
+				unlink($this->getCacheDir().$this->_getFilename($view));
 				$this->_fileHandle = null;
 				return false;
 			}
 			if($header['timestamp'] < (time() - $header['expire']))
 			{
-				/* When cache file is old it should be deleted ;) */
-				unlink($this->getCacheDir().$this->_getFilename());
+				/* When cache file is too old it should be deleted ;) */
+				unlink($this->getCacheDir().$this->_getFilename($view));
 				$this->_fileHandle = null;
 				return false;
 			}
-			$this->_dynamic = $header['dynamic'];
+			$this->_dynamic = (boolean)$header['dynamic'];
 			return true;
 		}
 		else
@@ -256,10 +250,13 @@ class Opc_View_Cache implements Opt_Caching_Interface
 
 	/**
 	 * Clears the cache for the specified view.
+	 *
+	 * @param Opt_View $view View
+	 * @return boolean
 	 */
-	public function clear()
+	public function clear(Opt_View $view)
 	{
-		unlink($this->getCacheDir().$this->_getFilename());
+		return unlink($this->getCacheDir().$this->_getFilename($view));
 	} // end clear();
 
 	/**
@@ -270,17 +267,22 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	 */
 	public function templateCacheStart(Opt_View $view)
 	{
-		if($this->isCached())
+		if($this->isCached($view))
 		{
 			if($this->_dynamic)
 			{
-				return $this->getCacheDir().$this->_getFilename();
+				return $this->getCacheDir().$this->_getFilename($view);
 			}
 			else
 			{
 				while(!feof($this->_fileHandle))
 				{
 					$buf = fgets($this->_fileHandle, 2048);
+					if($buf === false)
+					{
+						throw new Opc_View_Cache_ReadingError_Exception();
+						return false;
+					}
 					echo $buf;
 				}
 			}
@@ -315,7 +317,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 		if($view->hasDynamicContent())
 		{
 			$buffer = $view->getOutputBuffers();
-			$dyn = file_get_contents($tpl->compileDir.$this->_view->_convert($this->_view->getTemplate()).'.dyn');
+			$dyn = file_get_contents($tpl->compileDir.$view->_convert($view->getTemplate()).'.dyn');
 			if($dyn !== false)
 			{
 				$dynamic = unserialize($dyn);
@@ -323,7 +325,8 @@ class Opc_View_Cache implements Opt_Caching_Interface
 			}
 			else
 			{
-				throw new Opc_View_CacheInvalidDynamicContent_Exception($this->_view->getTemplate());
+				throw new Opc_View_Cache_InvalidDynamicContent_Exception($view->getTemplate());
+				return false;
 			}
 			$content = '';
 			for($i = 0, $endI = count($buffer); $i<$endI; $i++)
@@ -331,16 +334,18 @@ class Opc_View_Cache implements Opt_Caching_Interface
 				$content .= $buffer[$i];
 				$content .= $dynamic[$i];
 			}
-			if(file_put_contents($this->getCacheDir().$this->_getFilename(), $header.$content.ob_get_flush()) === false)
+			if(file_put_contents($this->getCacheDir().$this->_getFilename($view), $header.$content.ob_get_flush()) === false)
 			{
-				throw new Opc_View_CacheCannotSaveFile_Exception($this->getCacheDir());
+				throw new Opc_View_Cache_CannotSaveFile_Exception($this->getCacheDir());
+				return false;
 			}
 		}
 		else
 		{
-			if(file_put_contents($this->getCacheDir().$this->_getFileName(), $header.ob_get_contents()) === false)
+			if(file_put_contents($this->getCacheDir().$this->_getFileName($view), $header.ob_get_contents()) === false)
 			{
-				throw new Opc_View_CacheCannotSaveFile_Exception($this->getCacheDir());
+				throw new Opc_View_Cache_CannotSaveFile_Exception($this->getCacheDir());
+				return false;
 			}
 		}
 	} // end templateCacheStop();

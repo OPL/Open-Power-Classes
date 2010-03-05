@@ -20,7 +20,8 @@
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
+// TODO: Add getting initial configuration from Opc_Class
+class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 {
 	protected
 		/**
@@ -42,22 +43,22 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		 * File existence checking state.
 		 * @var boolean
 		 */
-		$_fileCheck = false;
+		$_fileExistsCheck = false;
 
 	/**
 	 * Creates the adapter and applies the options.
 	 * 
 	 * @param array $options The adapter options.
 	 */
-	public function __construct(array $options)
+	public function __construct(array $options = array())
 	{
-		if(!empty($options['directory']))
+		if(isset($options['directory']))
 		{
 			$this->setDirectory($options['directory']);
 		}
-		if(!empty($options['fileCheck']))
+		if(isset($options['fileExistsCheck']))
 		{
-			$this->_fileCheck = (boolean)$options['fileCheck'];
+			$this->_fileExistsCheck = (boolean)$options['fileExistsCheck'];
 		}
 	} // end __construct();
 
@@ -92,20 +93,20 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 	 *
 	 * @param boolean $state State of feature
 	 */
-	public function setFileCheck($state)
+	public function setFileExistsCheck($state)
 	{
-		$this->_fileCheck = (boolean)$state;
-	} // end setFileCheck();
+		$this->_fileExistsCheck = (boolean)$state;
+	} // end setFileExistsCheck();
 
 	/**
 	 * Returns state of feature.
 	 *
 	 * @return boolean
 	 */
-	public function getFileCheck()
+	public function getFileExistsCheck()
 	{
-		return $this->_fileCheck;
-	} // end getFileCheck();
+		return $this->_fileExistsCheck;
+	} // end getFileExistsCheck();
 
 	/**
 	 * Returns translation for specified group and id.
@@ -160,7 +161,7 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		$data = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini');
 		if($data === false)
 		{
-			if($this->_fileCheck && !file_exists($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini'))
+			if($this->_fileExistsCheck && !file_exists($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini'))
 			{
 				throw new Opc_Translate_Adapter_GroupFileNotFound_Exception($group, $language);
 			}
@@ -184,7 +185,7 @@ class Opc_Translate_Adapter_Ini extends Opc_Translate_Adapter
 		$data = @parse_ini_file($this->_directory.$language.'.ini',true);
 		if($data === false)
 		{
-			if($this->_fileCheck)
+			if($this->_fileExistsCheck)
 			{
 				throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
 			}

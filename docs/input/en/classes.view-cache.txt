@@ -1,3 +1,34 @@
 Title: Opc_View_Cache
 
 ----
+
+This is simple class to use Open Power Template caching system. Handles `opt:dynamic` instruction.
+
+Basic setup
+===========
+
+The most basic setup is just to create an instance of Opc_View_Cache and set it to Opc_Class.
+
+~~~~
+[php]
+$cache = new Opc_View_Cache(array('cacheDir' => './cache/')); // 1
+$tpl = new Opt_Class; // 2
+// ...
+$tpl->setCache($cache); // 3
+~~~~
+
+> [steps]
+> 1. Creating instance of Opc_View_Cache.
+> 2. Creating instance of Opt_Class.
+> 3. Setting caching system of Opt_Class to use Opc_View_Cache.
+
+It's important to set **at least** cache directory.
+
+Available options
+=================
+
+Option       | Required? | Default value | Description
+-------------|-----------|---------------|-------------
+`cacheDir`   | Yes       | null          | Directory, where cache has to store files.
+`expiryTime` | No        | 1800          | Time of validity of cache files.
+`key`        | No        | null          | Additional key to distinguish the same views and other cache files.

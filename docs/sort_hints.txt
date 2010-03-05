@@ -16,6 +16,11 @@ classes.paginator.decorators.range-slider
 classes.paginator.decorators.stepping-slider
 classes.paginator.opt
 classes.translate
+classes.translate.setup
+classes.translate.adapter
+classes.translate.adapter.ini
+classes.translate.adapter.xml
+classes.translate.adapter.yaml
 classes.view-cache
 classes.visit
 classes.visit-useragent

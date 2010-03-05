@@ -20,7 +20,7 @@ class Opc_CannotCreateAnotherInstance_Exception extends Opc_Exception
 	protected $_message = 'Cannot create another Opc_Class instance.';
 } // end Opc_InvalidArgumentType_Exception;
 
-class Opc_ClassInstanteNotExists_Exception extends Opc_Exception
+class Opc_ClassInstanceNotExists_Exception extends Opc_Exception
 {
 	protected $_message = 'Opc_Class instance not found. It must be created before using Opc_* classes.';
 } // end Opc_InvalidArgumentType_Exception;
@@ -55,45 +55,55 @@ class Opc_PaginatorWrongSubclassDecorator_Exception extends Opc_Exception
 	protected $_message = 'Given decorator "%s" is not a subclass of "Opc_Paginator_Decorator".';
 } // end Opc_PaginatorWrongSubclassDecorator_Exception;
 
-class Opc_DoctrineModelsInvalidDirectoryName_Exception extends Opc_Exception
+class Opc_DoctrineModels_InvalidDirectoryName_Exception extends Opc_Exception
 {
 	protected $_message = 'Given Doctrine generated models folder name is invalid.';
 } // end Opc_DoctrineModelsGeneratedNameInvalid_Exception;
 
-class Opc_View_CacheInvalidDynamicContent_Exception extends Opc_Exception
+class Opc_View_Cache_InvalidDynamicContent_Exception extends Opc_Exception
 {
 	protected $_message = 'View %s has dynamic content, but file with it is broken. Cache cannot be generated.';
-} // end Opc_CacheInvalidDynamicContent_Exception;
+} // end Opc_Cache_InvalidDynamicContent_Exception;
 
-class Opc_View_CacheCannotSaveFile_Exception extends Opc_Exception
+class Opc_View_Cache_CannotSaveFile_Exception extends Opc_Exception
 {
 	protected $_message = 'Cache file could not be saved. Has PHP permission to write in cache directory "%s"?';
-} // end Opc_CacheCannotSaveFile_Exception;
+} // end Opc_View_Cache_CannotSaveFile_Exception;
+
+class Opc_View_Cache_ReadingError_Exception extends Opc_Exception
+{
+	protected $_message = 'Caching system encountered some problems while reading cache file.';
+} // end Opc_View_Cache_ReadingError_Exception;
 
 class Opc_Translate_NotSetTranslationDirectory_Exception extends Opc_Exception
 {
 	protected $_message = 'Directory with translation files is not set! You have to set it before using any functions!';
-} // end Opc_TranslateNotSetTranslationDirectory_Exception;
+} // end Opc_Translate_NotSetTranslationDirectory_Exception;
 
 class Opc_Translate_MessageNotFound_Exception extends Opc_Exception
 {
 	protected $_message = 'Translation message in group "%s" ID: "%s" is not found! Language used "%s"';
-} // end Opc_TranslateMessageNotFound_Exception;
+} // end Opc_Translate_MessageNotFound_Exception;
+
+class Opc_Translate_NoTranslationLoaded_Exception extends Opc_Exception
+{
+	protected $_message = 'Translation interface couldn\'t load correct language file!';
+} // end Opc_Translate_NoTranslationLoaded_Exception;
 
 class Opc_Translate_Adapter_FileNotFound_Exception extends Opc_Exception
 {
 	protected $_message = 'Translation file is not found for language "%s"! Type of translation: "%s"';
-} // end Opc_TranslateFileNotFound_Exception;
+} // end Opc_Translate_Adapter_FileNotFound_Exception;
 
 class Opc_Translate_Adapter_GroupFileNotFound_Exception extends Opc_Exception
 {
 	protected $_message = 'Translation file for group "%s" is not found for language "%s"!';
-} // end Opc_TranslateGroupFileNotFound_Exception;
+} // end Opc_Translate_Adapter_GroupFileNotFound_Exception;
 
 class Opc_Translate_Adapter_CannotAssignData_Exception extends Opc_Exception
 {
 	protected $_message = 'Cannot assign new data to message! Group "%s", ID "%s".';
-} // end Opc_TranslateCannotAssignData_Exception;
+} // end Opc_Translate_Adapter_CannotAssignData_Exception;
 
 class Opc_Translate_Adapter_Yaml_CompileWriteFile_Exception extends Opc_Exception
 {
@@ -104,11 +114,6 @@ class Opc_Translate_Adapter_YamlParser_Exception extends Opc_Exception
 {
 	protected $_message = 'There is an error in file "%s". Returned error message: "%s"';
 } // end Opc_Translate_Adapter_YamlParser_Exception;
-
-class Opc_Translate_Adapter_Xml_NoTranslationLoaded_Exception extends Opc_Exception
-{
-	protected $_message = 'There is no language loaded yet, so assignment couldn\'t be successful.';
-} // end Opc_Translate_Adapter_Xml_NoTranslationLoaded_Exception;
 
 class Opc_Calendar_NotSetUpCorrectly_Exception extends Opc_Exception
 {

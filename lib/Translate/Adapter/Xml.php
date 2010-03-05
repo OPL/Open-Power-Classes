@@ -20,7 +20,10 @@
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Translate_Adapter_Xml extends Opc_Translate_Adapter
+// TODO: Add compiling results feature
+// TODO: Add getting initial configuration from Opc_Class
+// TODO: Test!
+class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 {
 	protected
 		/**
@@ -49,13 +52,13 @@ class Opc_Translate_Adapter_Xml extends Opc_Translate_Adapter
 	 * 
 	 * @param array $options The adapter options.
 	 */
-	public function __construct(array $options)
+	public function __construct(array $options = array())
 	{
-		if(!empty($options['directory']))
+		if(isset($options['directory']))
 		{
 			$this->setDirectory($options['directory']);
 		}
-		if(!empty($options['fileExistsCheck']))
+		if(isset($options['fileExistsCheck']))
 		{
 			$this->_fileExistsCheck = (boolean)$options['fileExistsCheck'];
 		}
@@ -152,7 +155,7 @@ class Opc_Translate_Adapter_Xml extends Opc_Translate_Adapter
 			}
 			else
 			{
-				throw new Opc_Translate_Adapter_Xml_NoTranslationLoaded_Exception();
+				return false;
 			}
 		}
 		if(isset($this->_messsages->$group->$id))
