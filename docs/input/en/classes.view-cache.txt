@@ -8,6 +8,7 @@ Basic setup
 ===========
 
 The most basic setup is just to create an instance of Opc_View_Cache and set it to Opc_Class.
+Handles `opt:dynamic` instruction.
 
 ~~~~
 [php]
