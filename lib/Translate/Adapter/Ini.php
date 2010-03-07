@@ -113,7 +113,7 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 	 * 
 	 * @param string $language The language
 	 * @param string $group The message group
-	 * @param string $msg The message identifier
+	 * @param string $id The message identifier
 	 * @return string|null
 	 */
 	public function getMessage($language, $group, $id)
@@ -161,7 +161,7 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 		$data = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini');
 		if($data === false)
 		{
-			if($this->_fileExistsCheck && !file_exists($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini'))
+			if($this->_fileExistsCheck)
 			{
 				throw new Opc_Translate_Adapter_GroupFileNotFound_Exception($group, $language);
 			}

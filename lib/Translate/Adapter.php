@@ -27,10 +27,10 @@ interface Opc_Translate_Adapter
 	 *
 	 * @param string $language The language
 	 * @param string $group The message group
-	 * @param string $msg The message identifier
+	 * @param string $id The message identifier
 	 * @return string
 	 */
-	public function getMessage($language, $group, $msg);
+	public function getMessage($language, $group, $id);
 
 	/**
 	 * Assings the data to the specified message. The method must return

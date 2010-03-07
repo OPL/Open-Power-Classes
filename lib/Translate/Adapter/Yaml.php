@@ -144,10 +144,10 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 	 *
 	 * @param string $language The language
 	 * @param string $group The message group
-	 * @param string $msg The message identifier
+	 * @param string $id The message identifier
 	 * @return string
 	 */
-	public function getMessage($language, $group, $msg)
+	public function getMessage($language, $group, $id)
 	{
 		if(isset($this->_assigned[$group][$id]))
 		{
@@ -195,7 +195,7 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 		{
 			if(!file_exists($this->_directory.$language.'.yml'))
 			{
-				throw new Opc_Translate_Adapter_FileNotFound_Exception($language, $type);
+				throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
 				return false;
 			}
 		}
@@ -276,7 +276,7 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 					// We need to compile retreived data
 					$data = $this->_parser->parse(file_get_contents($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.yml'));
 					if(file_put_contents(
-							$this->_directory.'cache'.DIRECTORY_SEPARATOR.$file.'.yml.php', serialize($data))
+							$this->_directory.'cache'.DIRECTORY_SEPARATOR.$language.'.yml.php', serialize($data))
 						=== false)
 					{
 						// Error writing file

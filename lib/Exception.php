@@ -87,7 +87,7 @@ class Opc_Translate_NoTranslationLoaded_Exception extends Opc_Exception
 
 class Opc_Translate_Adapter_FileNotFound_Exception extends Opc_Exception
 {
-	protected $_message = 'Translation file is not found for language "%s"! Type of translation: "%s"';
+	protected $_message = 'Translation file is not found for language "%s"!';
 } // end Opc_Translate_Adapter_FileNotFound_Exception;
 
 class Opc_Translate_Adapter_GroupFileNotFound_Exception extends Opc_Exception

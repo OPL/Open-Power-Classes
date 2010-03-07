@@ -119,18 +119,18 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 	 * 
 	 * @param string $language The language
 	 * @param string $group The message group
-	 * @param string $msg The message identifier
+	 * @param string $id The message identifier
 	 * @return string|null
 	 */
 	public function getMessage($language, $group, $id)
 	{
-		if(isset($this->_assigned->$group->$id))
+		if(isset($this->_assigned[$group]->$id))
 		{
-			return $this->_assigned->$group->$id;
+			return $this->_assigned[$group]->$id;
 		}
-		if(isset($this->_messages->$group->$id))
+		if(isset($this->_messages[$group]->$id))
 		{
-			return $this->_messages->$group->$id;
+			return $this->_messages[$group]->$id;
 		}
 		return null;
 	} // end getMessage();
@@ -158,9 +158,9 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 				return false;
 			}
 		}
-		if(isset($this->_messsages->$group->$id))
+		if(isset($this->_messsages[$group]->$id))
 		{
-			$this->_assigned->$group->$id = vsprintf($this->_messages->$group->$id, $data);
+			$this->_assigned[$group]->$id = vsprintf($this->_messages[$group]->$id, $data);
 			return true;
 		}
 		return false;
@@ -193,13 +193,13 @@ XML;
 				return false;
 			}
 		}
-		if($this->_messages === null)
+		if($this->_messages[$group] === null)
 		{
-			$this->_messages = new SimpleXMLElement($empty);
+			$this->_messages[$group] = new SimpleXMLElement($empty);
 		}
 		foreach($data as $key => $value)
 		{
-			$this->_messages->$group->$key = $value;
+			$this->_messages[$group]->$key = $value;
 		}
 		return true;
 	} // end loadGroupLanguage();
@@ -211,12 +211,6 @@ XML;
 	 */
 	public function loadLanguage($language)
 	{
-$empty = <<<XML
-<?xml version='1.0' standalone='yes'?>
- <data>
- </data>
-XML;
-
 		$data = @simplexml_load_file($this->_directory.$language.'.xml');
 		if($data === false)
 		{
@@ -229,13 +223,9 @@ XML;
 				return false;
 			}
 		}
-		if($this->_messages === null)
-		{
-			$this->_messages = new SimpleXMLElement($empty);
-		}
 		foreach($data as $key => $value)
 		{
-			$this->_messages->$key = $value;
+			$this->_messages[$key] = $value;
 		}
 		return true;
 	} // end loadLanguage();
