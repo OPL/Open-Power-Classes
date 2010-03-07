@@ -28,7 +28,7 @@ class Opc_Class extends Opl_Class
 	 * Default cache directory.
 	 * @var string
 	 */
-	public $cacheDir = '';
+	public $cacheDirectory = '';
 	/**
 	 * Cache expiry time.
 	 * @var integer
@@ -41,6 +41,21 @@ class Opc_Class extends Opl_Class
 	 * @var string
 	 */
 	public $defaultLanugage = 'en';
+	/**
+	 * We need to check files existence?
+	 * @var boolean $translateFileExistsCheck
+	 */
+	public $translateFileExistsCheck = false;
+	/**
+	 * We want to compile result data?
+	 * @var boolean $translateCompileResult
+	 */
+	public $translateCompileResult = true;
+	/**
+	 * Directory to store compiled data.
+	 * @var string $translateCompileResultDirectory
+	 */
+	public $translateCompileResultDirectory = '!cache';
 	
 	// Opc_Paginator configuration
 	/**

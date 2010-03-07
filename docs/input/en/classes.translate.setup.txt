@@ -13,17 +13,19 @@ Then we can configure our Opc_Translate.
 [php]
 <?php
 // code before is setting up Opl_Loader
-$tpl = new Opt_Class; // 1
-$adapter = new Opc_Translate_Adapter_Ini(array('directory' => './langs/')); // 2
-$t = new Opc_Translate($adapter); // 3
-$tpl->setTranslationInterface($t); // 4
+$opc = new Opc_Class; // 1
+$tpl = new Opt_Class; // 2
+$adapter = new Opc_Translate_Adapter_Ini(array('directory' => './langs/')); // 3
+$t = new Opc_Translate($adapter); // 4
+$tpl->setTranslationInterface($t); // 5
 ~~~~
 
 > [steps]
-> 1. We create Opt_Class object.
-> 2. Now we have to create adapter for Opc_Translate, which handles specific file format.
-> 3. Here we create Opc_Translate object. It's constructor needs to have default adapter - adapter witch it will use for all operations.
-> 4. And at last we registers translation interface to OPT. It is not needed to completly configure translation interface before setting it to template.
+> 1. We create Opc_Class object - needed by every Opc class.
+> 2. We create Opt_Class object.
+> 3. Now we have to create adapter for Opc_Translate, which handles specific file format.
+> 4. Here we create Opc_Translate object. It's constructor needs to have default adapter - adapter witch it will use for all operations.
+> 5. And at last we registers translation interface to OPT. It is not needed to completly configure translation interface before setting it to template.
 
 And that's basic configuration. It uses default language - of course English.
 
@@ -38,6 +40,7 @@ As before you need to configure Opl_Loaded by yourself.
 [php]
 <?php
 // code before
+$opc = new Opc_Class;
 $tpl = new Opt_Class;
 $adapter = new Opc_Translate_Adapter_Ini(array('directory' => './langs/')); // 1
 $t = new Opc_Translate($adapter);
@@ -60,6 +63,7 @@ Setting language is the easiest part of using Opc_Translate.
 [php]
 <?php
 // code before
+$opc = new Opc_Class;
 $tpl = new Opt_Class;
 $adapter = new Opc_Translate_Adapter_Ini(array('directory' => './langs/'));
 $t = new Opc_Translate($adapter);

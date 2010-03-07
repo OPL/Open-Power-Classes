@@ -8,10 +8,12 @@ Adapter which uses XML files as source.
 Available options
 =================
 
-Option            | Required? | Default value | Description
-------------------|-----------|---------------|-------------
-`directory`       | Yes       | null          | Directory, where adapter is searching for language files.
-`fileExistsCheck` | No        | false         | File existence checking before loading file state.
+Option                   | Required? | Default value | Description
+-------------------------|-----------|---------------|-------------
+`directory`              | Yes       | null          | Directory, where adapter is searching for language files.
+`fileExistsCheck`        | No        | false         | File existence checking before loading file state.
+`compileResult`          | No        | true          | State of compiling results to an php array and saving them to file.
+`compileResultDirectory` | No        | `!cache`      | Compiled data files storing directory. When started with `!` adapter will save compiled files under `directory/compileResultDirectory`.
 
 How to set options to adapter?
 ==============================
@@ -43,6 +45,8 @@ We could use setters for every option.
 $adapter = new Opc_Translate_Adapter_Xml();
 $adapter->setDirectory('./langs/');
 $adapter->setFileExistsCheck(false);
+$adapter->setCompileResult(true);
+$adapter->setCompileResultDirectory('./langsCache/');
 ~~~~
 
 As you can see, all setters have exactly the same name as configuration option.

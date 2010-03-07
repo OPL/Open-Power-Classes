@@ -33,7 +33,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	 * 
 	 * @var string
 	 */
-	private $_cacheDir = null;
+	private $_directory = null;
 
 	/**
 	 * The caching extra key.
@@ -82,9 +82,9 @@ class Opc_View_Cache implements Opt_Caching_Interface
 			throw new Opc_ClassInstanceNotExists_Exception;
 		}
 		$this->_opc = Opl_Registry::get('opc');
-		if(isset($options['cacheDir']))
+		if(isset($options['directory']))
 		{
-			$this->setCacheDir($options['cacheDir']);
+			$this->setDirectory($options['directory']);
 		}
 		if(isset($options['expiryTime']))
 		{
@@ -152,7 +152,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	 * 
 	 * @param string $dir New directory
 	 */
-	public function setCacheDir($dir)
+	public function setDirectory($dir)
 	{
 		if($dir[strlen($dir)-1] != DIRECTORY_SEPARATOR)
 		{
@@ -167,22 +167,22 @@ class Opc_View_Cache implements Opt_Caching_Interface
 		{
 			$dir = realpath($dir).DIRECTORY_SEPARATOR;
 		}
-		$this->_cacheDir = $dir;
-	} // end setCacheDir();
+		$this->_directory = $dir;
+	} // end setDirectory();
 
 	/**
 	 * Returns cache directory.
 	 * 
 	 * @return string
 	 */
-	public function getCacheDir()
+	public function getDirectory()
 	{
-		if($this->_cacheDir === null)
+		if($this->_directory === null)
 		{
-			$this->_cacheDir = $this->_opc->cacheDir;
+			$this->_directory = $this->_opc->cacheDirectory;
 		}
-		return $this->_cacheDir;
-	} // end getCacheDir();
+		return $this->_directory;
+	} // end getDirectory();
 
 	/**
 	 * Gets the cache filename with special key.
@@ -206,7 +206,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 		if(!$this->_isReadAlready)
 		{
 			$this->_isReadAlready == true;
-			$this->_fileHandle = @fopen($this->getCacheDir().$this->_getFilename($view), 'r');
+			$this->_fileHandle = @fopen($this->getDirectory().$this->_getFilename($view), 'r');
 			if($this->_fileHandle === false)
 			{
 				return false;
@@ -221,14 +221,14 @@ class Opc_View_Cache implements Opt_Caching_Interface
 			{
 				/* When header is not an array it means it is wrong, so file must be deleted
 				   because of that and because it could be bad or unauthorized changed */
-				unlink($this->getCacheDir().$this->_getFilename($view));
+				unlink($this->getDirectory().$this->_getFilename($view));
 				$this->_fileHandle = null;
 				return false;
 			}
 			if($header['timestamp'] < (time() - $header['expire']))
 			{
 				/* When cache file is too old it should be deleted ;) */
-				unlink($this->getCacheDir().$this->_getFilename($view));
+				unlink($this->getDirectory().$this->_getFilename($view));
 				$this->_fileHandle = null;
 				return false;
 			}
@@ -256,7 +256,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	 */
 	public function clear(Opt_View $view)
 	{
-		return unlink($this->getCacheDir().$this->_getFilename($view));
+		return unlink($this->getDirectory().$this->_getFilename($view));
 	} // end clear();
 
 	/**
@@ -271,7 +271,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 		{
 			if($this->_dynamic == 'true')
 			{
-				return $this->getCacheDir().$this->_getFilename($view);
+				return $this->getDirectory().$this->_getFilename($view);
 			}
 			else
 			{
@@ -329,17 +329,17 @@ class Opc_View_Cache implements Opt_Caching_Interface
 				$content .= $buffer[$i];
 				$content .= $dynamic[$i];
 			}
-			if(file_put_contents($this->getCacheDir().$this->_getFilename($view), $header.$content.ob_get_flush()) === false)
+			if(file_put_contents($this->getDirectory().$this->_getFilename($view), $header.$content.ob_get_flush()) === false)
 			{
-				throw new Opc_View_Cache_CannotSaveFile_Exception($this->getCacheDir());
+				throw new Opc_View_Cache_CannotSaveFile_Exception($this->getDirectory());
 				return false;
 			}
 		}
 		else
 		{
-			if(file_put_contents($this->getCacheDir().$this->_getFileName($view), $header.ob_get_contents()) === false)
+			if(file_put_contents($this->getDirectory().$this->_getFileName($view), $header.ob_get_contents()) === false)
 			{
-				throw new Opc_View_Cache_CannotSaveFile_Exception($this->getCacheDir());
+				throw new Opc_View_Cache_CannotSaveFile_Exception($this->getDirectory());
 				return false;
 			}
 		}

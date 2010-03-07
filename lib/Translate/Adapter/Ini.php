@@ -25,6 +25,11 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 {
 	protected
 		/**
+		 * Opc_Class instance
+		 * @var Opc_Class
+		 */
+		$_opc = null,
+		/**
 		 * Language files directory.
 		 * @var string
 		 */
@@ -52,6 +57,11 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 	 */
 	public function __construct(array $options = array())
 	{
+		if(!Opl_Registry::exists('opc'))
+		{
+			throw new Opc_ClassInstanceNotExists_Exception;
+		}
+		$this->_opc = Opl_Registry::get('opc');
 		if(isset($options['directory']))
 		{
 			$this->setDirectory($options['directory']);
@@ -77,12 +87,15 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 	} // end setDirectory();
 
 	/**
-	 * Returns the current directory.
-	 * 
-	 * @return string
+	 * Returns files directory.
+	 * @return string Directory
 	 */
 	public function getDirectory()
 	{
+		if($this->_directory === null)
+		{
+			throw new Opc_Translate_Adapter_NotConfigured_Exception('Lack of directory!');
+		}
 		return $this->_directory;
 	} // end getDirectory();
 
@@ -99,12 +112,15 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 	} // end setFileExistsCheck();
 
 	/**
-	 * Returns state of feature.
-	 *
-	 * @return boolean
+	 * Returns state of file existence checking.
+	 * @return boolean State
 	 */
 	public function getFileExistsCheck()
 	{
+		if($this->_fileExistsCheck === null)
+		{
+			$this->_fileExistsCheck = $this->_opc->translateFileExistsCheck;
+		}
 		return $this->_fileExistsCheck;
 	} // end getFileExistsCheck();
 
@@ -158,10 +174,10 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 	 */
 	public function loadGroupLanguage($language, $group)
 	{
-		$data = @parse_ini_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.ini');
+		$data = @parse_ini_file($this->getDirectory().$language.DIRECTORY_SEPARATOR.$group.'.ini');
 		if($data === false)
 		{
-			if($this->_fileExistsCheck)
+			if($this->getFileExistsCheck())
 			{
 				throw new Opc_Translate_Adapter_GroupFileNotFound_Exception($group, $language);
 			}
@@ -182,10 +198,10 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 	 */
 	public function loadLanguage($language)
 	{
-		$data = @parse_ini_file($this->_directory.$language.'.ini',true);
+		$data = @parse_ini_file($this->getDirectory().$language.'.ini',true);
 		if($data === false)
 		{
-			if($this->_fileExistsCheck)
+			if($this->getFileExistsCheck())
 			{
 				throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
 			}

@@ -85,6 +85,11 @@ class Opc_Translate_NoTranslationLoaded_Exception extends Opc_Exception
 	protected $_message = 'Translation interface couldn\'t load correct language file!';
 } // end Opc_Translate_NoTranslationLoaded_Exception;
 
+class Opc_Translate_Adapter_NotConfigured_Exception extends Opc_Exception
+{
+	protected $_message = 'Translation adapter is not configured properly. Received message: "%s"';
+} // end Opc_Translate_Adapter_NotConfigured_Exception;
+
 class Opc_Translate_Adapter_FileNotFound_Exception extends Opc_Exception
 {
 	protected $_message = 'Translation file is not found for language "%s"!';
@@ -100,10 +105,10 @@ class Opc_Translate_Adapter_CannotAssignData_Exception extends Opc_Exception
 	protected $_message = 'Cannot assign new data to message! Group "%s", ID "%s".';
 } // end Opc_Translate_Adapter_CannotAssignData_Exception;
 
-class Opc_Translate_Adapter_Yaml_CompileWriteFile_Exception extends Opc_Exception
+class Opc_Translate_Adapter_CompileWriteFile_Exception extends Opc_Exception
 {
 	protected $_message = 'File "%s.%s" could not be written in cache.';
-} // end Opc_Translate_Adapter_Yaml_CompileWriteFile_Exception;
+} // end Opc_Translate_Adapter_CompileWriteFile_Exception;
 
 class Opc_Translate_Adapter_YamlParser_Exception extends Opc_Exception
 {

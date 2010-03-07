@@ -32,11 +32,14 @@ try
 	$yamlOptions = array(
 		'directory' => './langs/',
 		'fileExistsCheck' => true,
-		'compileResult' => true
+		'compileResult' => true,
+		'compileResultDirectory' => './cache/'
 	);
 	$xmlOptions = array(
 		'directory' => './langs/',
-		'fileExistsCheck' => false
+		'fileExistsCheck' => false,
+		'compileResult' => true,
+		'compileResultDirectory' => './cache/'
 	);
 
 	$adapterIni = new Opc_Translate_Adapter_Ini($iniOptions);

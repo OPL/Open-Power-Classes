@@ -8,14 +8,15 @@ and created by Symfony and Sensio Labs.
 Available options
 =================
 
-Option            | Required? | Default value | Description
-------------------|-----------|---------------|-------------
-`directory`       | Yes       | null          | Directory, where adapter is searching for language files.
-`fileExistsCheck` | No        | false         | File existence checking before loading file state.
-`compileResult`   | No        | true          | State of compiling results to an php array and saving them to file.
+Option                   | Required? | Default value | Description
+-------------------------|-----------|---------------|-------------
+`directory`              | Yes       | null          | Directory, where adapter is searching for language files.
+`fileExistsCheck`        | No        | false         | File existence checking before loading file state.
+`compileResult`          | No        | true          | State of compiling results to an php array and saving them to file.
+`compileResultDirectory` | No        | `!cache`      | Compiled data files storing directory. When started with `!` adapter will save compiled files under `directory/compileResultDirectory`.
 
 Compiling results **needs** cache directory which should be placed in language files directory,
-e.g. we have language directory `./langs/`, so we have to create directory `./langs/cache/`,
+e.g. we have language directory `./langs/`, so we have to create directory `./langs/cache/` (in default setup),
 where adapter will store all compiled result files. It is *important* to make PHP available to
 write to this directory.
 
@@ -50,6 +51,7 @@ $adapter = new Opc_Translate_Adapter_Yaml();
 $adapter->setDirectory('./langs/');
 $adapter->setFileExistsCheck(false);
 $adapter->setCompileResult(true);
+$adapter->setCompileResultDirectory('./langsCache/');
 ~~~~
 
 As you can see, all setters have exactly the same name as configuration option.

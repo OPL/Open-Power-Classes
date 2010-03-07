@@ -20,12 +20,14 @@
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-// TODO: Add compiling results feature
-// TODO: Add getting initial configuration from Opc_Class
-// TODO: Test!
 class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 {
 	protected
+		/**
+		 * Opc_Class instance
+		 * @var Opc_Class
+		 */
+		$_opc = null,
 		/**
 		 * Language files directory.
 		 * @var string
@@ -35,7 +37,17 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 		 * File existence checking state.
 		 * @var boolean
 		 */
-		$_fileExistsCheck = false,
+		$_fileExistsCheck = null,
+		/**
+		 * We want to compile result data?
+		 * @var boolean $_compileResult
+		 */
+		$_compileResult = null,
+		/**
+		 * Directory to store compiled data.
+		 * @var string Directory
+		 */
+		$_compileResultDirectory = null,
 		/**
 		 * Loaded translation.
 		 * @var array
@@ -54,6 +66,11 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 	 */
 	public function __construct(array $options = array())
 	{
+		if(!Opl_Registry::exists('opc'))
+		{
+			throw new Opc_ClassInstanceNotExists_Exception;
+		}
+		$this->_opc = Opl_Registry::get('opc');
 		if(isset($options['directory']))
 		{
 			$this->setDirectory($options['directory']);
@@ -61,6 +78,14 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 		if(isset($options['fileExistsCheck']))
 		{
 			$this->_fileExistsCheck = (boolean)$options['fileExistsCheck'];
+		}
+		if(isset($options['compileResult']))
+		{
+			$this->setCompileResult($options['compileResult']);
+		}
+		if(isset($options['compileResultDirectory']))
+		{
+			$this->setCompileResultDirectory($options['compileResultDirectory']);
 		}
 	} // end __construct();
 
@@ -85,14 +110,17 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 		}
 		$this->_directory = $directory;
 	} // end setDirectory();
-
+	
 	/**
-	 * Returns the current directory.
-	 * 
-	 * @return string
+	 * Returns files directory.
+	 * @return string Directory
 	 */
 	public function getDirectory()
 	{
+		if($this->_directory === null)
+		{
+			throw new Opc_Translate_Adapter_NotConfigured_Exception('Lack of directory!');
+		}
 		return $this->_directory;
 	} // end getDirectory();
 
@@ -111,8 +139,76 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 	 */
 	public function getFileExistsCheck()
 	{
+		if($this->_fileExistsCheck === null)
+		{
+			$this->_fileExistsCheck = $this->_opc->translateFileExistsCheck;
+		}
 		return $this->_fileExistsCheck;
 	} // end getFileExistsCheck();
+
+	/**
+	 * Sets result compilation on or off.
+	 * @param boolean $state State
+	 */
+	public function setCompileResult($state)
+	{
+		$this->_compileResult = (bool)$state;
+	} // end setFileExistsCheck();
+
+	/**
+	 * Returns state of compiling results feature.
+	 * @return boolean State
+	 */
+	public function getCompileResult()
+	{
+		if($this->_compileResult === null)
+		{
+			$this->_compileResult = $this->_opc->translateCompileResult;
+		}
+		return $this->_compileResult;
+	} // end getFileExistsCheck();
+
+	/**
+	 * Sets compiled data files storing directory.
+	 * @param string $directory Directory
+	 */
+	public function setCompileResultDirectory($directory)
+	{
+		if($directory != '')
+		{
+			if($directory[strlen($directory)-1] != DIRECTORY_SEPARATOR)
+			{
+				$directory .= DIRECTORY_SEPARATOR;
+			}
+		}
+
+		if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false)
+		{
+			$directory = realpath($directory).DIRECTORY_SEPARATOR;
+		}
+		$this->_compileResultDirectory = $directory;
+	} // end setCompileResultDirectory();
+
+	/**
+	 * Returns compiled data files directory.
+	 * @return string Directory
+	 */
+	public function getCompileResultDirectory()
+	{
+		if($this->_compileResultDirectory === null)
+		{
+			if(strpos($this->_opc->translateCompileResultDirectory, '!') === 0)
+			{
+				$this->_compileResultDirectory = $this->_directory.DIRECTORY_SEPARATOR.$this->_opc->translateCompileResultDirectory.DIRECTORY_SEPARATOR;
+			}
+			else
+			{
+				$this->_compileResultDirectory = $this->_opc->translateCompileResultDirectory;
+			}
+			$this->_compileResultDirectory = $this->_opc->translateCompileResultDirectory;
+		}
+		return $this->_compileResultDirectory;
+	} // end getCompileResultDirectory();
 
 	/**
 	 * Returns translation for specified group and id.
@@ -180,19 +276,38 @@ $empty = <<<XML
  <data>
  </data>
 XML;
-
-		$data = @simplexml_load_file($this->_directory.$language.DIRECTORY_SEPARATOR.$group.'.xml');
-		if($data === false)
+		if($this->getFileExistsCheck() && !file_exists($this->getDirectory().$language.DIRECTORY_SEPARATOR.$group.'.xml'))
 		{
-			if($this->_fileExistsCheck)
-			{
-				throw new Opc_Translate_Adapter_GroupFileNotFound_Exception($group, $language);
+			throw new Opc_Translate_Adapter_FileNotFound_Exception($language.DIRECTORY_SEPARATOR.$group);
+			return false;
+		}
+		if($this->getCompileResult())
+		{
+			$compileTime = @filemtime($this->getCompileResultDirectory().$language.'_'.$group.'.xml.php');
+			$fileTime = @filemtime($this->getDirectory().$language.DIRECTORY_SEPARATOR.$group.'.xml');
+			if($compileTime !== false && $compileTime > $fileTime &&
+				($contents = file_get_contents($this->getCompileResultDirectory().$language.'_'.$group.'.xml.php')) &&
+				(isset($options['recompile'])?$options['recompile']:true)
+			){
+				$data = unserialize($contents);
 			}
 			else
 			{
-				return false;
+				// We need to compile retreived data
+				$data = @simplexml_load_file($this->getDirectory().$language.DIRECTORY_SEPARATOR.$group.'.xml');
+				if(file_put_contents($this->getCompileResultDirectory().$language.'_'.$group.'.xml.php', serialize($data))	=== false)
+				{
+					// Error writing file
+					throw new Opc_Translate_Adapter_CompileWriteFile_Exception($language.DIRECTORY_SEPARATOR.$group, 'xml');
+					return false;
+				}
 			}
 		}
+		else
+		{
+			$data = @simplexml_load_file($this->getDirectory().$language.DIRECTORY_SEPARATOR.$group.'.xml');
+		}
+		// Copying data.
 		if($this->_messages[$group] === null)
 		{
 			$this->_messages[$group] = new SimpleXMLElement($empty);
@@ -211,22 +326,43 @@ XML;
 	 */
 	public function loadLanguage($language)
 	{
-		$data = @simplexml_load_file($this->_directory.$language.'.xml');
-		if($data === false)
+		if($this->getFileExistsCheck() && !file_exists($this->getDirectory().$language.'.xml'))
 		{
-			if($this->_fileExistsCheck)
-			{
-				throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
+			throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
+			return false;
+		}
+		if($this->getCompileResult())
+		{
+			$compileTime = @filemtime($this->getCompileResultDirectory().$language.'.xml.php');
+			$fileTime = @filemtime($this->getDirectory().$language.'.xml');
+			if($compileTime !== false && $compileTime > $fileTime &&
+				($contents = file_get_contents($this->getCompileResultDirectory().$language.'.xml.php')) &&
+				(isset($options['recompile'])?$options['recompile']:true)
+			){
+				$data = unserialize($contents);
 			}
 			else
 			{
-				return false;
+				// We need to compile retreived data
+				$data = @simplexml_load_file($this->getDirectory().$language.'.xml');
+				if(file_put_contents($this->getCompileResultDirectory().$language.'.xml.php', serialize($data))	=== false)
+				{
+					// Error writing file
+					throw new Opc_Translate_Adapter_CompileWriteFile_Exception($language, 'xml');
+					return false;
+				}
 			}
 		}
+		else
+		{
+			$data = @simplexml_load_file($this->getDirectory().$language.'.xml');
+		}
+		// Copying data.
 		foreach($data as $key => $value)
 		{
 			$this->_messages[$key] = $value;
 		}
+		unset($data);
 		return true;
 	} // end loadLanguage();
 } // end Opc_Translate_Adapter_Xml;

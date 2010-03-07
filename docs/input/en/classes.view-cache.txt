@@ -12,24 +12,27 @@ Handles `opt:dynamic` instruction.
 
 ~~~~
 [php]
-$cache = new Opc_View_Cache(array('cacheDir' => './cache/')); // 1
-$tpl = new Opt_Class; // 2
+$opc = new Opc_Class; // 1
+$cache = new Opc_View_Cache(array('directory' => './cache/')); // 2
+$tpl = new Opt_Class; // 3
 // ...
-$tpl->setCache($cache); // 3
+$tpl->setCache($cache); // 4
 ~~~~
 
 > [steps]
-> 1. Creating instance of Opc_View_Cache.
-> 2. Creating instance of Opt_Class.
-> 3. Setting caching system of Opt_Class to use Opc_View_Cache.
+> 1. Creating instance of Opc_Class needed by every Opc class.
+> 2. Creating instance of Opc_View_Cache. As you can see we can provide array
+>    with configuration options when creating new object.
+> 3. Creating instance of Opt_Class.
+> 4. Setting caching system of Opt_Class to use Opc_View_Cache.
 
 It's important to set **at least** cache directory.
 
 Available options
 =================
 
-Option       | Required? | Default value | Description
--------------|-----------|---------------|-------------
-`cacheDir`   | Yes       | null          | Directory, where cache has to store files.
-`expiryTime` | No        | 1800          | Time of validity of cache files.
-`key`        | No        | null          | Additional key to distinguish the same views and other cache files.
+Option        | Required? | Default value | Description
+--------------|-----------|---------------|-------------
+`directory`   | Yes       | null          | Directory, where cache has to store files.
+`expiryTime`  | No        | 1800          | Time of validity of cache files.
+`key`         | No        | null          | Additional key to distinguish the same views and other cache files.
