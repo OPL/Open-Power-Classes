@@ -160,10 +160,28 @@ class Opc_Translate implements Opl_Translation_Interface
 		{
 			return $msg;
 		}
+		// Try to load group for language
+		if($this->setGroupLanguage($this->_currentLanguage, $group))
+		{
+			// Try to get that loaded message
+			if(($msg = $adapter->getMessage($this->_currentLanguage, $group, $id)) !== null)
+			{
+				return $msg;
+			}
+		}
 		// Try to get default message.
 		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
 		{
 			return $msg;
+		}
+		// Try to load group for default language
+		if($this->setGroupLanguage($this->_defaultLanguage, $group))
+		{
+			// Try to get that loaded message
+			if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
+			{
+				return $msg;
+			}
 		}
 		throw new Opc_Translate_MessageNotFound_Exception($group, $id, $this->_currentLanguage);
 	} // end _();
