@@ -12,9 +12,12 @@ try
 {
 	$opc = new Opc_Class;
 	//$opc = new Opc_Class;
+    
+    //$pager2 = Opc_Paginator::create(0, 13);
+    //$pager2->page = isset($_GET['page']) ? $_GET['page'] : 1;
 
 	$pager = Opc_Paginator::create(1000, 13); // returns Opc_Paginator_Pager;
-	$pager->all = 1000;
+	//$pager->all = 0;
 	$pager->page = isset($_GET['page']) ? $_GET['page'] : 1;
 	//$pager->offset = 174;
 	

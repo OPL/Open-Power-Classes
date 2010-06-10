@@ -215,7 +215,9 @@ class Opc_Visit
 	} // end toArray();
 	
 	/**
-	 * Magic function so that $obj->key = "value" will NOT work.
+	 * Magic function so that $obj->key = "value" will NOT work. However,
+	 * assigning NULL resets the specified variable and causes it to be
+	 * reloaded.
 	 * 
 	 * @param string $key
 	 * @param mixed $value
@@ -223,12 +225,18 @@ class Opc_Visit
 	 */
 	final public function __set($key, $value)
 	{
-		if($key[0] == '_' || !isset($this->$key))
+		if($key[0] == '_' || !property_exists($this, $key))
 		{
 			throw new Opc_OptionNotExists_Exception($key, __CLASS__);
 		}
-		
-		throw new Opc_OptionReadOnly_Exception($key, __CLASS__);
+		if($value === null && in_array($key, $this->_fields))
+		{
+			$this->$key = null;
+		}
+		else
+		{
+			throw new Opc_OptionReadOnly_Exception($key, __CLASS__);
+		}
 	} // end __set();
 	
 	/**
@@ -412,11 +420,11 @@ class Opc_Visit
 				if(strpos($item, ';') !== false)
 				{
 					$range = explode(';', $item);
-					$proc[] = array('symbol' => $range[0], 'q' => (float)trim($range[1], 'q='));
+					$proc[] = array('symbol' => $range[0], 'q' => (float)trim($range[1], 'q=	 '));
 				}
 				else
 				{
-					$proc[] = array('symbol' => $item, 'q' => 1);
+					$proc[] = array('symbol' => $item, 'q' => 1.0);
 				}
 			}
 			usort($proc, array($this, '_quality'));

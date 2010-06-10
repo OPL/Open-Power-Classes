@@ -1,0 +1,32 @@
+Title: Setup
+
+----
+
+Installation
+============
+
+At the begining you should know that DoctrineModels should be registered AFTER Opl_Loader.
+So your code should look like this:
+
+~~~~
+[php]
+<?php
+require('./libs/Opl/Base.php');
+Opl_Loader::setDirectory('./libs/');
+Opl_Loader::register();
+
+// You have setup Opl_Loader now.
+
+Opc_DoctrineModels::setPath('./models/'); // 1
+Opc_DoctrineModels::register(); // 2
+~~~~
+
+> [steps]
+> 1. We set path to models directory. The path should end with `/`, but it is not necessary like in Opl_Loader.
+> 2. Now we register an autoloader.
+
+Using
+=====
+
+If you configured it like it is shown above - you can use your models without thinking about loading it.
+Autoloader loads it automatically, of course it is lazy loading.

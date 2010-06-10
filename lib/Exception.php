@@ -55,6 +55,11 @@ class Opc_PaginatorWrongSubclassDecorator_Exception extends Opc_Exception
 	protected $_message = 'Given decorator "%s" is not a subclass of "Opc_Paginator_Decorator".';
 } // end Opc_PaginatorWrongSubclassDecorator_Exception;
 
+class Opc_PaginatorPageNotFound_Exception extends Opc_Exception
+{
+	protected $_message = 'Page "%s" was not found.';
+} // end Opc_PaginatorWrongSubclassDecorator_Exception;
+
 class Opc_DoctrineModels_InvalidDirectoryName_Exception extends Opc_Exception
 {
 	protected $_message = 'Given Doctrine generated models folder name is invalid.';

@@ -99,6 +99,10 @@ class Opc_Paginator
 	 */
 	public static function countOffset($page, $limit)
 	{
+		if($page < 1)
+		{
+			return 0;
+		}
 		return ($page-1) * $limit;
 	} // end registerDecorator();
 } // end Opc_Paginator;
