@@ -9,8 +9,7 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
- * 
- * $Id: Ini.php 201 2009-08-09 19:19:16Z extremo $
+ * : Ini.php 201 2009-08-09 19:19:16Z extremo $
  */
 
 /**
