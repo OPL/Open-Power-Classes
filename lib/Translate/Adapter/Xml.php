@@ -10,7 +10,6 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
- * $Id: Xml.php 201 2010-03-03 21:56:16Z megawebmaster $
  */
 
 /**
