@@ -165,37 +165,6 @@ class Opc_Visit
 				'userAgentString', 'userAgent', 'languages', 'mimeTypes', 'cookieServer', 'cookiePath', 'currentAddress', 'currentFile', 
 				'currentParams', 'currentPath', 'basePath', 'pathInfo', 'queryString', 'fileName'
 			);
-
-	/**
-	 * The singleton instance.
-	 * @static
-	 * @var Opc_Visit
-	 */
-	static private $_instance = null;
-
-	/**
-	 * Singleton implementation.
-	 *
-	 * @static
-	 * @return Opc_Visit
-	 */
-	static public function getInstance()
-	{
-		if(self::$_instance == null)
-		{
-			self::$_instance = new Opc_Visit;
-		}
-		return self::$_instance;
-	} // end getInstance();
-
-	/**
-	 * The private class constructor - empty.
-	 */
-	final private function __construct()
-	{
-		/* null */
-	} // end __construct();
-	
 	/**
 	 * Returns an array with all fields.
 	 * 
