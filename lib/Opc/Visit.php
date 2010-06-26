@@ -131,6 +131,12 @@ class Opc_Visit
 	 */
 	protected $currentPath;
 	/**
+	 * The server host.
+	 * @access public
+	 * @var string
+	 */
+	protected $currentHost;
+	/**
 	 * Full path minus the host.
 	 * @access public
 	 * @var string
@@ -163,7 +169,7 @@ class Opc_Visit
 	private $_fields = array(
 				'ip', 'numericIp', 'host', 'protocol', 'referrer', 'port', 'secure', 'requestMethod', 
 				'userAgentString', 'userAgent', 'languages', 'mimeTypes', 'cookieServer', 'cookiePath', 'currentAddress', 'currentFile', 
-				'currentParams', 'currentPath', 'basePath', 'pathInfo', 'queryString', 'fileName'
+				'currentParams', 'currentPath', 'currentHost', 'basePath', 'pathInfo', 'queryString', 'fileName'
 			);
 	/**
 	 * Returns an array with all fields.
@@ -299,6 +305,9 @@ class Opc_Visit
 			case 'cookiePath':
 				$this->cookiePath = substr($this->get('currentPath'), strpos($this->get('currentPath'), $this->get('cookieServer')) + strlen($this->get('cookieServer')), strlen($this->get('currentPath')));
 				break;
+			case 'currentHost':
+				$this->currentHost = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+				break;
 			case 'currentAddress':
 			case 'currentFile':
 			case 'currentParams':
@@ -306,16 +315,20 @@ class Opc_Visit
 			case 'basePath':
 			case 'pathInfo':
 			case 'queryString':
+				// TODO: Fix current file discovery
 				$this->currentPath = $this->currentAddress = $this->currentFile = $this->get('protocol').'://';
 				$serverName = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-				
+
+				$this->currentParams = $_SERVER['PATH_INFO'].(strlen($_SERVER['QUERY_STRING']) > 0 ? '?'.$_SERVER['QUERY_STRING'] : '');
+
 				$this->currentAddress .= $serverName.$_SERVER['REQUEST_URI'];
 				$this->currentFile .= $serverName.$_SERVER['PHP_SELF'];
 				$this->pathInfo = isset($_SERVER['PATH_INFO']) &&  $_SERVER['PATH_INFO'] != ''  ? $_SERVER['PATH_INFO'] : '';
 				$this->queryString = isset($_SERVER['QUERY_STRING']) &&  $_SERVER['QUERY_STRING'] != '' ? $_SERVER['QUERY_STRING'] : '';
 				$this->fileName = basename($_SERVER['SCRIPT_NAME']);
-				$this->currentPath = $this->currentFile;     
-				
+				$this->currentPath = $this->currentFile;
+
+				/*
 				$pos = strpos($this->currentAddress, $this->currentFile);  
 				 
 				if(($pos = strpos($this->currentFile, $this->fileName)) !== false)
@@ -344,6 +357,7 @@ class Opc_Visit
 					// No mod-rewrite enter
 					$this->currentParams = substr($this->currentAddress, strlen($this->currentFile));
 				}
+				*/
 				
 				$this->basePath = substr($this->currentPath, strpos($this->currentPath, $serverName) + strlen($serverName));
 				break;
