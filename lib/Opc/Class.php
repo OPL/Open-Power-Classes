@@ -85,7 +85,7 @@ class Opc_Class extends Opl_Class
 		{
 			throw new Opc_CannotCreateAnotherInstance_Exception;
 		}
-		Opl_Registry::register('opc', $this);
+		Opl_Registry::set('opc', $this);
 	} // end __construct();
 
 	/**
