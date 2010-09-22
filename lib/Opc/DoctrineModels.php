@@ -11,14 +11,15 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc;
+use Opc\Exception as Opc_Exception;
 /**
- * An utility class which helps autoload models in Doctrine ORM.
+ * An utility class which helps autoload models in Doctrine ORM 1.x.
  * 
  * @author Amadeusz "megawebmaster" Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_DoctrineModels
+class DoctrineModels
 {
 	
 	/**
@@ -122,7 +123,7 @@ class Opc_DoctrineModels
 		}
 		else
 		{
-			throw new Opc_DoctrineModels_InvalidDirectoryName_Exception();
+			throw new Opc_Exception('Opc\DoctrineModels: Invalid directory name!');
 		}
 
 	} // end setGeneratedModelsDirectoryName();
@@ -152,4 +153,4 @@ class Opc_DoctrineModels
 	{
 		spl_autoload_register(array('Opc_DoctrineModels', 'autoload'));
 	} // end register();
-} // end Opc_DoctrineModels;
+} // end DoctrineModels;

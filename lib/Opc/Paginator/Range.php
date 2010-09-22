@@ -11,14 +11,21 @@
  * and other contributors. See website for details.
  *
  */
- 
+ namespace Opc\Paginator;
+ use Opc\Paginator;
+ use Opc\Paginator\Exception as Opc_Paginator_Exception;
+ use \Opl_Registry;
+ use \Iterator;
+ use \Countable;
+ use \SeekableIterator;
+ use \OutOfBoundsException;
 /**
  * Paginator worker class.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
+class Range implements Iterator, Countable, SeekableIterator
 {
 	/**
 	 * This constant means the pager needs to be reset.
@@ -102,7 +109,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	/**
 	 * Decorator object instance.
 	 * @access private
-	 * @var Opc_Paginator_Decorator
+	 * @var Opc\Paginator\Decorator
 	 */
 	protected $_decorator = null;
 	/**
@@ -123,7 +130,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanceNotExists_Exception;
+			throw new Opc_Paginator_Exception('Opc\Core class not exists!');
 		}
 		$opc = Opl_Registry::get('opc');
 		
@@ -165,7 +172,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case null:
 				break;
 			default:
-				throw new Opc_InvalidArgumentType_Exception(gettype($state), 'Opc_Paginator_Range::STATE_*');
+				throw new Opc_Paginator_Exception('The method got "'.gettype($state).'" data type, "Opc\Paginator\Range::STATE_*" expected.');
 				break;
 		}
 		
@@ -246,7 +253,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 				
 				$ret = array(
 					'number' => $page,
-					'offset' => Opc_Paginator::countOffset($page, $this->get('limit')),
+					'offset' => Paginator::countOffset($page, $this->get('limit')),
 				);
 				return $ret;
 				break;
@@ -255,7 +262,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case 'all':
 				break;
 			default:
-				throw new Opc_OptionNotExists_Exception($key, get_class($this));
+				throw new Opc_Paginator_Exception('The option "'.$key.'" does not exist in "'.get_class($this).'"');
 				break;
 		}
 		
@@ -288,7 +295,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case 'offset':
 				if($value >= $this->get('all'))
 				{
-					throw new Opc_PaginatorPageNotFound_Exception('offset: '.$value);
+					throw new Opc_Paginator_Exception('Page "offset: '.$value.'" was not found.');
 				}
 				
 				$this->$key = $value;
@@ -297,7 +304,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case 'page':
 				if($value < 1 || $value > $this->get('pageCount'))
 				{
-					throw new Opc_PaginatorPageNotFound_Exception($value);
+					throw new Opc_Paginator_Exception('Page "'.$value.'" was not found.');
 				}
 				
 				$this->$key = (int)$value;
@@ -306,27 +313,27 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case 'decorator':
 				if(is_string($value))
 				{
-					$decoratorClass = Opc_Paginator::getDecoratorClassName($value);
+					$decoratorClass = Paginator::getDecoratorClassName($value);
 					
 					if(!$decoratorClass)
 					{
-						throw new Opc_PaginatorUndefinedDecorator_Exception($value);
+						throw new Opc_Paginator_Exception('Undefined decorator "'.$value.'".');
 					}
 					
 					$this->_decorator = new $decoratorClass;
 					
-					if(!is_subclass_of($this->_decorator, 'Opc_Paginator_Decorator'))
+					if(!is_subclass_of($this->_decorator, 'Opc\Paginator\Decorator'))
 					{
-						throw new Opc_PaginatorWrongSubclassDecorator_Exception(get_class($value));
+						throw new Opc_Paginator_Exception('Given decorator "'.get_class($value).'" is not a subclass of "Opc\Paginator\Decorator".');
 					}
 					
 					$this->_decorator->setPaginator($this);
 				}
 				elseif(is_object($value))
 				{
-					if(!is_subclass_of($value, 'Opc_Paginator_Decorator'))
+					if(!is_subclass_of($value, 'Opc\Paginator\Decorator'))
 					{
-						throw new Opc_PaginatorWrongSubclassDecorator_Exception(get_class($value));
+						throw new Opc_Paginator_Exception('Given decorator "'.get_class($value).'" is not a subclass of "Opc\Paginator\Decorator".');
 					}
 					
 					$this->_decorator = clone $value;
@@ -334,7 +341,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 				}
 				else
 				{
-					throw new Opc_PaginatorUndefinedDecorator_Exception((string) $value);
+					throw new Opc_Paginator_Exception('Undefined decorator "'.(string)$value.'".');
 				}
 				
 				$this->state(self::STATE_DIRTY);
@@ -347,7 +354,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 				
 				if($this->$key < 1)
 				{
-					throw new Opc_OptionInvalid_Exception($key, get_class($this), 'grater than 0');
+					throw new Opc_Paginator_Exception('The option "'.$key.'" in "'.get_class($this).'" is invalid. Expected: "grater than 0".');
 				}
 				break;
 			case 'page_float':
@@ -355,10 +362,10 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 			case 'last':
 			case 'previous':
 			case 'next':
-				throw new Opc_OptionReadOnly_Exception($key, get_class($this));
+				throw new Opc_Paginator_Exception('The option "'.$key.'" is read-only in "'.get_class($this).'" and cannot be set.');
 				break;
 			default:
-				throw new Opc_OptionNotExists_Exception($key, get_class($this));
+				throw new Opc_Paginator_Exception('The option "'.$key.'" does not exist in "'.get_class($this).'"');
 				break;
 		}
 		
@@ -390,7 +397,7 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 		
 		if(isset($current['number']))
 		{
-			$current['offset'] = Opc_Paginator::countOffset($current['number'], $this->get('limit'));
+			$current['offset'] = Paginator::countOffset($current['number'], $this->get('limit'));
 		}
 		
 		return $current;
@@ -419,10 +426,10 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	{
 		$this->_i = 1;
 		
-		if($this->_state == Opc_Paginator_Range::STATE_DIRTY)
+		if($this->_state == self::STATE_DIRTY)
 		{
 			$this->setup();
-			$this->state(Opc_Paginator_Range::STATE_CLEAN);
+			$this->state(self::STATE_CLEAN);
 			
 		}
 		
@@ -470,4 +477,4 @@ class Opc_Paginator_Range implements Iterator, Countable, SeekableIterator
 	{
 		return $this->pageCount;
 	} // end count();
-} // end Opc_Paginator_Range;
+} // end Range;

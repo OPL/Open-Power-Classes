@@ -11,7 +11,7 @@
  * and other contributors. See website for details.
  * 
  */
-
+namespace Opc\Translate;
 /**
  * The translation adapter representing the message format.
  *
@@ -19,7 +19,7 @@
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-interface Opc_Translate_Adapter
+interface Adapter
 {
 	/**
 	 * Returns the message in the specified language.
@@ -57,4 +57,4 @@ interface Opc_Translate_Adapter
 	 * @param string $group Group name
 	 */
 	public function loadGroupLanguage($language, $group);
-} // end Opc_Translate_Adapter;
+} // end Adapter;

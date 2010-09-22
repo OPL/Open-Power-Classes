@@ -22,7 +22,7 @@ class Package_Visit_UserAgentTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUserAgents($userAgent, $browser, $os)
 	{
-		$result = Opc_Visit_UserAgent::getInstance()->analyze($userAgent);
+		$result = \Opc\Visit\UserAgent::getInstance()->analyze($userAgent);
 		
 		foreach($result as $group => $fields)
 		{

@@ -11,19 +11,19 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Visit;
 /**
  * Browser and OS detector.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Visit_UserAgent
+class UserAgent
 {
 	/**
 	 * The singleton instance.
 	 * @static
-	 * @var Opc_Visit_UserAgent|null
+	 * @var Opc\Visit\UserAgent|null
 	 */
 	static private $_instance = null;
 	
@@ -31,13 +31,13 @@ class Opc_Visit_UserAgent
 	 * Singleton implementation.
 	 *
 	 * @static
-	 * @return Opc_Visit
+	 * @return Opc\Visit\UserAgent
 	 */
 	static public function getInstance()
 	{
 		if(self::$_instance == null)
 		{
-			self::$_instance = new Opc_Visit_UserAgent;
+			self::$_instance = new self;
 		}
 		return self::$_instance;
 	} // end getInstance();
@@ -139,4 +139,4 @@ class Opc_Visit_UserAgent
 		
 		return $return;
 	} // end analyze();
-} // end Opc_Visit_UserAgent;
+} // end UserAgent;

@@ -11,7 +11,13 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc;
+use \Opl_Class;
+use \Opl_Registry;
+use \Opt_View;
+use \Opc\View\Cache as Opc_View_Cache;
+use \Opc\Exception;
+use \SplFileInfo;
 /**
  * The class manages the configuration and plugin loading utilities for OPC.
  * Furthermore, it serves as a factory object for other classes.
@@ -20,7 +26,7 @@
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License 
  */
-class Opc_Class extends Opl_Class
+class Core extends Opl_Class
 {
 	// Opc_View_Cache configuration
 	/**
@@ -83,7 +89,7 @@ class Opc_Class extends Opl_Class
 	{
 		if(Opl_Registry::exists('opc'))
 		{
-			throw new Opc_CannotCreateAnotherInstance_Exception;
+			throw new Exception('Cannot create another Opc\Core instance!');
 		}
 		Opl_Registry::set('opc', $this);
 	} // end __construct();
@@ -115,4 +121,4 @@ class Opc_Class extends Opl_Class
 	{
 		return '';
 	} // end _pluginLoader();    
-} // end Opc_Class;
+} // end Core;

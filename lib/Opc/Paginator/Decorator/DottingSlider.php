@@ -11,6 +11,8 @@
  * and other contributors. See website for details.
  *
  */
+namespace Opc\Paginator\Decorator;
+use Opc\Paginator\Decorator\Slider;
 
 /**
  * Dotting slider decorator class. Extends slider decorator but instead
@@ -21,7 +23,7 @@
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Paginator_Decorator_DottingSlider extends Opc_Paginator_Decorator_Slider
+class DottingSlider extends Slider
 {
 	/**
 	 * Replaces static separator of "Slider" with a dot representing all pages,
@@ -46,4 +48,4 @@ class Opc_Paginator_Decorator_DottingSlider extends Opc_Paginator_Decorator_Slid
 		
 		return $current;
 	} // end _separator();
-} // end Opc_Paginator_Decorator_DottingSlider;
+} // end DottingSlider;

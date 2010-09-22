@@ -11,7 +11,8 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Paginator\Decorator;
+use Opc\Paginator\Decorator\Slider;
 /**
  * Range slider decorator class. It always displays a range of defined number
  * of pages.
@@ -21,7 +22,7 @@
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Paginator_Decorator_RangeSlider extends Opc_Paginator_Decorator
+class RangeSlider extends Slider
 {
 	/**
 	 * Number of pages in range. It should be an odd number.
@@ -125,4 +126,4 @@ class Opc_Paginator_Decorator_RangeSlider extends Opc_Paginator_Decorator
 		
 		return $current;
 	} // end current();
-} // end Opc_Paginator_Decorator_DottingSlider;
+} // end DottingSlider;

@@ -11,7 +11,11 @@
  * and other contributors. See website for details.
  * 
  */
-
+namespace Opc;
+use \Opl_Translation_Interface;
+use \Opl_Registry;
+use Opc\Translate\Exception as Opc_Translate_Exception;
+use Opc\Translate\Adapter;
 /**
  * The class represents a translation interface for OPL
  *
@@ -19,12 +23,12 @@
  * @author Tomasz "Zyx" Jędrzejewski <http://www.zyxist.com>
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Translate implements Opl_Translation_Interface
+class Translate implements Opl_Translation_Interface
 {
 	protected
 		/**
 		 * The default adapter.
-		 * @var Opc_Translate_Adapter
+		 * @var Opc\Translate\Adapter
 		 */
 		$_defaultAdapter = null,
 		/**
@@ -50,20 +54,20 @@ class Opc_Translate implements Opl_Translation_Interface
 		$_defaultLanguage = 'en',
 		/**
 		 * Opc_Class instance.
-		 * @var Opc_Class
+		 * @var Opc\Core
 		 */
 		$_opc = null;
 
 	/**
 	 * Creates the new translation object.
 	 * 
-	 * @param Opc_Translate_Adapter $adapter The default translation adapter.
+	 * @param Opc\Translate\Adapter $adapter The default translation adapter.
 	 */
-	public function __construct(Opc_Translate_Adapter $adapter)
+	public function __construct(Adapter $adapter)
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanceNotExists_Exception;
+			throw new Opc_Translate_Exception('Opc\Core class not exists!');
 		}
 		$this->_opc = Opl_Registry::get('opc');
 		$this->_defaultLanguage = $this->_opc->defaultLanugage;
@@ -73,10 +77,10 @@ class Opc_Translate implements Opl_Translation_Interface
 	/**
 	 * Sets the default translation adapter.
 	 * 
-	 * @param Opc_Translate_Adapter $adapter The new default adapter.
-	 * @return Opc_Translate
+	 * @param Opc\Translate\Adapter $adapter The new default adapter.
+	 * @return Opc\Translate
 	 */
-	public function setAdapter(Opc_Translate_Adapter $adapter)
+	public function setAdapter(Adapter $adapter)
 	{
 		$this->_defaultAdapter = $adapter;
 		return $this;
@@ -85,7 +89,7 @@ class Opc_Translate implements Opl_Translation_Interface
 	/**
 	 * Returns the current default adapter.
 	 * 
-	 * @return Opc_Translate_Adapter
+	 * @return Opc\Translate\Adapter
 	 */
 	public function getAdapter()
 	{
@@ -94,12 +98,13 @@ class Opc_Translate implements Opl_Translation_Interface
 
 	/**
 	 * Sets the translation adapter for the specified message group.
+	 * Implements fluent interface.
 	 * 
 	 * @param string $group The group name.
-	 * @param Opc_Translate_Adapter $adapter The new default adapter.
-	 * @return Opc_Translate
+	 * @param Opc\Translate\Adapter $adapter The new default adapter.
+	 * @return Opc\Translate
 	 */
-	public function setGroupAdapter($group, Opc_Translate_Adapter $adapter)
+	public function setGroupAdapter($group,  Adapter $adapter)
 	{
 		$this->_groupAdapters[$group] = $adapter;
 		return $this;
@@ -110,7 +115,7 @@ class Opc_Translate implements Opl_Translation_Interface
 	 * any adapter set, it returns the default adapter.
 	 *
 	 * @param string $group The group name.
-	 * @return Opc_Translate_Adapter
+	 * @return Opc\Translate\Adapter
 	 */
 	public function getGroupAdapter($group)
 	{
@@ -182,9 +187,16 @@ class Opc_Translate implements Opl_Translation_Interface
 				return $msg;
 			}
 		}
-		throw new Opc_Translate_MessageNotFound_Exception($group, $id, $this->_currentLanguage);
+		throw new Opc_Translate_Exception('Message id \''.$id.'\' in group \''.$group.'\' of language \''.$this->_currentLanguage.'\' not found!');
 	} // end _();
 
+	/**
+	 * Assigns translation for current language to specified group and Id.
+	 *
+	 * @param string $group Group Id.
+	 * @param string $id Message Id.
+	 * @param mixed ...
+	 */
 	public function assign($group, $id)
 	{
 		$data = func_get_args();
@@ -227,11 +239,16 @@ class Opc_Translate implements Opl_Translation_Interface
 			}
 			else
 			{
-				throw new Opc_Translate_NoTranslationLoaded_Exception();
+				throw new Opc_Translate_Exception('Translation is not loaded! Neither default nor current language files could be found.');
 			}
 		}
 	} // end setLanguage();
 
+	/**
+	 * Returns current language.
+	 *
+	 * @return string
+	 */
 	public function getLanguage()
 	{
 		return $this->_currentLanguage;
@@ -260,7 +277,7 @@ class Opc_Translate implements Opl_Translation_Interface
 			}
 			else
 			{
-				throw new Opc_Translate_NoTranslationLoaded_Exception();
+				throw new Opc_Translate_Exception('Translation is not loaded! Neither default nor current language files could be found.');
 			}
 		}
 		elseif($this->_currentLanguage != $language)
@@ -277,7 +294,7 @@ class Opc_Translate implements Opl_Translation_Interface
 			}
 			else
 			{
-				throw new Opc_Translate_NoTranslationLoaded_Exception();
+				throw new Opc_Translate_Exception('Translation is not loaded! Neither default nor current language files could be found.');
 			}
 		}
 	} // end setGroupLanguage();
@@ -297,8 +314,13 @@ class Opc_Translate implements Opl_Translation_Interface
 		$this->_defaultLanguage = $language;
 	} // end setDefaultLanguage();
 
+	/**
+	 * Returns default language.
+	 * 
+	 * @return string
+	 */
 	public function getDefaultLanguage()
 	{
 		return $this->_defaultLanguage;
 	} // end getDefaultLanguage();
-} // end Opc_View_Translation;
+} // end Translation;

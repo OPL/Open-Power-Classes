@@ -11,7 +11,8 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Paginator\Decorator;
+use Opc\Paginator\Decorator\Slider;
 /**
  * Stepping slider decorator class. Extends slider decorator, but instead
  * of gaps it returns steps. 
@@ -21,7 +22,7 @@
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Slider
+class SteppingSlider extends Slider
 {
 	/**
 	 * Number of pages per one step.
@@ -101,4 +102,4 @@ class Opc_Paginator_Decorator_SteppingSlider extends Opc_Paginator_Decorator_Sli
 		
 		return $current;
 	} // end _separator();
-} // end Opc_Paginator_Decorator_SteppingSlider;
+} // end SteppingSlider;

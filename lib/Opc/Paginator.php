@@ -11,14 +11,15 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc;
+use Opc\Paginator\Range;
 /**
  * A factory and global configuration class for Paginator.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Paginator
+class Paginator
 {
 	/**
 	 * List of default decorator aliases
@@ -27,16 +28,16 @@ class Opc_Paginator
 	 * @var array
 	 */
 	protected static $_decorators = array(
-		'all'				=> 'Opc_Paginator_Decorator_All',
-		'slider'			=> 'Opc_Paginator_Decorator_Slider',
-		'dotting_slider'	=> 'Opc_Paginator_Decorator_DottingSlider',
-		'stepping_slider'	=> 'Opc_Paginator_Decorator_SteppingSlider',
-		'range_slider'		=> 'Opc_Paginator_Decorator_RangeSlider',
-		'jumper'			=> 'Opc_Paginator_Decorator_Jumper',
+		'all'				=> 'Opc\Paginator\Decorator\All',
+		'slider'			=> 'Opc\Paginator\Decorator\Slider',
+		'dotting_slider'	=> 'Opc\Paginator\Decorator\DottingSlider',
+		'stepping_slider'	=> 'Opc\Paginator\Decorator\SteppingSlider',
+		'range_slider'		=> 'Opc\Paginator\Decorator\RangeSlider',
+		'jumper'			=> 'Opc\Paginator\Decorator\Jumper',
 	);
 	
 	/**
-	 * Disabled constructor, because Opc_Paginator is a static class
+	 * Disabled constructor, because Opc\Paginator is a static class
 	 * 
 	 * @access private
 	 * @return false
@@ -52,11 +53,11 @@ class Opc_Paginator
 	 * @static
 	 * @param integer $all The amout of all items
 	 * @param integer $limit Items per page
-	 * @return Opc_Paginator_Range New paginator
+	 * @return Opc\Paginator\Range New paginator
 	 */
 	public static function create($all = null, $limit = null)
 	{
-		return new Opc_Paginator_Range($all, $limit);
+		return new Range($all, $limit);
 	} // end create();
 	
 	/**
@@ -104,4 +105,4 @@ class Opc_Paginator
 		}
 		return ($page-1) * $limit;
 	} // end registerDecorator();
-} // end Opc_Paginator;
+} // end Paginator;

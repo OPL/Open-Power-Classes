@@ -11,19 +11,23 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\View;
+use Opc\View\Exception as Opc_View_Exception;
+use \Opl_Registry;
+use \Opt_Caching_Interface;
+use \Opt_View;
 /**
  * The class represents a caching system for Open Power Template 2.
  * 
  * @author Amadeusz "megawebmaster" Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_View_Cache implements Opt_Caching_Interface
+class Cache implements Opt_Caching_Interface
 {
 	/**
-	 * The Opc_Class object.
+	 * The Opc\Core object.
 	 *
-	 * @var Opc_Class
+	 * @var Opc\Core
 	 */
 	private $_opc;
 
@@ -78,7 +82,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanceNotExists_Exception;
+			throw new Opc_View_Exception('Opc\Core class not exists!');
 		}
 		$this->_opc = Opl_Registry::get('opc');
 		if(isset($options['directory']))
@@ -128,7 +132,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 		}
 		else
 		{
-			throw new Opc_InvalidArgumentType_Exception(gettype($time), 'integer');
+			throw new Opc_View_Exception('The method got "'.gettype($time).'" data type, "integer" expected.');
 		}
 	} // end setExpiryTime();
 
@@ -319,7 +323,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 			}
 			else
 			{
-				throw new Opc_View_Cache_InvalidDynamicContent_Exception($view->getTemplate());
+				throw new Opc_View_Exception('View "'.$view->getTemplate().'" has dynamic content, but file with it is broken. Cache cannot be generated.');
 				return false;
 			}
 			$content = '';
@@ -330,7 +334,7 @@ class Opc_View_Cache implements Opt_Caching_Interface
 			}
 			if(file_put_contents($this->getDirectory().$this->_getFilename($view), $header.$content.ob_get_flush()) === false)
 			{
-				throw new Opc_View_Cache_CannotSaveFile_Exception($this->getDirectory());
+				throw new Opc_View_Exception('Cache file could not be saved. Has PHP permission to write in cache directory "'.$this->getDirectory().'"?');
 				return false;
 			}
 		}
@@ -338,9 +342,9 @@ class Opc_View_Cache implements Opt_Caching_Interface
 		{
 			if(file_put_contents($this->getDirectory().$this->_getFileName($view), $header.ob_get_contents()) === false)
 			{
-				throw new Opc_View_Cache_CannotSaveFile_Exception($this->getDirectory());
+				throw new Opc_View_Exception('Cache file could not be saved. Has PHP permission to write in cache directory "'.$this->getDirectory().'"?');
 				return false;
 			}
 		}
 	} // end templateCacheStop();
-} // end Opc_View_Cache;
+} // end Cache;

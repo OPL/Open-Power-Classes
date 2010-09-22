@@ -11,7 +11,10 @@
  * and other contributors. See website for details.
  * 
  */
-
+namespace Opc\Translate\Adapter;
+use Opc\Translate\Adapter;
+use Opc\Translate\Adapter\Exception as Opc_Translate_Adapter_Exception;
+use \Opl_Registry;
 /**
  * The translation adapter for INI files representing the message format.
  *
@@ -19,13 +22,13 @@
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-// TODO: Add getting initial configuration from Opc_Class
-class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
+// TODO: Add getting initial configuration from Opc\Core
+class Ini implements Adapter
 {
 	protected
 		/**
-		 * Opc_Class instance
-		 * @var Opc_Class
+		 * Opc\Core instance
+		 * @var Opc\Core
 		 */
 		$_opc = null,
 		/**
@@ -58,7 +61,7 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanceNotExists_Exception;
+			throw new Opc_Translate_Adapter_Exception('Opc\Core class not exists!');
 		}
 		$this->_opc = Opl_Registry::get('opc');
 		if(isset($options['directory']))
@@ -93,7 +96,7 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 	{
 		if($this->_directory === null)
 		{
-			throw new Opc_Translate_Adapter_NotConfigured_Exception('Lack of directory!');
+			throw new Opc_Translate_Adapter_Exception('Translation adapter is not configured properly: lack of files directory!');
 		}
 		return $this->_directory;
 	} // end getDirectory();
@@ -178,7 +181,7 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 		{
 			if($this->getFileExistsCheck())
 			{
-				throw new Opc_Translate_Adapter_GroupFileNotFound_Exception($group, $language);
+				throw new Opc_Translate_Adapter_Exception('Translation file for group "'.$group.'" is not found for language "'.$language.'"!');
 			}
 			else
 			{
@@ -202,7 +205,7 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 		{
 			if($this->getFileExistsCheck())
 			{
-				throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
+				throw new Opc_Translate_Adapter_Exception('Translation file is not found for language "'.$language.'"!');
 			}
 			else
 			{
@@ -212,4 +215,4 @@ class Opc_Translate_Adapter_Ini implements Opc_Translate_Adapter
 		$this->_messages = $data;
 		return true;
 	} // end loadLanguage();
-} // end Opc_Translate_Adapter_Ini;
+} // end Ini;

@@ -11,14 +11,15 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Paginator\Decorator;
+use Opc\Paginator\Decorator;
 /**
  * Decorator class, which returns all pages.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Paginator_Decorator_All extends Opc_Paginator_Decorator
+class All extends Decorator
 {
 	/**
 	 * Returns all page numbers.
@@ -41,4 +42,4 @@ class Opc_Paginator_Decorator_All extends Opc_Paginator_Decorator
 		
 		return $current;
 	} // end current();
-} // end Opc_Paginator_Decorator_All;
+} // end All;

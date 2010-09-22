@@ -11,7 +11,10 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Translate\Adapter;
+use Opc\Translate\Adapter;
+use Opc\Translate\Adapter\Exception as Opc_Translate_Adapter_Exception;
+use \Opl_Registry;
 /**
  * The translation adapter for XML files representing the message format.
  * Needs to be completed.
@@ -19,12 +22,12 @@
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
+class Xml implements Adapter
 {
 	protected
 		/**
-		 * Opc_Class instance
-		 * @var Opc_Class
+		 * Opc\Core instance
+		 * @var Opc\Core
 		 */
 		$_opc = null,
 		/**
@@ -67,7 +70,7 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanceNotExists_Exception;
+			throw new Opc_Translate_Adapter_Exception('Opc\Core class not exists!');
 		}
 		$this->_opc = Opl_Registry::get('opc');
 		if(isset($options['directory']))
@@ -118,7 +121,7 @@ class Opc_Translate_Adapter_Xml implements Opc_Translate_Adapter
 	{
 		if($this->_directory === null)
 		{
-			throw new Opc_Translate_Adapter_NotConfigured_Exception('Lack of directory!');
+			throw new Opc_Translate_Adapter_Exception('Translation adapter is not configured properly: lack of files directory!');
 		}
 		return $this->_directory;
 	} // end getDirectory();
@@ -277,7 +280,7 @@ $empty = <<<XML
 XML;
 		if($this->getFileExistsCheck() && !file_exists($this->getDirectory().$language.DIRECTORY_SEPARATOR.$group.'.xml'))
 		{
-			throw new Opc_Translate_Adapter_FileNotFound_Exception($language.DIRECTORY_SEPARATOR.$group);
+			throw new Opc_Translate_Adapter_Exception('Translation file for group "'.$group.'" is not found for language "'.$language.'"!');
 			return false;
 		}
 		if($this->getCompileResult())
@@ -297,7 +300,7 @@ XML;
 				if(file_put_contents($this->getCompileResultDirectory().$language.'_'.$group.'.xml.php', serialize($data))	=== false)
 				{
 					// Error writing file
-					throw new Opc_Translate_Adapter_CompileWriteFile_Exception($language.DIRECTORY_SEPARATOR.$group, 'xml');
+					throw new Opc_Translate_Adapter_Exception('File "'.$language.DIRECTORY_SEPARATOR.$group.'.xml" could not be written in cache.');
 					return false;
 				}
 			}
@@ -327,7 +330,7 @@ XML;
 	{
 		if($this->getFileExistsCheck() && !file_exists($this->getDirectory().$language.'.xml'))
 		{
-			throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
+			throw new Opc_Translate_Adapter_Exception('Translation file is not found for language "'.$language.'"!');
 			return false;
 		}
 		if($this->getCompileResult())
@@ -347,7 +350,7 @@ XML;
 				if(file_put_contents($this->getCompileResultDirectory().$language.'.xml.php', serialize($data))	=== false)
 				{
 					// Error writing file
-					throw new Opc_Translate_Adapter_CompileWriteFile_Exception($language, 'xml');
+					throw new Opc_Translate_Adapter_Exception('File "'.$language.'.xml" could not be written in cache.');
 					return false;
 				}
 			}
@@ -364,4 +367,4 @@ XML;
 		unset($data);
 		return true;
 	} // end loadLanguage();
-} // end Opc_Translate_Adapter_Xml;
+} // end Xml;

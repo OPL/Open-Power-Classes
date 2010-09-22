@@ -11,7 +11,8 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Paginator\Decorator;
+use Opc\Paginator\Decorator;
 /**
  * Slider decorator class. Displays pages around current, pages at the
  * beggining and at the end and a gap between them.  
@@ -21,7 +22,7 @@
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
+class Slider extends Decorator
 {
 	/**
 	 * Number of pages around current.
@@ -148,4 +149,4 @@ class Opc_Paginator_Decorator_Slider extends Opc_Paginator_Decorator
 		
 		return $current;
 	} // end _separator();
-} // end Opc_Paginator_Decorator_Slider;
+} // end Slider;

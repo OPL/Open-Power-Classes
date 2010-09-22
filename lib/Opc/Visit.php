@@ -11,7 +11,9 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc;
+use Opc\Visit\UserAgent;
+use Opc\Visit\Exception as Opc_Visit_Exception;
 /**
  * An utility class that serves various information about the current
  * request.
@@ -20,7 +22,7 @@
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License 
  */
-class Opc_Visit
+class Visit
 {
 	/**
 	 * Dot-decimal client's IP.
@@ -201,7 +203,7 @@ class Opc_Visit
 	{
 		if($key[0] == '_' || !property_exists($this, $key))
 		{
-			throw new Opc_OptionNotExists_Exception($key, __CLASS__);
+			throw new Opc_Visit_Exception('The option "'.$key.'" does not exist in "'.get_class($this).'"');
 		}
 		if($value === null && in_array($key, $this->_fields))
 		{
@@ -209,7 +211,7 @@ class Opc_Visit
 		}
 		else
 		{
-			throw new Opc_OptionReadOnly_Exception($key, __CLASS__);
+			throw new Opc_Visit_Exception('The option "'.$key.'" is read-only in "'.get_class($this).'" and cannot be set.');
 		}
 	} // end __set();
 	
@@ -235,7 +237,7 @@ class Opc_Visit
 		// Filter out private fields..
 		if($key[0] == '_')
 		{
-			throw new Opc_OptionNotExists_Exception($key, __CLASS__);
+			throw new Opc_Visit_Exception('The option "'.$key.'" does not exist in "'.__CLASS__.'"');
 		}
 		
 		// At first, we check if the data is persisted in a variable.
@@ -285,7 +287,7 @@ class Opc_Visit
 				$this->userAgentString = $_SERVER['HTTP_USER_AGENT'];
 				break;
 			case 'userAgent':
-				$this->userAgent = Opc_Visit_UserAgent::getInstance()->analyze($_SERVER['HTTP_USER_AGENT']);
+				$this->userAgent = UserAgent::getInstance()->analyze($_SERVER['HTTP_USER_AGENT']);
 				break;
 			case 'port':
 				$this->port = $_SERVER['SERVER_PORT'];
@@ -362,7 +364,7 @@ class Opc_Visit
 				$this->basePath = substr($this->currentPath, strpos($this->currentPath, $serverName) + strlen($serverName));
 				break;
 			default:
-				throw new Opc_OptionNotExists_Exception($key, get_class($this));
+				throw new Opc_Visit_Exception('The option "'.$key.'" does not exist in "'.get_class($this).'"');
 				break;
 		}
 		
@@ -430,4 +432,4 @@ class Opc_Visit
 	{
 		return (int)(($b['q'] - $a['q'])*100);
 	} // end _quality();
-} // end Opc_Visit;
+} // end Visit;

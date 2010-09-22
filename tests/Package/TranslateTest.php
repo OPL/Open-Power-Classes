@@ -1,6 +1,6 @@
 <?php
 /**
- * The tests for Opc_Translate.
+ * The tests for Opc\Translate.
  *
  * @author Tomasz "Zyx" Jędrzejewski
  * @copyright Copyright (c) 2009 Invenzzia Group
@@ -26,46 +26,46 @@ class Package_TranslateTest extends PHPUnit_Framework_TestCase
 	} // end tearDown();
 
 	/**
-	 * @covers Opc_Translate::setAdapter
-	 * @covers Opc_Translate::getAdapter
+	 * @covers Opc\Translate::setAdapter
+	 * @covers Opc\Translate::getAdapter
 	 */
 	public function testAdapterSetters()
 	{
-		$translate = new Opc_Translate($this->getMock('Opc_Translate_Adapter'));
+		$translate = new \Opc\Translate($this->getMock('\Opc\Translate\Adapter'));
 
-		$translate->setAdapter($obj = $this->getMock('Opc_Translate_Adapter'));
+		$translate->setAdapter($obj = $this->getMock('\Opc\Translate\Adapter'));
 		$this->assertSame($obj, $translate->getAdapter());
 	} // end testAdapterSetters();
 
 	/**
-	 * @covers Opc_Translate::__construct
+	 * @covers Opc\Translate::__construct
 	 */
 	public function testConstructor()
 	{
-		$translate = new Opc_Translate($obj = $this->getMock('Opc_Translate_Adapter'));
+		$translate = new \Opc\Translate($obj = $this->getMock('\Opc\Translate\Adapter'));
 		$this->assertSame($obj, $translate->getAdapter());
 	} // end testConstructor();
 
 	/**
-	 * @covers Opc_Translate::setGroupAdapter
-	 * @covers Opc_Translate::getGroupAdapter
+	 * @covers Opc\Translate::setGroupAdapter
+	 * @covers Opc\Translate::getGroupAdapter
 	 */
 	public function testGroupAdapterSetter()
 	{
-		$translate = new Opc_Translate($obj1 = $this->getMock('Opc_Translate_Adapter'));
-		$translate->setGroupAdapter('foo', $obj2 = $this->getMock('Opc_Translate_Adapter'));
+		$translate = new \Opc\Translate($obj1 = $this->getMock('\Opc\Translate\Adapter'));
+		$translate->setGroupAdapter('foo', $obj2 = $this->getMock('\Opc\Translate\Adapter'));
 		$this->assertSame($obj2, $translate->getGroupAdapter('foo'));
 	} // end testGroupAdapterSetter();
 
 	/**
 	 * getGroupAdapter should return the default adapter for the undefined group.
 	 *
-	 * @covers Opc_Translate::getGroupAdapter
+	 * @covers Opc\Translate::getGroupAdapter
 	 */
 	public function testGroupAdapterSetterDefault()
 	{
-		$translate = new Opc_Translate($obj1 = $this->getMock('Opc_Translate_Adapter'));
-		$translate->setGroupAdapter('foo', $obj2 = $this->getMock('Opc_Translate_Adapter'));
+		$translate = new \Opc\Translate($obj1 = $this->getMock('\Opc\Translate\Adapter'));
+		$translate->setGroupAdapter('foo', $obj2 = $this->getMock('\Opc\Translate\Adapter'));
 		$this->assertSame($obj1, $translate->getGroupAdapter('bar'));
 	} // end testGroupAdapterSetterDefault();
 } // end Package_TranslateTest;

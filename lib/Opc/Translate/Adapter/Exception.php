@@ -11,10 +11,12 @@
  * and other contributors. See website for details.
  *
  */
-namespace Opc;
-use \Opl_Exception;
-
-class Exception extends Opl_Exception
+namespace Opc\Translate\Adapter;
+use Opc\Translate\Exception as Opc_Exception;
+/**
+ * Exception class for Opc\Translate\Adapter's purposes.
+ */
+class Exception extends Opc_Exception
 {
 	/* null */
 } // end Exception;

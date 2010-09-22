@@ -11,7 +11,8 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Paginator\Decorator;
+use Opc\Paginator\Decorator;
 /**
  * Jumper decorator class. Page ranges jump between steps.
  *  
@@ -20,7 +21,7 @@
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
+class Jumper extends Decorator
 {
 	/**
 	 * Number of pages per one step.
@@ -137,4 +138,4 @@ class Opc_Paginator_Decorator_Jumper extends Opc_Paginator_Decorator
 		}
 		return $current;
 	} // end current();
-} // end Opc_Paginator_Decorator_Jumper;
+} // end Jumper;

@@ -11,18 +11,23 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Translate\Adapter;
+use Opc\Translate\Adapter;
+use Opc\Translate\Adapter\Exception as Opc_Translate_Adapter_Exception;
+use Symfony\Component\Yaml\Parser;
+use \Opl_Registry;
+use \InvalidArgumentException;
 /**
  * The translation adapter for YAML files representing the message format.
  *
  * @author Amadeusz 'megawebmaster' Starzykiewicz
  */
-class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
+class Yaml implements Adapter
 {
 	protected
 		/**
-		 * Opc_Class instance
-		 * @var Opc_Class
+		 * Opc\Core instance
+		 * @var Opc\Core
 		 */
 		$_opc = null,
 		/**
@@ -47,7 +52,7 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 		$_compileResultDirectory = null,
 		/**
 		 * Contains parser object
-		 * @var Opc_Translate_Adapter_Yaml_sfYamlParser $_parser
+		 * @var Symfony\Component\Yaml\Parser $_parser
 		 */
 		$_parser = null,
 		/**
@@ -69,7 +74,7 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 	{
 		if(!Opl_Registry::exists('opc'))
 		{
-			throw new Opc_ClassInstanceNotExists_Exception;
+			throw new Opc_Translate_Adapter_Exception('Opc\Core class not exists!');
 		}
 		$this->_opc = Opl_Registry::get('opc');
 		if(isset($options['fileExistsCheck']))
@@ -119,7 +124,7 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 	{
 		if($this->_directory === null)
 		{
-			throw new Opc_Translate_Adapter_NotConfigured_Exception('Lack of directory!');
+			throw new Opc_Translate_Adapter_Exception('Translation adapter is not configured properly: lack of files directory!');
 		}
 		return $this->_directory;
 	} // end getDirectory();
@@ -259,11 +264,11 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 	{
 		if($this->_parser === null)
 		{
-			$this->_parser = new Opc_Translate_Adapter_Yaml_sfYamlParser();
+			$this->_parser = new Parser();
 		}
 		if($this->getFileExistsCheck() && !file_exists($this->getDirectory().$language.'.yml'))
 		{
-			throw new Opc_Translate_Adapter_FileNotFound_Exception($language);
+			throw new Opc_Translate_Adapter_Exception('Translation file is not found for language "'.$language.'"!');
 			return false;
 		}
 		try
@@ -285,7 +290,7 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 					if(file_put_contents($this->getCompileResultDirectory().$language.'.yml.php', serialize($data))	=== false)
 					{
 						// Error writing file
-						throw new Opc_Translate_Adapter_CompileWriteFile_Exception($language, 'yml');
+						throw new Opc_Translate_Adapter_Exception('File "'.$language.'.yml" could not be written in cache.');
 						return false;
 					}
 				}
@@ -299,7 +304,7 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 		}
 		catch(InvalidArgumentException $e)
 		{
-			throw new Opc_Translate_Adapter_YamlParser_Exception($language, $e->getMessage());
+			throw new Opc_Translate_Adapter_Exception('There is an error in file "'.$language.'.yml". Returned error message: "'.$e->getMessage().'"');
 			return false;
 		}
 	} // end loadLanguage();
@@ -314,11 +319,11 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 	{
 		if($this->_parser === null)
 		{
-			$this->_parser = new Opc_Translate_Adapter_Yaml_sfYamlParser();
+			$this->_parser = new Parser();
 		}
 		if($this->getFileExistsCheck() && !file_exists($this->getDirectory().$language.DIRECTORY_SEPARATOR.$group.'.yml'))
 		{
-			throw new Opc_Translate_Adapter_FileNotFound_Exception($language.DIRECTORY_SEPARATOR.$group);
+			throw new Opc_Translate_Adapter_Exception('Translation file for group "'.$group.'" is not found for language "'.$language.'"!');
 			return false;
 		}
 		try
@@ -342,7 +347,7 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 					if(file_put_contents($this->getCompileResultDirectory().$language.'_'.$group.'.yml.php', serialize($data))	=== false)
 					{
 						// Error writing file
-						throw new Opc_Translate_Adapter_CompileWriteFile_Exception($language.DIRECTORY_SEPARATOR.$group, 'yml');
+						throw new Opc_Translate_Adapter_Exception('File "'.$language.DIRECTORY_SEPARATOR.$group.'.yml" could not be written in cache.');
 						return false;
 					}
 				}
@@ -356,8 +361,8 @@ class Opc_Translate_Adapter_Yaml implements Opc_Translate_Adapter
 		}
 		catch(InvalidArgumentException $e)
 		{
-			throw new Opc_Translate_Adapter_YamlParser_Exception($language.' group: '.$group, $e->getMessage());
+			throw new Opc_Translate_Adapter_Exception('There is an error in group "'.$group.'" of language "'.$language.'". Returned error message: "'.$e->getMessage().'"');
 			return false;
 		}
 	} // end loadGroupLanguage();
-} // end Opc_Translate_Adapter_Yaml;
+} // end Yaml;

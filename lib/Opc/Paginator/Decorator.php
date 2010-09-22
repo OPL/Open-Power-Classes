@@ -11,18 +11,20 @@
  * and other contributors. See website for details.
  *
  */
-
+namespace Opc\Paginator;
+use Opc\Paginator\Range;
+use Opc\Paginator\Exception as Opc_Paginator_Exception;
 /**
  * All decorators must extend and implement that class.
  * 
  * @author Jacek "eXtreme" Jędrzejewski
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-abstract class Opc_Paginator_Decorator
+abstract class Decorator
 {
 	/**
 	 * Paginator instance.
-	 * @var Opc_Paginator_Range
+	 * @var Opc\Paginator\Range
 	 */
 	protected $_paginator = null;
 	
@@ -74,12 +76,11 @@ abstract class Opc_Paginator_Decorator
 		
 		if(isset($this->$key))
 		{
-			$this->_paginator->state(Opc_Paginator_Range::STATE_DIRTY);
+			$this->_paginator->state(Range::STATE_DIRTY);
 			$this->$key = $value;
 			return true;
 		}
-		
-		throw new Opc_OptionNotExists_Exception($key, get_class($this));
+		throw new Opc_Paginator_Exception('The option "'.$key.'" does not exist in "'.get_class($this).'"');
 	} // end set();
 		
 	/**
@@ -107,15 +108,14 @@ abstract class Opc_Paginator_Decorator
 		{
 			return $this->$key;
 		}
-		
-		throw new Opc_OptionNotExists_Exception($key, get_class($this));
+		throw new Opc_Paginator_Exception('The option "'.$key.'" does not exist in "'.get_class($this).'"');
 	} // end get();
 	
 	/**
 	 * @param Opc_Paginator_Range $paginator Current paginator instance
 	 * @return void
 	 */
-	final public function setPaginator(Opc_Paginator_Range $paginator)
+	final public function setPaginator(Range $paginator)
 	{
 		$this->_paginator = $paginator; 
 	} // end setPaginator();
@@ -127,4 +127,4 @@ abstract class Opc_Paginator_Decorator
 	 * @return array
 	 */
 	abstract public function current();
-} // end Opc_Paginator_Decorator;
+} // end Decorator;
