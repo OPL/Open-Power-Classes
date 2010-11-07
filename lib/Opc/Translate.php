@@ -1,7 +1,6 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ==========================================
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -9,318 +8,209 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
- * 
+ *
  */
 namespace Opc;
-use \Opl_Translation_Interface;
-use \Opl_Registry;
-use Opc\Translate\Exception as Opc_Translate_Exception;
-use Opc\Translate\Adapter;
+use MessageFormatter;
+use SplPriorityQueue;
+use Opl_Translation_Interface;
+use Opc\Translate\LoaderInterface;
+use Opc\Translate\CachingInterface;
+
 /**
- * The class represents a translation interface for OPL
+ * The class represents a translation interface for OPL.
  *
- * @author Amadeusz "megawebmaster" Starzykiewicz
- * @author Tomasz "Zyx" Jędrzejewski <http://www.zyxist.com>
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Translate implements Opl_Translation_Interface
 {
-	protected
-		/**
-		 * The default adapter.
-		 * @var Opc\Translate\Adapter
-		 */
-		$_defaultAdapter = null,
-		/**
-		 * The group adapters.
-		 * @var array
-		 */
-		$_groupAdapters = array(),
-		/**
-		 * Variable contains the currently loaded language identifier.
-		 * @var string
-		 */
-		$_currentLanguage = null,
-		/**
-		 * Array contains groups and its languages when they are other than main.
-		 * @var array
-		 */
-		$_groupsLanguage = array(),
-		/**
-		 * Default language to use in case when there is no language selected
-		 * or selected language has not specified required translation.
-		 * @var string
-		 */
-		$_defaultLanguage = 'en',
-		/**
-		 * Opc_Class instance.
-		 * @var Opc\Core
-		 */
-		$_opc = null;
+	/**
+	 * The identifier of the primary language.
+	 * @var SplPriorityQueue
+	 */
+	protected $_languages;
 
 	/**
-	 * Creates the new translation object.
-	 * 
-	 * @param Opc\Translate\Adapter $adapter The default translation adapter.
+	 * The stored messages.
+	 * @var array
 	 */
-	public function __construct(Adapter $adapter)
+	protected $_messages = array();
+
+	/**
+	 * Data-assigned messages.
+	 * @var array
+	 */
+	protected $_dataMessages = array();
+
+	/**
+	 * The list of groups, where the base language has been applied.
+	 * @var array
+	 */
+	protected $_baseLoads = array();
+
+	/**
+	 * The translation loader
+	 * @var \Opc\Translate\LoaderInterface
+	 */
+	protected $_loader;
+
+	/**
+	 * The caching interface
+	 * @var \Opc\Translate\CachingInterface
+	 */
+	protected $_cache;
+
+	/**
+	 * Initializes the translation object.
+	 *
+	 * @param \Opc\Translate\CachingInterface $cache Caching system
+	 * @param \Opc\Translate\LoaderInterface $loader Translation message loader
+	 */
+	public function __construct(CachingInterface $cache, LoaderInterface $loader)
 	{
-		if(!Opl_Registry::exists('opc'))
-		{
-			throw new Opc_Translate_Exception('Opc\Core class not exists!');
-		}
-		$this->_opc = Opl_Registry::get('opc');
-		$this->_defaultLanguage = $this->_opc->defaultLanugage;
-		$this->_defaultAdapter = $adapter;
+		$this->_cache = $cache;
+		$this->_loader = $loader;
+		$this->_languages = new SplPriorityQueue;
 	} // end __construct();
 
 	/**
-	 * Sets the default translation adapter.
-	 * 
-	 * @param Opc\Translate\Adapter $adapter The new default adapter.
-	 * @return Opc\Translate
-	 */
-	public function setAdapter(Adapter $adapter)
-	{
-		$this->_defaultAdapter = $adapter;
-		return $this;
-	} // end setAdapter();
-
-	/**
-	 * Returns the current default adapter.
-	 * 
-	 * @return Opc\Translate\Adapter
-	 */
-	public function getAdapter()
-	{
-		return $this->_defaultAdapter;
-	} // end getAdapter();
-
-	/**
-	 * Sets the translation adapter for the specified message group.
-	 * Implements fluent interface.
-	 * 
-	 * @param string $group The group name.
-	 * @param Opc\Translate\Adapter $adapter The new default adapter.
-	 * @return Opc\Translate
-	 */
-	public function setGroupAdapter($group,  Adapter $adapter)
-	{
-		$this->_groupAdapters[$group] = $adapter;
-		return $this;
-	} // end setAdapter();
-
-	/**
-	 * Returns the group adapter. If the group does not have
-	 * any adapter set, it returns the default adapter.
+	 * Adds the language used by the translator. The priority determines the
+	 * order which the languages will be verified in. Implements fluent
+	 * interface. The method implements fluent interface.
 	 *
-	 * @param string $group The group name.
-	 * @return Opc\Translate\Adapter
+	 * @param string $language The language locale
+	 * @param int $priority The language priority
+	 * @return \Opc\Translate
 	 */
-	public function getGroupAdapter($group)
+	public function addLanguage($language, $priority)
 	{
-		if(isset($this->_groupAdapters[$group]))
-		{
-			return $this->_groupAdapters[$group];
-		}
-		return $this->_defaultAdapter;
-	} // end getAdapter();
+		$this->_languages->insert((string)$language, (int)$priority);
+	} // end addLanguage();
 
 	/**
-	 * Returns translation for specified group and id.
-	 * 
-	 * @param string|integer $group Group name
-	 * @param string|integer $id Id
+	 * Checks if the given language is already registered. Note that
+	 * this implementation has complexity of O(n), so try not to use
+	 * it too often.
+	 *
+	 * @param string $language The searched language.
+	 * @return boolean
+	 */
+	public function hasLanguage($language)
+	{
+		foreach($this->_languages as $checkedLanguage)
+		{
+			if($checkedLanguage == $language)
+			{
+				return true;
+			}
+		}
+		return false;
+	} // end hasLanguage();
+
+	/**
+	 * Returns the list of registered languages in the order of their
+	 * priorities.
+	 *
+	 * @return array
+	 */
+	public function getLanguages()
+	{
+		$list = array();
+		foreach($this->_languages as $language)
+		{
+			$list[] = $language;
+		}
+		return $list;
+	} // end getLanguages();
+
+	/**
+	 * Returns a translation for the specified message identifier stored
+	 * in a given group. If the primary language is missing the translation,
+	 * it attempts to load the base language group.
+	 *
+	 * @param string|integer $group Translation group
+	 * @param string|integer $id Message identifier within the group
 	 * @return string
 	 */
 	public function _($group, $id)
 	{
-		$groupAdapter = false;
-		$adapter = null;
-		// Select the adapter.
-		if(isset($this->_groupAdapters[$group]))
+		// Messages with data assigned
+		if(isset($this->_dataMessages[$group.'@'.$id]))
 		{
-			$adapter = $this->_groupAdapters[$group];
-			$groupAdapter = true;
+			return $this->_dataMessages[$group.'@'.$id];
 		}
-		else
-		{
-			$adapter = $this->_defaultAdapter;
-		}
-		// Check if there is set language.
-		if($groupAdapter)
-		{
-			if(!isset($this->_groupsLanguage[$group]))
-			{
-				$this->setGroupLanguage($this->_defaultLanguage, $group);
-			}
-		}
-		elseif($this->_currentLanguage === null)
-		{
-			$this->setLanguage($this->_defaultLanguage);
-		}
-		// Try to get translated message.
-		if(($msg = $adapter->getMessage($this->_currentLanguage, $group, $id)) !== null)
-		{
-			return $msg;
-		}
-		// Try to load group for language
-		if($this->setGroupLanguage($this->_currentLanguage, $group))
-		{
-			// Try to get that loaded message
-			if(($msg = $adapter->getMessage($this->_currentLanguage, $group, $id)) !== null)
-			{
-				return $msg;
-			}
-		}
-		// Try to get default message.
-		if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
-		{
-			return $msg;
-		}
-		// Try to load group for default language
-		if($this->setGroupLanguage($this->_defaultLanguage, $group))
-		{
-			// Try to get that loaded message
-			if(($msg = $adapter->getMessage($this->_defaultLanguage, $group, $id)) !== null)
-			{
-				return $msg;
-			}
-		}
-		throw new Opc_Translate_Exception('Message id \''.$id.'\' in group \''.$group.'\' of language \''.$this->_currentLanguage.'\' not found!');
+		$void = null;
+		return $this->_getRawMessage($group, $id, $void);
 	} // end _();
 
 	/**
-	 * Assigns translation for current language to specified group and Id.
+	 * Assigns the arguments to the given message. The message should be
+	 * formatted using the ICU message formatting rules.
 	 *
-	 * @param string $group Group Id.
-	 * @param string $id Message Id.
-	 * @param mixed ...
+	 * @param string|integer $group Translation group
+	 * @param string|integer $id Message identifier within the group
+	 * @param array $args
 	 */
-	public function assign($group, $id)
+	public function assign($group, $id, array $args)
 	{
-		$data = func_get_args();
-		$adapter = null;
-		unset($data[0],$data[1]);
-		if(isset($this->_groupAdapters[$group]))
+		$locale = null;
+		$message = $this->_getRawMessage($group, $id, $locale);
+		if(!($message instanceof MessageFormatter))
 		{
-			$adapter = $this->_groupAdapters[$group];
+			$messageObj = new MessageFormatter($locale, $message);
+		
+			if($messageObj === null)
+			{
+				throw new Exception('Invalid message format: \''.$message.'\' (\''.$group.'@'.$id.'\')');
+			}
+
+			$this->_messages[$locale][$group][$id] = $message = $messageObj;
 		}
-		else
-		{
-			$adapter = $this->_defaultAdapter;
-		}
-		$language = null;
-		$adapter->assign($language, $group, $id, $data);
+		$this->_dataMessages[$group.'@'.$id] = $message->format($args);
 	} // end assign();
 
 	/**
-	 * Function chooses new language for messages.
+	 * Returns the message for the given id, probing the languages according
+	 * to their priority. In the last argument, the matching language locale
+	 * is passed.
 	 *
-	 * Returns true if there is language file in translations directory and function
-	 * is able to load it, otherwise it returns false and uses default language.
-	 * 
-	 * @param string $language New language
-	 * @return boolean
+	 * If the message is missing in all the languages, an exception is thrown.
+	 *
+	 * @throws Opc\Exception
+	 * @param string|integer $group Translation group
+	 * @param string|integer $id Message identifier within the group
+	 * @param string $locale A reference to a variable, where the matching locale should be stored.
+	 * @return <type>
 	 */
-	public function setLanguage($language)
+	protected function _getRawMessage($group, $id, &$locale)
 	{
-		if($this->_currentLanguage != $language)
+		foreach($this->_languages as $language)
 		{
-			if($this->_defaultAdapter->loadLanguage($language))
+			if(!isset($this->_messages[$language]))
 			{
-				$this->_currentLanguage = $language;
-				return true;
+				$this->_messages[$language] = array();
 			}
-			elseif($this->_defaultAdapter->loadLanguage($this->_defaultLanguage))
+			if(!isset($this->_messages[$language][$group]))
 			{
-				$this->_currentLanguage = $this->_defaultLanguage;
-				return false;
+				if($this->_cache->hasGroup($language, $group))
+				{
+					$this->_messages[$language][$group] = $this->_cache->getGroup($language, $group);
+				}
+				else
+				{
+					$this->_cache->setGroup($language, $group,
+						$this->_messages[$language][$group] = $this->_loader->loadLanguageGroup($language, $group)
+					);
+				}
 			}
-			else
+			if(isset($this->_messages[$language][$group][$id]))
 			{
-				throw new Opc_Translate_Exception('Translation is not loaded! Neither default nor current language files could be found.');
+				$locale = $language;
+				return $this->_messages[$language][$group][$id];
 			}
 		}
-	} // end setLanguage();
-
-	/**
-	 * Returns current language.
-	 *
-	 * @return string
-	 */
-	public function getLanguage()
-	{
-		return $this->_currentLanguage;
-	} // end getLanguage();
-
-	/**
-	 * Sets language to specified group.
-	 *
-	 * @param string $group Group name
-	 * @param string $language New language
-	 * @return boolean
-	 */
-	public function setGroupLanguage($group, $language)
-	{
-		if(isset($this->_groupAdapters[$group]))
-		{
-			if($this->_groupAdapters[$group]->loadGroupLanguage($language, $group))
-			{
-				$this->_groupsLanguage[$group] = $language;
-				return true;
-			}
-			elseif($this->_groupAdapters[$group]->loadGroupLanguage($this->_defaultLanguage, $group))
-			{
-				$this->_groupsLanguage[$group] = $this->_defaultLanguage;
-				return false;
-			}
-			else
-			{
-				throw new Opc_Translate_Exception('Translation is not loaded! Neither default nor current language files could be found.');
-			}
-		}
-		elseif($this->_currentLanguage != $language)
-		{
-			if($this->_defaultAdapter->loadGroupLanguage($group, $language))
-			{
-				$this->_groupsLanguage[$group] = $language;
-				return true;
-			}
-			elseif($this->_defaultAdapter->loadGroupLanguage($group, $this->_defaultLanguage))
-			{
-				$this->_groupsLanguage[$group] = $this->_defaultLanguage;
-				return false;
-			}
-			else
-			{
-				throw new Opc_Translate_Exception('Translation is not loaded! Neither default nor current language files could be found.');
-			}
-		}
-	} // end setGroupLanguage();
-
-	public function getGroupLanguage($group)
-	{
-		return isset($this->_groupsLanguage[$group])?$this->_groupsLanguage[$group]:null;
-	} // end getGroupLanguage();
-	
-	/**
-	 * Gives access to control default language.
-	 * 
-	 * @param string $language New default language
-	 */
-	public function setDefaultLanguage($language)
-	{
-		$this->_defaultLanguage = $language;
-	} // end setDefaultLanguage();
-
-	/**
-	 * Returns default language.
-	 * 
-	 * @return string
-	 */
-	public function getDefaultLanguage()
-	{
-		return $this->_defaultLanguage;
-	} // end getDefaultLanguage();
-} // end Translation;
+		throw new Exception('Missing translation for \''.$group.'@'.$id.'\'');
+	} // end _getRawMessage();
+} // end Translate;
