@@ -12,16 +12,16 @@ echo "Loading bootstrap...\n";
 date_default_timezone_set('Europe/Warsaw');
 
 $config = parse_ini_file(dirname(__FILE__).'/../paths.ini', true);
-require($config['libraries']['Opl'].'Opl/Loader.php');
+require($config['Opl'].'Opl/Loader.php');
 
 $nsLoader = new Opl_Loader;
 // Libraries that use PHP 5.3 namespaces go here.
-$nsLoader->addLibrary('Symfony', $config['libraries']['Symfony']);
-$nsLoader->addLibrary('Opc', $config['libraries']['Opc']);
+$nsLoader->addLibrary('Symfony', $config['Symfony']);
+$nsLoader->addLibrary('Opc', $config['Opc']);
 $nsLoader->register();
 
 $oplLoader = new Opl_Loader('_');
-$oplLoader->addLibrary('Opl', $config['libraries']['Opl']);
-$oplLoader->addLibrary('Opt', $config['libraries']['Opt']);
+$oplLoader->addLibrary('Opl', $config['Opl']);
+$oplLoader->addLibrary('Opt', $config['Opt']);
 $oplLoader->addLibrary('Extra', './Extra/');
 $oplLoader->register();
