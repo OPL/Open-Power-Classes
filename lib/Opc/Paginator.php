@@ -12,6 +12,7 @@
  *
  */
 namespace Opc;
+use Opc\Core;
 use Opc\Paginator\Range;
 /**
  * A factory and global configuration class for Paginator.
@@ -51,13 +52,14 @@ class Paginator
 	 * Creates a new instance of paginator
 	 * 
 	 * @static
+	 * @param \Opc\Core $opc The main configuration class
 	 * @param integer $all The amout of all items
 	 * @param integer $limit Items per page
 	 * @return Opc\Paginator\Range New paginator
 	 */
-	public static function create($all = null, $limit = null)
+	public static function create(Core $opc, $all = null, $limit = null)
 	{
-		return new Range($all, $limit);
+		return new Range($opc, $all, $limit);
 	} // end create();
 	
 	/**

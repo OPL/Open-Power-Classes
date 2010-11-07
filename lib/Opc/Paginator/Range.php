@@ -12,6 +12,7 @@
  *
  */
  namespace Opc\Paginator;
+ use Opc\Core;
  use Opc\Paginator;
  use Opc\Paginator\Exception as Opc_Paginator_Exception;
  use \Opl_Registry;
@@ -121,19 +122,15 @@ class Range implements Iterator, Countable, SeekableIterator
 	
 	/**
 	 * Creates new paginator.
-	 * 
+	 *
+	 * @param \Opc\Core $opc The main configuration class
 	 * @param integer $all The amout of all items
 	 * @param integer $limit Items per page
 	 * @return void
 	 */
-	public function __construct($all = null, $limit = null)
+	public function __construct(Core $opc, $all = null, $limit = null)
 	{
-		if(!Opl_Registry::exists('opc'))
-		{
-			throw new Opc_Paginator_Exception('Opc\Core class not exists!');
-		}
-		$opc = Opl_Registry::get('opc');
-		
+	
 		if(is_null($limit))
 		{
 			$limit = $opc->itemsPerPage;
