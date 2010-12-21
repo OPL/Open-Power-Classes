@@ -48,6 +48,27 @@ abstract class FileLoader implements LoaderInterface
 	} // end __construct();
 
 	/**
+	 * Adds new paths to the loader.
+	 *
+	 * @param array|string $paths The new paths.
+	 */
+	public function addPaths($paths = array())
+	{
+		if(!is_array($paths))
+		{
+			$paths = array($paths);
+		}
+		foreach($paths as &$path)
+		{
+			if($path[strlen($path) - 1] != DIRECTORY_SEPARATOR)
+			{
+				$path .= DIRECTORY_SEPARATOR;
+			}
+			$this->_paths[] = $path;
+		}
+	} // end addPaths();
+
+	/**
 	 * Returns a validated path to the specified file. If the file name is
 	 * invalid or it does not exist in any of defined paths, an exception
 	 * is thrown.
